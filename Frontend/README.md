@@ -1,6 +1,22 @@
 # Portal360
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.15.
+🟣 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.21
+🪲 Node.js: v22.22.0
+🎨 Tailwind CSS: 3.3.3
+🌼 DaisyUI:  3.4.19.
+
+## Before running the project, make sure to install all required dependencies. In the project root folder, run:
+
+```bash
+npm install
+```
+
+or 
+
+```bash
+npm i
+```
+This will download and install all packages listed in `package.json`.
 
 ## Development server
 
