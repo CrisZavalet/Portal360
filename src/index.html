@@ -1,13 +1,28 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Portal360</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <app-root></app-root>
+
+<body class="min-h-full m-0 leading-normal bg-gradient-to-r from-[#1C1854] to-[#081440]">
+
+  <div class="relative flex flex-col md:flex-row items-center justify-start min-h-screen ">
+
+    <div class="relative w-full md:w-[30%] h-[300px] rounded-full bg-[#552481] blur-[200px] mb-8 md:mb-0"></div>
+
+    <div class="relative sm:absolute top-0 right-0 w-[50%] h-[300px] blur-[190px] 
+                bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
+                z-10"></div>
+    <div class="relative w-full lg:w-[20%] h-[627px] bg-[#552481] blur-[200px]"></div>
+    <div class="relative w-full lg:w-[100%] h-[627px] mt-24 lg:mt-0 bg-[#1F4470] blur-[200px]"></div>
+  </div>
+  <app-root class="absolute top-0 left-0 w-full sm:h-full"></app-root>
 </body>
+
 </html>
