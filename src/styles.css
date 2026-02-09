@@ -7,3 +7,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ::view-transition-new(root) {
   animation-duration: 200ms;
 }
+/* Define keyframe animations */
+@keyframes rotate-out {
+  to {
+    transform: rotate(90deg);
+  }
+}
+@keyframes rotate-in {
+  from {
+    transform: rotate(-90deg);
+  }
+}
