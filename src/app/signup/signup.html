@@ -110,7 +110,7 @@
                         class="absolute inset-y-0 right-3 flex items-center text-white/60 hover:text-white ">
                         <span>
                             @if (!showConfirmPassword) {
-                            <img src="./assets/eye.svg" alt="Show Password" class="h-5 w-5 " />
+                            <img src="./assets/eye.svg" alt="Show Password" class="h-5 w-5  " />
                             }
                             @if (showConfirmPassword) {
                             <img src="./assets/eye-slash.svg" alt="Hide Password" class="h-5 w-5 " />
@@ -137,9 +137,9 @@
         </form>
 
         <hr class="m-10">
-
-        <span class="text-white text-center">Ya tienes una cuenta?</span><a class="font-semibold text-white" routerLink="/login"> Inicia sesión</a>
-
+        <div class="flex justify-center">
+            <span class="text-white text-center">Ya tienes una cuenta?</span><a class="ml-2 font-medium text-indigo-400 hover:text-indigo-300" routerLink="/login"> Inicia sesión</a>
+        </div>
         <div class="mt-10 text-center text-sm/6 text-gray-400">
             <a href="#" class="p-2 text-center font-light text-white-400 hover:text-indigo-300">Terminos y
                 Condiciones</a>
