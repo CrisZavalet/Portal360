@@ -1,0 +1,53 @@
+.custom-toggle {
+ background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 20px 10px rgba(255, 255, 255, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-toggle .mat-button-toggle {
+  flex: 1;
+  border-radius: 9999px;
+  text-align: center;
+  font-weight: 400;
+  color: #ffffff;
+   
+}
+
+.custom-toggle
+  .mat-button-toggle[value="salida"]
+  .mat-button-toggle-checked
+  .mat-button-toggle-label-content::before {
+  color: white!important;
+  background-color: #ffffff !important;
+}
+
+
+.custom-toggle
+  .mat-button-toggle[value="entrada"].mat-button-toggle-checked {
+  background-color: #22c55e !important;
+  color: white !important;
+}
+.custom-toggle
+  .mat-button-toggle[value="salida"].mat-button-toggle-checked {
+  background-color: #ef4444 !important;
+  color: white !important;
+}
+
+.custom-toggle .mat-button-toggle:not(.mat-button-toggle-checked):hover {
+  background-color: #ffffff;
+  color:black
+}
+
+.custom-toggle .mat-button-toggle-standalone.mat-button-toggle-appearance-standard .mat-pseudo-checkbox, .mat-button-toggle-group-appearance-standard .mat-pseudo-checkbox{
+    color: #ffffff !important;
+     background-color:#ffffff !important;
+}
