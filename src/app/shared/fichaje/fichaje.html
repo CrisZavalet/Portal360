@@ -1,0 +1,98 @@
+<div
+  class="max-w-xl mx-auto mt-6
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         rounded-3xl p-6 transition-all duration-300"
+>
+
+  <div class="text-sm text-slate-500 dark:text-slate-400">
+    {{ currentDate}}
+  </div>
+
+  <div class="text-center mt-4">
+    <div class="text-5xl font-bold tracking-tight text-slate-800 dark:text-white">
+      {{ formattedTime }}
+    </div>
+
+    <div class="text-sm mt-2 text-indigo-500 font-medium">
+      {{ tipoFichaje }}
+    </div>
+  </div>
+
+  <div class="flex gap-4 justify-center">
+
+  @if (!isFichaje) {
+    <button
+      (click)="start()"
+      class="bg-green-500 text-white px-4 py-2 rounded w-24">
+      Play
+    </button>
+  }
+
+  @if (isFichaje) {
+    <button
+      (click)="pause()"
+      class="bg-yellow-500 text-white px-4 py-2 rounded w-24">
+      Pause
+    </button>
+  }
+
+  <button
+    (click)="stop()"
+    class="bg-red-500 text-white px-4 py-2 rounded w-24">
+    Stop
+  </button>
+
+</div>
+
+  <div class="flex justify-center gap-4 mt-6 text-sm bg-indigo-900/20 rounded-lg p-3">
+    <button
+      (click)="tipoFichaje = 'Presencial'"
+      [ngClass]="tipoFichaje === 'Presencial'
+        ? 'text-indigo-600 font-semibold'
+        : 'text-slate-500'"
+    >
+      Presencial
+    </button>
+
+    <button
+      (click)="tipoFichaje = 'Teletrabajo'"
+      [ngClass]="tipoFichaje === 'Teletrabajo'
+        ? 'text-indigo-600 font-semibold'
+        : 'text-slate-500'"
+    >
+      Teletrabajo
+    </button>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mt-8">
+
+    <div
+      class="bg-white/50 dark:bg-white/10
+             backdrop-blur-md
+             rounded-2xl p-4 text-center
+             border border-white/30"
+    >
+      <div class="text-xs text-slate-500">Media diaria</div>
+      <div class="text-xl font-semibold text-slate-800 dark:text-white">
+        {{ mediaDiaria }}h
+      </div>
+    </div>
+
+    <div
+      class="bg-white/50 dark:bg-white/10
+             backdrop-blur-md
+             rounded-2xl p-4 text-center
+             border border-white/30"
+    >
+      <div class="text-xs text-slate-500">Horas semanales</div>
+      <div class="text-xl font-semibold text-slate-800 dark:text-white">
+        {{ horasSemanales }}h
+      </div>
+    </div>
+
+  </div>
+
+</div>

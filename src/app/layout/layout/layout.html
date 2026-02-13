@@ -1,0 +1,11 @@
+<div class="flex h-screen ">
+  <app-sidebar [collapsed]="sidebarCollapsed" (toggle)="toggleSidebar()"></app-sidebar>
+
+<main
+  class="flex-1 p-6 overflow-auto transition-all duration-300
+         bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100
+         dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+>
+    <router-outlet />
+  </main>
+</div>
