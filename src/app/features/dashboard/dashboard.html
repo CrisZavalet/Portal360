@@ -1,0 +1,94 @@
+<div>
+  <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Bienvenid@</h1>
+
+  <div>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-4">
+      Este es tu panel de control personal, donde puedes gestionar tus fichajes, nóminas, documentos
+      y más. Explora las diferentes secciones para aprovechar al máximo tu experiencia en el portal.
+    </p>
+  </div>
+
+  <div>
+  <div class="rounded-2xl px-6 py-5 max-w-xl mx-auto
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+
+             <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2">Panel de Fichaje</h2> 
+
+        <app-fichaje></app-fichaje>    
+    </div>
+
+  <div
+class="rounded-2xl px-6 py-5 max-w-xl mx-auto
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"  >
+    <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2">Proximos festivos {{ currentYear }}</h2>
+    <div class="inline flex gap-4 justify-center">
+      @for (holidays of holiday; track holidays) {
+        <div
+  class="w-32 h-40 rounded-2xl
+         flex flex-col items-center justify-center
+         text-center p-3
+         transition-all duration-300 hover:scale-105
+         bg-white/50 dark:bg-white/10
+         backdrop-blur-md
+         border border-white/40 dark:border-white/10
+         shadow-lg shadow-black/5">
+          <div
+            class="text-3xl font-bold text-gray-800"
+            [ngClass]="holidays.isNacionalHoliday 
+  ? 'text-rose-500' 
+  : 'text-indigo-500'"
+          >
+            {{ holidays.day }}
+          </div>
+
+          <div class="text-sm capitalize text-gray-500">
+            {{ holidays.month }}
+          </div>
+          <hr class="w-full border-gray-300 my-2" />
+          <div class="mt-2 text-xs font-medium text-gray-700">
+            {{ holidays.name }}
+          </div>
+        </div>
+      }
+    </div>
+<div class="inline flex gap-4 justify-center mt-2">
+    <p class="text-xs text-slate-500 dark:text-slate-400">Nacional: <span style="font-size: 10px;">&#x1F7E5;</span></p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Local: <span style="font-size: 10px;">&#x1F7E6;</span></p>
+</div>
+
+  </div>
+
+</div>
+
+
+  <div class=" mt-6 rounded-2xl px-6 py-5  mx-auto
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+    <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2 mt-6">Peticiones pendientes</h2> 
+    <div class="inline flex gap-4 justify-center"> 
+      
+    </div> 
+    </div>
+
+
+      <div class=" mt-6 rounded-2xl px-6 py-5  mx-auto
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2 mt-6">Proximos cumpleaños</h2>
+    </div>
+</div>
+

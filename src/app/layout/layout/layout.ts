@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Sidebar } from "./sidebar/sidebar";
+import { Sidebar } from "../sidebar/sidebar";
 import { RouterOutlet } from "@angular/router";
 
 @Component({
@@ -9,5 +9,10 @@ import { RouterOutlet } from "@angular/router";
   styleUrl: './layout.css',
 })
 export class Layout {
+ sidebarCollapsed = false;
 
+
+ toggleSidebar() {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
 }
