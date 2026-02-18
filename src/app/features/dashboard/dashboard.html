@@ -8,21 +8,31 @@
     </p>
   </div>
 
-  <div>
-  <div class="rounded-2xl px-6 py-5 max-w-xl mx-auto
+<div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6 mt-3">
+  <div class="rounded-2xl px-6 py-5 w-full
          bg-white/40 dark:bg-white/10
          backdrop-blur-xl
          border border-white/30 dark:border-white/10
          shadow-xl shadow-black/5
-         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-
+         ">
              <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2">Panel de Fichaje</h2> 
 
         <app-fichaje></app-fichaje>    
     </div>
 
+      <div class="rounded-2xl px-6 py-5 w-full
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         ">
+             <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2">Total de horas trabajadas</h2> 
+
+        <app-time></app-time> 
+    </div>
+
   <div
-class="rounded-2xl px-6 py-5 max-w-xl mx-auto
+class="rounded-2xl px-6 py-5 w-full
          bg-white/40 dark:bg-white/10
          backdrop-blur-xl
          border border-white/30 dark:border-white/10
@@ -44,22 +54,22 @@ class="rounded-2xl px-6 py-5 max-w-xl mx-auto
             class="text-3xl font-bold text-gray-800"
             [ngClass]="holidays.isNacionalHoliday 
   ? 'text-rose-500' 
-  : 'text-indigo-500'"
-          >
+  : 'text-indigo-500 dark:text-indigo-400 '">
+          
             {{ holidays.day }}
           </div>
 
-          <div class="text-sm capitalize text-gray-500">
+          <div class="text-sm capitalize text-gray-500 dark:text-slate-200">
             {{ holidays.month }}
           </div>
           <hr class="w-full border-gray-300 my-2" />
-          <div class="mt-2 text-xs font-medium text-gray-700">
+          <div class="mt-2 text-xs font-medium text-gray-700  dark:text-slate-200">
             {{ holidays.name }}
           </div>
         </div>
       }
     </div>
-<div class="inline flex gap-4 justify-center mt-2">
+<div class="inline flex gap-4 justify-center mt-5">
     <p class="text-xs text-slate-500 dark:text-slate-400">Nacional: <span style="font-size: 10px;">&#x1F7E5;</span></p>
 <p class="text-xs text-slate-500 dark:text-slate-400">Local: <span style="font-size: 10px;">&#x1F7E6;</span></p>
 </div>
@@ -76,8 +86,8 @@ class="rounded-2xl px-6 py-5 max-w-xl mx-auto
          shadow-xl shadow-black/5
          transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
     <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2 mt-6">Peticiones pendientes</h2> 
-    <div class="inline flex gap-4 justify-center"> 
-      
+    <div class="inline flex gap-4 justify-left"> 
+      <p class="dark:text-slate-400">No hay peticiones pendientes</p>
     </div> 
     </div>
 
@@ -89,6 +99,54 @@ class="rounded-2xl px-6 py-5 max-w-xl mx-auto
          shadow-xl shadow-black/5
          transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
         <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2 mt-6">Proximos cumpleaños</h2>
-    </div>
+       <div class="flex gap-4 justify-f flex-wrap mt-4">
+
+    @for (birthday of birthdays; track birthday) {
+      <div class="w-56 rounded-2xl p-4
+           flex items-center gap-4
+           transition-all duration-300 hover:scale-105
+           bg-white/50 dark:bg-white/10
+           backdrop-blur-md
+           border border-white/40 dark:border-white/10
+           shadow-lg shadow-black/5">
+
+        <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-indigo-400">
+          <img [src]="birthday.avatar" 
+               alt="avatar"
+               class="w-full h-full object-cover">
+        </div>
+
+        <div class="flex flex-col text-left">
+          <span class="font-semibold text-slate-800 dark:text-white">
+            {{ birthday.name }}
+          </span>
+
+          <span class="text-sm text-slate-500 dark:text-slate-300">
+            {{ birthday.position }}
+          </span>
+
+          <span class="text-xs font-medium mt-1 text-indigo-500 dark:text-indigo-300">
+            🎂 {{ birthday.day }} {{ birthday.month }}
+          </span>
+        </div>
+
+      </div>
+    }
+
+  </div>
+      </div>
+
+     <div class=" mt-6 rounded-2xl px-6 py-5  mx-auto
+         bg-white/40 dark:bg-white/10
+         backdrop-blur-xl
+         border border-white/30 dark:border-white/10
+         shadow-xl shadow-black/5
+         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+        <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2 mt-6">Calendario</h2>
+   
+   
+
+
+        </div>
 </div>
 

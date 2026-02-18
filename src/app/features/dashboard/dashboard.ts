@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { Holiday } from '../../core/holiday';
 import { CommonModule } from '@angular/common';
 import { Fichaje } from "../../shared/fichaje/fichaje";
+import { Time } from "../../shared/time/time";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Fichaje,],
+  imports: [CommonModule, Fichaje, Time],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -17,6 +18,31 @@ export class Dashboard {
   date_today!: any;
   currentYear!: any;
   isNacionalHoliday: boolean = false;
+
+
+  birthdays = [
+  {
+    name: 'Laura Gómez',
+    position: 'Recursos Humanos',
+    day: 18,
+    month: 'Febrero',
+    avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
+  },
+  {
+    name: 'Carlos Martínez',
+    position: 'Desarrollador',
+    day: 22,
+    month: 'Febrero',
+    avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+  },
+  {
+    name: 'Ana López',
+    position: 'Marketing',
+    day: 27,
+    month: 'Febrero',
+    avatar: 'https://randomuser.me/api/portraits/women/68.jpg'
+  }
+];
 
   constructor(private holidayService: Holiday) { }
   ngOnInit() {
