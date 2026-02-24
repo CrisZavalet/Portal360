@@ -1,23 +1,23 @@
-<div class="grid grid-cols-2 gap-4 mt-1 bg-gradient-to-br from-slate-100 via-indigo-100 to-indigo-200 rounded-lg p-3  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white 
-         ">
+<div class="block  gap-4 mt-1 bg-gradient-to-br from-slate-100 via-indigo-100 to-indigo-200 rounded-lg p-3  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white 
+         lg:grid lg:grid-cols-2 "> 
 
     <div class="bg-white/50 dark:bg-white/10
              backdrop-blur-md
              rounded-2xl p-4 text-center
-             border border-white/30">
+             border border-white/30 mb-3 lg:mb-0">
       <div class="text-xs text-slate-500">Media diaria</div>
       <div class="text-xl font-semibold text-slate-800 dark:text-white">
-        {{ horasRestantesDiarias  }} h
+        {{ restantesHoy  }} h
       </div>
     </div>
 
     <div class="bg-white/50 dark:bg-white/10
              backdrop-blur-md
              rounded-2xl p-4 text-center
-             border border-white/30">
+             border border-white/30 mb-3 lg:mb-0 ">
       <div class="text-xs text-slate-500">Horas semanales</div>
       <div class="text-xl font-semibold text-slate-800 dark:text-white">
-        {{  horasRestantesSemanales }}h
+        {{  horasSemana }}h
       </div>
     </div>
 
@@ -27,7 +27,7 @@
              border border-white/30">
       <div class="text-xs text-slate-500">Horas restantes</div>
       <div class="text-xl font-semibold text-slate-800 dark:text-white">
-        {{horasRestantesSemanales  }}h
+        {{restantesSemana}}h
       </div>
     </div>
 

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import{ CommonModule } from '@angular/common';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import{FormControl , FormGroup, Validators, ReactiveFormsModule,FormBuilder,FormsModule} from '@angular/forms';
+import { AuthService } from '../../../core/auth-service';
 
 @Component({
   selector: 'app-login-web',
@@ -16,7 +17,7 @@ showErrorModal = false;
 showSuccessModal:boolean = false;
 errorMessage = '';
 successMessage = '';
-constructor(private fb: FormBuilder) {}
+constructor(private fb: FormBuilder, private authService:AuthService, private router:Router) {}
 
 ngOnInit() {
   this.loginForm = new FormGroup({
@@ -27,10 +28,14 @@ ngOnInit() {
 
 Login() {
       console.warn(this.loginForm.value);
-      
-   if (this.loginForm.valid) {
-    const {username, password} = this.loginForm.value;  
-    console.log('formulario válido');  
+      if (this.loginForm.valid) {
+        const {username, password} = this.loginForm.value;  
+        const success = this.authService.login(username, password);
+     if (success) {
+    this.router.navigate(['/']);
+  } else {
+    this.openModalError('El usuario o la contraseña son incorrectos. \nPor favor completa los datos correctamente.');
+  } 
     } else {
       console.log('Formulario inválido');
        this.loginForm.markAllAsTouched();
