@@ -9,10 +9,17 @@
     <div class="text-3xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-slate-800 dark:text-white">
       {{ formattedTime }}
     </div>
+    
 
     <div class="text-sm text-indigo-500 font-medium">
       {{ tipoFichaje }}
     </div>
+
+  @if (horaFichaje != null) {
+      <div class="text-sm text-green-500">
+        Hora de fichaje: {{ horaFichaje }}
+      </div>
+    }
 
   </div>
 
