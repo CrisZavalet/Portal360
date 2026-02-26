@@ -20,6 +20,9 @@ overflow-hidden
   "
   [class.w-20]="collapsed"
   [class.w-64]="!collapsed"
+   [class.-translate-x-full]="mobileOpen"
+  [class.translate-x-0]="mobileOpen"
+  class="lg:translate-x-0"
 >
 <div
   class="p-4 relative"
@@ -58,6 +61,7 @@ overflow-hidden
   <nav class="flex-1 space-y-2 p-4">
     <a
       routerLink="/dashboard"
+      (click)="closeMobile.emit()"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
@@ -77,6 +81,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="my-time"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class=" flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80
@@ -95,6 +100,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="/paysheet"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80
@@ -113,6 +119,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="/documents"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80
@@ -131,6 +138,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="/absences"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80
@@ -149,6 +157,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="/benefits"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80
@@ -167,6 +176,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="/employees"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80
@@ -185,6 +195,7 @@ hover:border hover:border-white/20"
     <a
       routerLink="/notifications"
       routerLinkActive="bg-white/15 border border-white/20 text-white"
+      (click)="closeMobile.emit()"
       class="flex items-center gap-3 px-3 py-2 rounded-xl
 transition-all duration-300
 text-white/80

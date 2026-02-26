@@ -1,5 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
-import { WorkTime } from '../../core/work-time';
+import { WorkTime } from '../../core/services/work-time';
 
 @Component({
   selector: 'app-time',

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WorkTime } from '../../core/work-time';
+import { WorkTime } from '../../core/services/work-time';
 
 @Component({
   selector: 'app-fichaje',
