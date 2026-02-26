@@ -1,3 +1,133 @@
 <div>
   <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Fichaje</h1>
+  <p class="text-xs text-slate-500 dark:text-slate-400 mt-4">Esta es la sección de fichaje del portal.</p>
+
+  <div class="flex items-center justify-between mb-4">
+<button 
+  (click)="mesAnterior()" 
+  class="group
+         relative p-4 mt-8 rounded-full
+      bg-indigo-100  backdrop-blur-xl
+       border border-white/20
+       shadow-[0_8px_32px_rgba(0,0,0,0.25)]
+       hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]
+       transition-all duration-300  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
+
+  <svg xmlns="http://www.w3.org/2000/svg"
+       width="22"
+       height="22"
+       viewBox="0 0 24 24"
+       class="stroke-slate-400 group-hover:stroke-slate-800/80 transition">
+
+    <g fill="none"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2">
+
+      <path stroke-dasharray="20"
+            d="M21 12h-17.5">
+        <animate fill="freeze"
+                 attributeName="stroke-dashoffset"
+                 dur="0.3s"
+                 values="20;0"/>
+      </path>
+
+      <path stroke-dasharray="12"
+            stroke-dashoffset="12"
+            d="M3 12l7 7M3 12l7 -7">
+        <animate fill="freeze"
+                 attributeName="stroke-dashoffset"
+                 begin="0.3s"
+                 dur="0.2s"
+                 to="0"/>
+      </path>
+    </g>
+  </svg>
+
+</button>
+  <h2 class=" mt-8 text-2xl font-semibold text-gray-700 dark:text-gray-300">
+    {{ mesSeleccionado() + 1 }} / {{ anioSeleccionado() }}
+  </h2>
+
+  <button (click)="mesSiguiente()" class="group
+         relative p-4 mt-8 rounded-full
+      bg-indigo-100  backdrop-blur-xl
+       border border-white/20
+       shadow-[0_8px_32px_rgba(0,0,0,0.25)]
+       hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]
+       transition-all duration-300  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
+
+  <svg xmlns="http://www.w3.org/2000/svg"
+       width="22"
+       height="22"
+       viewBox="0 0 24 24"
+       class="stroke-slate-400 group-hover:stroke-slate-800/80 transition">
+
+    <g fill="none"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       stroke-width="2">
+
+      <path stroke-dasharray="20"
+            d="M3 12h17.5">
+        <animate fill="freeze"
+                 attributeName="stroke-dashoffset"
+                 dur="0.3s"
+                 values="20;0"/>
+      </path>
+
+      <path stroke-dasharray="12"
+            stroke-dashoffset="12"
+            d="M21 12l-7 7M21 12l-7 -7">
+        <animate fill="freeze"
+                 attributeName="stroke-dashoffset"
+                 begin="0.3s"
+                 dur="0.2s"
+                 to="0"/>
+      </path>
+    </g>
+  </svg>
+
+    </button>
+</div>
+
+  <div class="flex justify-center mt-10">
+        <table class="table-auto md:table-fixed w-full text-slate-800 dark:text-slate-200 
+                bg-white/10 
+                backdrop-blur-lg 
+                border border-white/20 
+                rounded-2xl 
+                shadow-2xl 
+                overflow-hidden ">
+
+    <thead class="bg-gradient-to-br from-slate-100 via-indigo-100 to-indigo-200 rounded-lg p-3  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white ">
+      <tr>
+        <th class="p-4 text-left">Fecha</th>
+        <th class="p-4 text-left">Fichaje</th>
+        <th class="p-4 text-left">Tipo</th>
+        <th class="p-4 text-left">Total</th>
+        <th class="p-4 text-left">Aprobado</th>
+      </tr>
+    </thead>
+
+    <tbody >
+            @if (fichajesFiltrados().length === 0) {
+      <tr>
+        <td  colspan="5" class="p-4 text-center">No hay fichajes este mes</td>
+      </tr>
+    }
+      @for (f of fichajesFiltrados(); track f.fecha) {
+       <tr class="border-t border-white/10 hover:bg-white/20 transition">
+        <td class="p-4">{{formatearFecha(f.fecha)}}</td>
+        <td class="p-4">{{ f.entrada }} - {{ f.salida }}</td>
+        <td class="p-4">Presencial</td>
+        <td class="p-4">{{ f.totalHoras }}h</td>
+        <td class="p-4">{{ f.aprobado ? 'Sí' : 'No' }}</td>
+      </tr>
+    }
+     
+    </tbody>
+
+  </table>
+</div>
 </div>

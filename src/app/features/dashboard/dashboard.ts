@@ -1,5 +1,5 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { Holiday } from '../../core/holiday';
+import { Holiday } from '../../core/services/holiday';
 import { CommonModule } from '@angular/common';
 import { Fichaje } from "../../shared/fichaje/fichaje";
 import { Time } from "../../shared/time/time";

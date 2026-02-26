@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import{ CommonModule } from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import{FormControl , FormGroup, Validators, ReactiveFormsModule,FormBuilder,FormsModule} from '@angular/forms';
-import { AuthService } from '../../../core/auth-service';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-login-web',
