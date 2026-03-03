@@ -16,6 +16,7 @@ export class Sidebar {
 @Output() toggle = new EventEmitter<void>();
 @Input() mobileOpen = false;
 @Output() closeMobile = new EventEmitter<void>();
+open:any = false;
   constructor(private authService:AuthService, private router:Router){}
 
 
@@ -25,6 +26,5 @@ this.router.navigate(['/login'])
 }
 
 sidebarOpen = false;
-
 
 }

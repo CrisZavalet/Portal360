@@ -1,64 +1,59 @@
 <aside
-   class="
-    h-screen
-    flex flex-col
-    transition-all duration-300
-    backdrop-blur-2xl
-    border-r
-    shadow-[0_0_40px_rgba(0,0,0,0.4)]
-    bg-slate-900/40
-    border-white/10
+  class="relative h-screen flex flex-col justify-between
+         transition-all duration-300
+         backdrop-blur-2xl
+         border-r border-white/10
+         shadow-[0_0_40px_rgba(0,0,0,0.4)]
+         bg-slate-900/40
+         overflow-hidden
+         lg:translate-x-0"
 
-    before:absolute
-before:inset-0
-before:-z-10
-before:bg-gradient-to-b
-before:from-white/5
-before:to-transparent
-relative
-overflow-hidden
-  "
   [class.w-20]="collapsed"
   [class.w-64]="!collapsed"
-   [class.-translate-x-full]="mobileOpen"
+  [class.-translate-x-full]="mobileOpen"
   [class.translate-x-0]="mobileOpen"
-  class="lg:translate-x-0"
->
-<div
-  class="p-4 relative"
-  [ngClass]="collapsed
-    ? 'flex flex-col items-center gap-4'
-    : 'flex items-center justify-center'"
 >
 
-  @if (!collapsed) {
-    <img
-      src="./assets/PORTAL360.png"
-      alt="Logo Portal360"
-      class="w-40 object-contain"
-    />
+  @if (open) {
+    <div
+      class="fixed inset-0 z-40"
+      (click)="open = !open">
+    </div>
   }
 
-  @if (collapsed) {
-    <img
-      src="./assets/icons/logo_responsive_2.png"
-      alt="Logo Portal360"
-      class="w-10 h-10 object-contain"
-    />
-  }
+  <div class="flex flex-col flex-1">
 
-  <img
-    src="./assets/menu-hamburger.png"
-    alt="Menu"
-    class="w-5 cursor-pointer transition-all duration-300 hover:rotate-90"
-    [ngClass]="collapsed ? '' : 'absolute right-4'"
-    (click)="toggle.emit()"
-  />
+    <div
+      class="p-4 relative"
+      [ngClass]="collapsed
+        ? 'flex flex-col items-center gap-4'
+        : 'flex items-center justify-center'"
+    >
 
-</div>
+      @if (!collapsed) {
+        <img src="./assets/PORTAL360.png"
+             alt="Logo"
+             class="w-40 object-contain" />
+      }
+
+      @if (collapsed) {
+        <img src="./assets/icons/logo_responsive_2.png"
+             alt="Logo"
+             class="w-10 h-10 object-contain" />
+      }
+
+      <img
+        src="./assets/menu-hamburger.png"
+        alt="Menu"
+        class="w-5 cursor-pointer transition-all duration-300 hover:rotate-90"
+        [ngClass]="collapsed ? '' : 'absolute right-4'"
+        (click)="toggle.emit()"
+      />
+
+    </div>
 
 
-  <nav class="flex-1 space-y-2 p-4">
+<nav class="flex-1 space-y-2 p-4">
     <a
       routerLink="/dashboard"
       (click)="closeMobile.emit()"
@@ -211,40 +206,80 @@ hover:border hover:border-white/20"
       <span>Notificaciones</span>
         }
     </a>
-  </nav>
 
-  <div class="p-4 border-t border-slate-700">
-    <button
-      class="flex items-center gap-3 p-4 bg-slate-800 hover:bg-slate-700 transition rounded-xl w-full"
-    >
-      <div class="flex justify-between gap-5 items-center w-full">
-         @if (!collapsed) {
-             <img src="./assets/profile.png" alt="Foto perfil" class="h-10 w-10 rounded-full" />
-            }@else{
-                <img src="./assets/profile.png" alt="Foto perfil" class="h-auto w-auto rounded-full border border-white" />
-                
-         }
 
-         @if (!collapsed) {
-        <div class="text-left">
-          <div class="text-xs text-white/80 font-medium"><span>Florencia Macarena Sandoval Perez</span></div>
-          <div class="text-xs text-slate-400">Administrador</div>
-        </div>
-            }
-      </div>
-       @if (!collapsed) {
-      <div class="w-6 h-6 flex items-center justify-center dropdown dropdown-bottom">
-        
-       
+    </nav>
 
-        <button mat-button [matMenuTriggerFor]="menu"   class="bg-white/10 backdrop-blur-md rounded-xl text-white px-4 py-2 hover:bg-white/20"
-> <img class="w-5" src="./assets/ic--outline-more-vert.png" alt="options" /></button>
-<mat-menu #menu="matMenu" panelClass="glass-menu">
-  <button mat-menu-item class="text-white">Perfil</button>
-  <button mat-menu-item (click)="logout()">Salir</button>
-</mat-menu>
-      </div>
-        }
-    </button>
   </div>
+
+  <div class="relative p-4 border-t border-white/10">
+
+    <div class="flex items-center justify-between
+                bg-slate-800 hover:bg-slate-700
+                transition rounded-xl p-4">
+
+      <div class="flex items-center gap-3">
+        <img src="./assets/profile.png"
+             alt="Perfil"
+             class=" w-10 h-auto rounded-full" />
+
+        @if (!collapsed) {
+          <div class="text-left">
+            <div class="text-xs text-white/80 font-medium">
+              Florencia Macarena Sandoval Perez
+            </div>
+            <div class="text-xs text-slate-400">
+              Administrador
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (!collapsed) {
+        <div class="relative z-50">
+
+          <button
+            (click)="open = !open"
+            class="p-1 bg-white/10 backdrop-blur-md rounded-xl hover:bg-white/20"
+          >
+            <img class="w-5"
+                 src="./assets/ic--outline-more-vert.png" />
+          </button>
+
+          @if (open) {
+            <div
+              class="absolute bottom-14 right-0
+                     w-48
+                     backdrop-blur-2xl
+                     bg-gradient-to-br from-white/30 to-white/5
+                     border border-white/20
+                     rounded-2xl
+                     shadow-[0_20px_40px_rgba(0,0,0,0.3)]
+                     p-2
+                     z-50">
+
+              <button class="w-full text-left px-3 py-2 hover:bg-white/20 rounded-lg">
+                Perfil
+              </button>
+
+              <button class="w-full text-left px-3 py-2 hover:bg-white/20 rounded-lg">
+                Configuración
+              </button>
+
+              <button
+                (click)="logout()"
+                class="w-full text-left px-3 py-2 hover:bg-red-500/20 text-red-400 rounded-lg">
+                Cerrar sesión
+              </button>
+
+            </div>
+          }
+
+        </div>
+      }
+
+    </div>
+
+  </div>
+
 </aside>
