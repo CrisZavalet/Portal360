@@ -32,7 +32,7 @@
     </div>
 
   <div
-class="rounded-2xl px-6 py-5 w-full
+    class="rounded-2xl px-6 py-5 w-full
          bg-white/40 dark:bg-white/10
          backdrop-blur-xl
          border border-white/30 dark:border-white/10
@@ -42,7 +42,7 @@ class="rounded-2xl px-6 py-5 w-full
     <div class="inline flex   gap-4 justify-center">
       @for (holidays of holiday; track holidays) {
         <div
-  class="w-32 h-40 rounded-2xl
+    class="w-32 h-40 rounded-2xl
          flex flex-col items-center justify-center
          text-center p-3
          transition-all duration-300 hover:scale-105
@@ -53,8 +53,8 @@ class="rounded-2xl px-6 py-5 w-full
           <div
             class="text-3xl font-bold text-gray-800"
             [ngClass]="holidays.isNacionalHoliday 
-  ? 'text-rose-500' 
-  : 'text-indigo-500 dark:text-indigo-400 '">
+    ? 'text-rose-500' 
+    : 'text-indigo-500 dark:text-indigo-400 '">
           
             {{ holidays.day }}
           </div>
