@@ -38,4 +38,6 @@ sidebarCollapsed = false;
   closeMobile() {
     this.mobileOpen = false;
   }
+
+  
 }

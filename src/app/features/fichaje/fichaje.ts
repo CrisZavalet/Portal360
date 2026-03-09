@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-fichaje',
-  imports: [FormsModule],
+  imports: [FormsModule, ],
   templateUrl: './fichaje.html',
   styleUrl: './fichaje.css',
 })
