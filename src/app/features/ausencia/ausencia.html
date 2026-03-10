@@ -1,10 +1,90 @@
 <div>
-    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Ausencias</h1>
+  <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Ausencias</h1>
 
-      <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-6 justify-center mt-10">
-        <div class="  xl:col-span-2 rounded-2xl px-6 py-5 mt-5 w-full bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Ausencias Obtenidas</h2>
-            
+  <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-6 justify-center mt-10">
+
+    <div
+      class="xl:col-span-2 mt-5 w-full rounded-2xl px-6 py-5
+             bg-white/40 dark:bg-white/10
+             backdrop-blur-xl
+             border border-white/30 dark:border-white/10
+             shadow-xl shadow-black/5"
+    >
+
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+          Ausencias Obtenidas
+        </h2>
+
+        <button
+          class="flex items-center gap-2 px-3 py-2 rounded-xl
+                 bg-indigo-600 text-white text-sm font-medium
+                 hover:bg-indigo-700
+                 transition-all duration-300
+                 shadow-lg shadow-indigo-500/20
+                 hover:-translate-y-0.5 hover:shadow-xl"
+        >
+         <img src="./assets/icons/plus.svg"> Solicitar ausencia
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
+          <span class="text-gray-600 dark:text-gray-300">Vacaciones Generadas</span>
+          <span class="font-semibold text-lg text-slate-800 dark:text-white">0</span>
         </div>
+
+        <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
+          <span class="text-gray-600 dark:text-gray-300">Vacaciones Utilizadas</span>
+          <span class="font-semibold text-lg text-slate-800 dark:text-white">0</span>
         </div>
+
+        <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
+          <span class="text-gray-600 dark:text-gray-300">Vacaciones Disponibles</span>
+          <span class="font-semibold text-lg text-emerald-600 dark:text-emerald-400">0</span>
+        </div>
+
+        <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
+          <span class="text-gray-600 dark:text-gray-300">Vacaciones Planificadas</span>
+          <span class="font-semibold text-lg text-indigo-600 dark:text-indigo-400">0</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div
+      class="xl:col-span-2 rounded-2xl px-6 py-5 mt-5 w-full
+             bg-white/40 dark:bg-white/10
+             backdrop-blur-xl
+             border border-white/30 dark:border-white/10
+             shadow-xl shadow-black/5"
+    >
+      <h2
+        class="text-lg text-center font-semibold text-slate-800 dark:text-white tracking-tight p-2"
+      >
+        Información
+      </h2>
+
+      <div class="flex justify-center">
+        <p class="text-sm text-slate-600 dark:text-slate-300 text-center">
+          ¿Hay un error en esta sección? Contacta con RRHH
+        </p>
+      </div>
+
+      <div class="flex justify-center">
+        <button
+          class="mt-4 px-4 py-2 rounded-lg
+                 bg-indigo-600 text-white
+                 hover:bg-indigo-700
+                 transition-all duration-300
+                 shadow-xl shadow-black/5
+                 hover:shadow-2xl hover:-translate-y-1"
+        >
+          Contactar con RRHH
+        </button>
+      </div>
+    </div>
+
+  </div>
 </div>
