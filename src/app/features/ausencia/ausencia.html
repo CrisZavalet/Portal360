@@ -1,35 +1,21 @@
 <div>
   <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Ausencias</h1>
 
-  <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-6 justify-center mt-10">
-
+  <div class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-6 justify-center mt-1">
     <div
-      class="xl:col-span-2 mt-5 w-full rounded-2xl px-6 py-5
-             bg-white/40 dark:bg-white/10
-             backdrop-blur-xl
-             border border-white/30 dark:border-white/10
-             shadow-xl shadow-black/5"
+      class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
     >
-
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-          Ausencias Obtenidas
-        </h2>
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Ausencias Obtenidas</h2>
 
         <button
-          class="flex items-center gap-2 px-3 py-2 rounded-xl
-                 bg-indigo-600 text-white text-sm font-medium
-                 hover:bg-indigo-700
-                 transition-all duration-300
-                 shadow-lg shadow-indigo-500/20
-                 hover:-translate-y-0.5 hover:shadow-xl"
+          class="flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5 hover:shadow-xl"
         >
-         <img src="./assets/icons/plus.svg"> Solicitar ausencia
+          <img src="./assets/icons/plus.svg" /> Solicitar ausencia
         </button>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Generadas</span>
           <span class="font-semibold text-lg text-slate-800 dark:text-white">0</span>
@@ -49,16 +35,99 @@
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Planificadas</span>
           <span class="font-semibold text-lg text-indigo-600 dark:text-indigo-400">0</span>
         </div>
-
       </div>
     </div>
 
+    <div class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5">
+      <div
+ 
+>
+      <div class="flex items-center justify-center gap-6 mb-8">
+
+  <button
+    class="w-10 h-10 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur hover:scale-110 transition"
+    (click)="changeYear(-1)"
+  >
+    ←
+  </button>
+
+  <span class="text-2xl font-bold text-slate-800 dark:text-white">
+    {{ year }}
+  </span>
+
+  <button
+    class="w-10 h-10 rounded-full bg-white/40 dark:bg-white/10 backdrop-blur hover:scale-110 transition"
+    (click)="changeYear(1)"
+  >
+    →
+  </button>
+
+</div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+    @for (month of months; track $index; let m = $index) {
+
+      <div
+        class="rounded-xl p-5
+        bg-white/60 dark:bg-white/5
+        border border-white/40 dark:border-white/10
+        shadow-md hover:shadow-lg
+        transition-all duration-300"
+      >
+
+        <h2
+          class="text-lg font-semibold text-slate-800 dark:text-white
+          mb-4 text-center tracking-wide"
+        >
+          {{ monthNames[m] }}
+        </h2>
+
+        <div
+          class="grid grid-cols-7 text-xs font-semibold
+          text-slate-500 dark:text-slate-400 mb-1"
+        >
+          @for (d of weekDays; track d) {
+            <div class="text-center">{{ d }}</div>
+          }
+        </div>
+
+        <div class="grid grid-cols-7 gap-1 text-sm">
+
+          @for (day of month; track $index) {
+
+            <div
+              class="flex items-center justify-center
+              h-8 rounded-md
+              text-slate-700 dark:text-slate-300
+              hover:bg-blue-600/10
+              transition cursor-pointer"
+
+              [class.bg-red-500]="isEvent(day,m)"
+              [class.text-white]="isEvent(day,m)"
+            >
+
+              @if(day){
+                {{ day }}
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+    </div>
+
     <div
-      class="xl:col-span-2 rounded-2xl px-6 py-5 mt-5 w-full
-             bg-white/40 dark:bg-white/10
-             backdrop-blur-xl
-             border border-white/30 dark:border-white/10
-             shadow-xl shadow-black/5"
+      class="xl:col-span-2 rounded-2xl px-6 py-5 mt-2 w-full bg-white/40 dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
     >
       <h2
         class="text-lg text-center font-semibold text-slate-800 dark:text-white tracking-tight p-2"
@@ -74,17 +143,11 @@
 
       <div class="flex justify-center">
         <button
-          class="mt-4 px-4 py-2 rounded-lg
-                 bg-indigo-600 text-white
-                 hover:bg-indigo-700
-                 transition-all duration-300
-                 shadow-xl shadow-black/5
-                 hover:shadow-2xl hover:-translate-y-1"
+          class="mt-4 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 shadow-xl shadow-black/5 hover:shadow-2xl hover:-translate-y-1"
         >
           Contactar con RRHH
         </button>
       </div>
     </div>
-
   </div>
 </div>
