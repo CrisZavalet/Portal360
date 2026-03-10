@@ -129,7 +129,6 @@ setInterval(() => {
         person.day
       );
 
-      // Si ya pasó este año → lo pasamos al siguiente
       if (nextBirthday < todayClean) {
         nextBirthday = new Date(
           todayClean.getFullYear() + 1,
