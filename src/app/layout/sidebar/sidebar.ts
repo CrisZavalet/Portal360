@@ -28,6 +28,13 @@ this.router.navigate(['/login'])
 sidebarOpen = false;
 
 
+perfile(){
+  this.router.navigate(['/profile'])
+}
+
+
+
+
  }
 
 
