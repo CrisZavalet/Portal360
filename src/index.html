@@ -14,18 +14,26 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="bg-[linear-gradient(to_right,_#1C1854,_#081440)] min-h-full m-0 leading-normal">
-  <div class="relative flex flex-col md:flex-row items-center justify-start min-h-screen ">
+<body class="bg-[linear-gradient(to_right,_#1C1854,_#081440)] min-h-screen m-0 leading-normal overflow-hidden">
 
-    <div class="relative w-full md:w-[30%] h-[300px] rounded-full bg-[#552481] blur-[200px] mb-8 md:mb-0"></div>
 
-    <div class="relative lg:fixed  top-0 right-0 w-[50%] h-[300px] blur-[190px] 
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+
+ 
+    <div class="absolute w-[300px] h-[300px] bg-[#552481] blur-[120px] top-0 left-0"></div>
+
+   
+    <div class="absolute w-[300px] h-[300px] blur-[120px] 
                 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500
-               "></div>
-    <div class="relative w-full lg:w-[20%] h-[627px] bg-[#552481] blur-[200px]"></div>
-    <div class="relative w-full lg:w-[100%] h-[627px] mt-24 lg:mt-0 bg-[#1F4470] blur-[200px]"></div>
-  </div>
-  <app-root class="absolute  top-0 left-0 w-full sm:h-full"></app-root>
-</body>
+                top-0 right-0">
+    </div>
 
+    <div class="absolute w-full h-[300px] bg-[#1F4470] blur-[120px] bottom-0"></div>
+
+  </div>
+
+
+  <app-root class="absolute inset-0 z-10 w-full min-h-screen"></app-root>
+
+</body>
 </html>

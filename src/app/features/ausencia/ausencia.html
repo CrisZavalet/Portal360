@@ -91,10 +91,11 @@
                     [ngClass]="{
                       'bg-red-500 text-white font-semibold': getEvent(day, m)?.type === 'holiday',
                       'bg-blue-500 text-white font-semibold': getEvent(day, m)?.type === 'vacation',
-                      'bg-yellow-400 text-black font-semibold':getEvent(day, m)?.type === 'absence',
+                      'bg-yellow-400 text-black font-semibold':
+                        getEvent(day, m)?.type === 'absence',
                       'bg-purple-500 text-white font-semibold': getEvent(day, m)?.type === 'sick',
-                      'ring-4 ring-indigo-500 font-bold': isToday(day,m)
-                   }"
+                      'ring-4 ring-indigo-500 font-bold': isToday(day, m),
+                    }"
                   >
                     @if (day) {
                       {{ day }}
@@ -126,9 +127,8 @@
       <div class="flex justify-center">
         <button
           class="mt-4 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-all duration-300 shadow-xl shadow-black/5 hover:shadow-2xl hover:-translate-y-1"
-                  (click)="openExportModal()"
-
-          >
+          (click)="openExportModal()"
+        >
           Contactar con RRHH
         </button>
       </div>
@@ -147,15 +147,10 @@
       {{ selectedEvent?.name }}
     </h3>
 
-    <p class="mt-2 text-slate-600 dark:text-slate-300">
-      Fecha: {{ selectedEvent?.date }}
-    </p>
+    <p class="mt-2 text-slate-600 dark:text-slate-300">Fecha: {{ selectedEvent?.date }}</p>
 
-    <p class="mt-1 text-sm text-slate-500">
-      Tipo: {{ selectedEvent?.type }}
-    </p>
+    <p class="mt-1 text-sm text-slate-500">Tipo: {{ selectedEvent?.type }}</p>
 
-     
     <div class="modal-action">
       <form method="dialog">
         <button
@@ -168,191 +163,186 @@
   </div>
 </dialog>
 
-
 @if (exportModalOpen) {
-    <div class="fixed inset-0 flex items-center justify-center z-50">
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" (click)="closeExportModal()"></div>
+  <div class="fixed inset-0 flex items-center justify-center z-50">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" (click)="closeExportModal()"></div>
 
-      <div
-        class="relative w-[420px] p-6 rounded-3xl backdrop-blur-2xl bg-white/30 border border-white/40 shadow-2xl shadow-black/30"
-      >
-        <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-4">Contactar con RRHH</h2>
+    <div
+      class="relative w-[420px] p-6 rounded-3xl backdrop-blur-2xl bg-white/30 border border-white/40 shadow-2xl shadow-black/30"
+    >
+      <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-4">Contactar con RRHH</h2>
 
-        <div class="max-w-xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm p-4">
-          <input
-            type="text"
-            placeholder="Asunto de la consulta"
-            class="w-full text-lg font-semibold placeholder-gray-400 outline-none mb-2"
-          />
-          <hr class="w-full border-slate -100 my-2" />
+      <div class="max-w-xl mx-auto bg-white border border-gray-200 rounded-xl shadow-sm p-4">
+        <input
+          type="text"
+          placeholder="Asunto de la consulta"
+          class="w-full text-lg font-semibold placeholder-gray-400 outline-none mb-2"
+        />
+        <hr class="w-full border-slate -100 my-2" />
 
-          <textarea
-            placeholder="Descripción"
-            rows="4"
-            class="w-full resize-none outline-none text-gray-600 placeholder-gray-400"
-          ></textarea>
+        <textarea
+          placeholder="Descripción"
+          rows="4"
+          class="w-full resize-none outline-none text-gray-600 placeholder-gray-400"
+        ></textarea>
 
-          <hr class="w-full border-gray-100 my-2" />
-          <div class="flex items-center justify-between mt-4">
-            <div class="flex items-center gap-3">
-              <label
-                class="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
-              >
-                📎
-                <span>Adjuntar archivo</span>
-                <input type="file" class="hidden" />
-              </label>
-            </div>
-            <div class="flex gap-3">
-              <button
-                class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition"
-              >
-                Enviar
-              </button>
-              <button
-                (click)="closeExportModal()"
-                class="px-4 py-2 rounded-xl bg-slate-600/20 hover:bg-slate-600/40 transition"
-              >
-                Cancelar
-              </button>
-            </div>
+        <hr class="w-full border-gray-100 my-2" />
+        <div class="flex items-center justify-between mt-4">
+          <div class="flex items-center gap-3">
+            <label
+              class="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
+            >
+              📎
+              <span>Adjuntar archivo</span>
+              <input type="file" class="hidden" />
+            </label>
+          </div>
+          <div class="flex gap-3">
+            <button
+              class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition"
+            >
+              Enviar
+            </button>
+            <button
+              (click)="closeExportModal()"
+              class="px-4 py-2 rounded-xl bg-slate-600/20 hover:bg-slate-600/40 transition"
+            >
+              Cancelar
+            </button>
           </div>
         </div>
       </div>
     </div>
-  }
-
-  @if(modalOpen) {
-    <dialog open class="modal backdrop-blur-xl bg-white/30 dark:bg-slate-900/30 border border-white/30 dark:border-white/10 rounded-2xl shadow-xl shadow-black/5">
-      <div class="modal-box rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-xl">
-        <h3 class="font-bold text-xl text-slate-800 dark:text-white">Solicitar ausencia</h3>
-      
-  <fieldset class="fieldset mt-5">
-    <legend class="fieldset-legend  mb-1">Tipo de ausencia <span class="text-red-500">*</span></legend>
-    <select class="select border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
-      @for(type of selectAbsenceType; track type) {
-        <option [value]="type" [selected]="selectAbsenceType">
-          {{ type }}
-        </option>
-      }
-    </select>
-</fieldset>
-
-<fieldset class="fieldset mt-5">
-  <legend class="fieldset-legend mb-1">Comentario</legend>
-  <textarea class="textarea resize-none w-full rounded-md  border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block" rows="4" placeholder="Descripción"></textarea>
-</fieldset>
-
-<fieldset class="fieldset mt-5">
-  <legend class="fieldset-legend mb-1">
-    Duración <span class="text-red-500">*</span>
-  </legend>
-
-  <div class="flex gap-2">
-
-    <button
-      type="button"
-      (click)="setDuration('hours')"
-      class="px-4 py-2 rounded-lg transition border border-gray-300 "
-      [class.bg-indigo-600]="durationType === 'hours'"
-      [class.text-white]="durationType === 'hours'"
-      [class.bg-white]="durationType !== 'hours'"
-    >
-      Horas
-    </button>
-
-    <button
-      type="button"
-      (click)="setDuration('day')"
-      class="px-4 py-2 rounded-lg transition border border-gray-300"
-      [class.bg-indigo-600]="durationType === 'day'"
-      [class.text-white]="durationType === 'day'"
-      [class.bg-white]="durationType !== 'day'"
-    >
-      Un día
-    </button>
-
-    <button
-      type="button"
-      (click)="setDuration('days')"
-      class="px-4 py-2 rounded-lg transition border border-gray-300"
-      [class.bg-indigo-600]="durationType === 'days'"
-      [class.text-white]="durationType === 'days'"
-      [class.bg-white]="durationType !== 'days'"
-    >
-      Varios días
-    </button>
-
   </div>
-
-  @if(durationType === 'hours'){
-
-<div class="grid grid-cols-2 gap-4 mt-4">
-
-  <div>
-    <label class="label">Fecha</label>
-    <input type="date" class="input input-bordered w-full">
-  </div>
-
-  <div>
-    <label class="label">Horas</label>
-    <input type="number" class="input input-bordered w-full" placeholder="Ej: 2">
-  </div>
-
-</div>
-
 }
 
+@if (modalOpen) {
+  <dialog
+    open
+    class="modal backdrop-blur-xl bg-white/30 dark:bg-slate-900/30 border border-white/30 dark:border-white/10 rounded-2xl shadow-xl shadow-black/5"
+  >
+    <div
+      class="modal-box rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-xl"
+    >
+      <h3 class="font-bold text-xl text-slate-800 dark:text-white">Solicitar ausencia</h3>
 
+      <fieldset class="fieldset mt-5">
+        <legend class="fieldset-legend mb-1">
+          Tipo de ausencia <span class="text-red-500">*</span>
+        </legend>
+        <select
+          class="select border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm"
+        >
+          @for (type of selectAbsenceType; track type) {
+            <option [value]="type" [selected]="selectAbsenceType">
+              {{ type }}
+            </option>
+          }
+        </select>
+      </fieldset>
 
-@if(durationType === 'day'){
+      <fieldset class="fieldset mt-5">
+        <legend class="fieldset-legend mb-1">Comentario</legend>
+        <textarea
+          class="textarea resize-none w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block"
+          rows="4"
+          placeholder="Descripción"
+        ></textarea>
+      </fieldset>
 
-<div class="mt-4">
+      <fieldset class="fieldset mt-5">
+        <legend class="fieldset-legend mb-1">Duración <span class="text-red-500">*</span></legend>
 
-  <label class="label">Fecha</label>
-  <input type="date" class="input input-bordered w-full">
-
-</div>
-
-}
-
-
-@if(durationType === 'days'){
-
-<div class="grid grid-cols-2 gap-4 mt-4">
-
-  <div>
-    <label class="label">Desde</label>
-    <input type="date" class="input input-bordered w-full">
-  </div>
-
-  <div>
-    <label class="label">Hasta</label>
-    <input type="date" class="input input-bordered w-full">
-  </div>
-
-</div>
-
-}
-</fieldset>
-
-<fieldset class="fieldset mt-5">
-  <legend class="fieldset-legend mb-1">Adjuntar archivo</legend>
-  <input type="file" class="file-input file-input-sm" />
-  <label class="label">Max size 2MB</label>
-</fieldset>
-
-        <div class="modal-action">
-          <button class="flex px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 mr-5">
-            Solicitar
+        <div class="flex gap-2">
+          <button
+            type="button"
+            (click)="setDuration('hours')"
+            class="px-4 py-2 rounded-lg transition border border-gray-300"
+            [class.bg-indigo-600]="durationType === 'hours'"
+            [class.text-white]="durationType === 'hours'"
+            [class.bg-white]="durationType !== 'hours'"
+          >
+            Horas
           </button>
-          <button class="flex px-4 py-2 rounded-md bg-slate-400 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20" (click)="modalOpen = false">
-            Cancelar
+
+          <button
+            type="button"
+            (click)="setDuration('day')"
+            class="px-4 py-2 rounded-lg transition border border-gray-300"
+            [class.bg-indigo-600]="durationType === 'day'"
+            [class.text-white]="durationType === 'day'"
+            [class.bg-white]="durationType !== 'day'"
+          >
+            Un día
+          </button>
+
+          <button
+            type="button"
+            (click)="setDuration('days')"
+            class="px-4 py-2 rounded-lg transition border border-gray-300"
+            [class.bg-indigo-600]="durationType === 'days'"
+            [class.text-white]="durationType === 'days'"
+            [class.bg-white]="durationType !== 'days'"
+          >
+            Varios días
           </button>
         </div>
+
+        @if (durationType === 'hours') {
+          <div class="grid grid-cols-2 gap-4 mt-4">
+            <div>
+              <label class="label">Fecha</label>
+              <input type="date" class="input input-bordered w-full" />
+            </div>
+
+            <div>
+              <label class="label">Horas</label>
+              <input type="number" class="input input-bordered w-full" placeholder="Ej: 2" />
+            </div>
+          </div>
+        }
+
+        @if (durationType === 'day') {
+          <div class="mt-4">
+            <label class="label">Fecha</label>
+            <input type="date" class="input input-bordered w-full" />
+          </div>
+        }
+
+        @if (durationType === 'days') {
+          <div class="grid grid-cols-2 gap-4 mt-4">
+            <div>
+              <label class="label">Desde</label>
+              <input type="date" class="input input-bordered w-full" />
+            </div>
+
+            <div>
+              <label class="label">Hasta</label>
+              <input type="date" class="input input-bordered w-full" />
+            </div>
+          </div>
+        }
+      </fieldset>
+
+      <fieldset class="fieldset mt-5">
+        <legend class="fieldset-legend mb-1">Adjuntar archivo</legend>
+        <input type="file" class="file-input file-input-sm" />
+        <label class="label">Max size 2MB</label>
+      </fieldset>
+
+      <div class="modal-action">
+        <button
+          class="flex px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 mr-5"
+        >
+          Solicitar
+        </button>
+        <button
+          class="flex px-4 py-2 rounded-md bg-slate-400 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20"
+          (click)="modalOpen = false"
+        >
+          Cancelar
+        </button>
       </div>
-    </dialog>
-  } 
-
-
-
+    </div>
+  </dialog>
+}

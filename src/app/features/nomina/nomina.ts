@@ -11,6 +11,18 @@ import { FormsModule } from '@angular/forms';
 export class Nomina {
 
 exportModalOpen = false;
+
+openMes: string | null = null;
+
+toggleMes(mes: string) {
+  this.openMes = this.openMes === mes ? null : mes;
+}
+
+meses = [
+  'ENERO', 'FEBRERO', 'MARZO', 'ABRIL',
+  'MAYO', 'JUNIO', 'JULIO', 'AGOSTO',
+  'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
+];
 nomina: Nominas[] = [
   { archivo: new Date(2026, 1, 10), periodo: 'Enero 2026', tipo: 'Ordinaria', fechaEmision: new Date(2026, 1, 15), estado: 'Disponible', accion: 'Descargar' },
   { archivo: new Date(2026, 0, 10), periodo: 'Diciembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2026, 0, 15), estado: 'Disponible', accion: 'Descargar' },
@@ -57,6 +69,14 @@ closeExportModal() {
 
 downloadNominas() {
   console.log(`Descargando nóminas del año ${this.selectedYear()}`);  
+}
+
+nominasPorMes(month: string): Nominas[] {
+  return this.nomina.filter(x => x.periodo.toUpperCase().includes(month));
+}
+
+tieneNomina(month: string): boolean {
+  return this.nominasPorMes(month).length > 0;
 }
 
 }
