@@ -33,6 +33,7 @@ export const routes: Routes = [
       { path: 'employees', component: Empleados },
       { path: 'notifications', component: Notificaciones },
       { path: 'profile', component: Perfil },
+      
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
