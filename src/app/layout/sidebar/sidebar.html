@@ -216,9 +216,9 @@ hover:border hover:border-white/20"
 
     <div class="flex items-center justify-between
                 bg-slate-800 hover:bg-slate-700
-                transition rounded-xl p-4">
+                transition rounded-xl p-4 ">
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3"  (click)="open = !open"  >
         <img src="./assets/profile.png"
              alt="Perfil"
              class=" w-10 h-auto rounded-full" />
@@ -240,7 +240,7 @@ hover:border hover:border-white/20"
 
           <button
             (click)="open = !open"
-            class="p-1 bg-white/10 backdrop-blur-md rounded-xl hover:bg-white/20"
+            class="p-1  backdrop-blur-md rounded-xl "
           >
             <img class="w-5"
                  src="./assets/ic--outline-more-vert.png" />

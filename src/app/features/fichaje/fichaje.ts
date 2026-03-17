@@ -81,27 +81,3 @@ exportData() {
   this.exportModalOpen = false;
 }   
 }
-
-
-//  <th class="p-4 text-left">Archivo</th>
-//             <th class="p-4 text-left">Periodo</th>
-//             <th class="p-4 text-left">Tipo</th>
-//             <th class="p-4 text-left">Fecha emision</th>
-//             <th class="p-4 text-left">Estado</th>
-//             <th class="p-4 text-left">Acción</th>
-
-
-//  <tbody>
-//           @for (n of paginatedNominas; track n) {
-    //  <tr class="border-t border-white/10 hover:bg-white/20 transition">
-    //           <td class="px-3 py-2 md:p-4 whitespace-nowrap">{{ formatearFecha(n.archivo) }}</td>
-    //           <td class="px-3 py-2 md:p-4 whitespace-nowrap">{{ n.periodo }}</td>
-    //           <td class="px-3 py-2 md:p-4 whitespace-nowrap">{{ n.tipo }}</td>
-    //           <td class="px-3 py-2 md:p-4 whitespace-nowrap">{{ formatearFecha(n.fechaEmision) }}</td>
-    //           <td class="px-3 py-2 md:p-4 whitespace-nowrap">{{ n.estado }}</td>
-    //           <td class="px-3 py-2 md:p-4 whitespace-nowrap gap-2 flex">
-    //               <button class="px-1 py-1 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition"><img src="./assets/icons/eye-outline.svg" alt="Ver" srcset=""></button>
-    //       <button class="px-1 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"><img src="./assets/icons/download.svg" alt="Descargar" (click)="downloadNominas()" srcset="" ></button>
-    //           </td>
-    //         </tr>     }
-        // </tbody>
