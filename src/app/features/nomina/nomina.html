@@ -61,10 +61,18 @@
 
             <td class="flex justify-between md:table-cell p-2 md:p-4">
               <span class="font-medium md:hidden">Acción</span>
-              <button class="px-3 py-1 rounded-lg
-                             bg-indigo-500 text-white text-sm">
-                Descargar
+             
+              <button
+                class="px-1 py-1 mr-1 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition"
+              >
+                <img src="./assets/icons/eye-outline.svg" alt="Ver" srcset="" />
               </button>
+              <button
+                class="px-1 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+              >
+                <img src="./assets/icons/download.svg" alt="Descargar" srcset="" />
+              </button>
+            
             </td>
 
           </tr>
@@ -168,6 +176,7 @@
             }
           </select>
         </div>
+        
         <button
           (click)="downloadNominas()"
           class="w-1/2 flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
@@ -192,6 +201,7 @@
           class="mt-4 shadow-xl shadow-black/5 backdrop-blur-xl px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
         >
           Contactar con RRHH
+
         </button>
       </div>
     </div>

@@ -4,21 +4,25 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AuthService {
-    private MOCK_USER = {
+    private testUser = {
     id: 1,
-    name: 'Florencia Macarena Sandoval',
+    name: 'Florencia Macarena ',
+    surname: 'Sandoval Perez',
     username:'FlorSan',
     email: 'florencia@portal360.com',
     password: '123456',
-    role: 'empleado',
+    role: 'Empleado',
     vacaciones: 22
-  };
+  }
+
+  ;
+  
  login(username: string, password: string): boolean {
     if (
-      username === this.MOCK_USER.username &&
-      password === this.MOCK_USER.password
+      username === this.testUser.username &&
+      password === this.testUser.password
     ) {
-      const { password: _, ...userWithoutPassword } = this.MOCK_USER;
+      const { password: _, ...userWithoutPassword } = this.testUser;
 
       localStorage.setItem('user', JSON.stringify(userWithoutPassword));
       return true;

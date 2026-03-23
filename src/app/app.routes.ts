@@ -14,6 +14,8 @@ import { Empleados } from './features/empleados/empleados';
 import { Notificaciones } from './features/notificaciones/notificaciones';
 import { Perfil } from './features/perfil/perfil';
 import { NotFound } from './shared/not-found/not-found';
+import { Configurations } from './features/configurations/configurations';
+import { authUserGuard } from './core/guards/auth-user-guard';
 
 export const routes: Routes = [
    { path: 'access', component: Login },
@@ -24,15 +26,16 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      { path: 'dashboard', component: Dashboard },
-      { path: 'my-time', component: Fichaje },
-      { path: 'paysheet', component: Nomina },
-      { path: 'documents', component: Documento },
-      { path: 'absences', component: Ausencia },
-      { path: 'benefits', component: Beneficio },
-      { path: 'employees', component: Empleados },
-      { path: 'notifications', component: Notificaciones },
-      { path: 'profile', component: Perfil },
+      { path: 'dashboard', component: Dashboard, canActivate: [authUserGuard] },
+      { path: 'my-time', component: Fichaje, canActivate: [authUserGuard] },
+      { path: 'paysheet', component: Nomina, canActivate: [authUserGuard] },
+      { path: 'documents', component: Documento, canActivate: [authUserGuard] },
+      { path: 'absences', component: Ausencia, canActivate: [authUserGuard] },
+      { path: 'benefits', component: Beneficio, canActivate: [authUserGuard] },
+      { path: 'employees', component: Empleados, canActivate: [authUserGuard] },
+      { path: 'notifications', component: Notificaciones, canActivate: [authUserGuard] },
+      { path: 'profile', component: Perfil, canActivate: [authUserGuard] },
+      { path: 'config', component: Configurations, canActivate: [authUserGuard] },
       
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
