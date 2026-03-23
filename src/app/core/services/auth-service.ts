@@ -12,6 +12,7 @@ export class AuthService {
     email: 'florencia@portal360.com',
     password: '123456',
     role: 'Empleado',
+    fnac:'1994-10-15',
     vacaciones: 22
   }
 
@@ -33,6 +34,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('user');
+      localStorage.removeItem('token');
   }
 
   getUser() {

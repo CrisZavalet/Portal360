@@ -5,6 +5,7 @@ import { Fichaje } from "../../shared/fichaje/fichaje";
 import { Time } from "../../shared/time/time";
 import { Calendar } from "../../shared/calendar/calendar";
 import confetti from 'canvas-confetti';
+import { AuthService } from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,9 @@ export class Dashboard {
   today: Date = new Date();
   upcomingBirthdays: any[] = [];
   todayBirthdays: any[] = [];
+  name_user:any;
+  suername_user:any;
+  rol_user:any;
 @ViewChildren('birthdayCard') birthdayCards!: QueryList<ElementRef>;
 
 
@@ -61,8 +65,16 @@ export class Dashboard {
 
 birthdays: any[] = [];
 
-  constructor(private holidayService: Holiday) { }
+  constructor(private holidayService: Holiday,private authService: AuthService) { }
   ngOnInit() {
+
+
+    const user = this.authService.getUser();
+  this.name_user = user.name;
+  this.suername_user = user.surname;
+  this.rol_user = user.role;
+
+
     this.currentYear = new Date().getFullYear();
 
     this.holidayService.getHolidays(this.currentYear).subscribe((data: any) => {

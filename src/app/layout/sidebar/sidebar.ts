@@ -16,12 +16,23 @@ export class Sidebar {
 @Output() toggle = new EventEmitter<void>();
 @Input() mobileOpen = false;
 @Output() closeMobile = new EventEmitter<void>();
+name_user:any;
+suername_user:any;
+rol_user:any;
 open:any = false;
   constructor(private authService:AuthService, private router:Router){}
+
+ngOnInit(){
+  const user = this.authService.getUser();
+  this.name_user = user.name;
+  this.suername_user = user.surname;
+  this.rol_user = user.role;
+}
 
 
 logout(){
 this.authService.logout();
+  localStorage.removeItem('token');
 this.router.navigate(['/login'])
 }
 
