@@ -32,6 +32,10 @@ perfile(){
   this.router.navigate(['/profile'])
 }
 
+config(){
+  this.router.navigate(['/config'])
+}
+
 
 
 
