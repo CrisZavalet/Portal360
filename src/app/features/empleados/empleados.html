@@ -2,17 +2,34 @@
   <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Empleados</h1>
 
   <div class="mt-6 flex justify-center">
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      placeholder="Buscar empleado..."
-      class="w-full md:w-1/2 px-4 py-2 rounded-xl
+  
+  <label class="input w-full md:w-1/2 px-4 py-2 rounded-xl
              bg-white/30 backdrop-blur-md
              border border-white/30
              text-slate-800 dark:text-white
              placeholder-slate-500
-             focus:outline-none focus:ring-2 focus:ring-indigo-500"
-    />
+             focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg
+             transition ">
+  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g
+      stroke-linejoin="round"
+      stroke-linecap="round"
+      stroke-width="2.5"
+      stroke-color="indigo-500"
+      fill="none"
+      stroke="currentColor"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </g>
+  </svg> 
+  <input type="search" [(ngModel)]="searchTerm"
+ class="grow dark:text-white" placeholder="Buscar empleado..." />
+ 
+</label>
+
+
+
   </div>
 
   <div class="hidden md:block mt-10">
