@@ -32,7 +32,8 @@ empleadosFiltrados() {
   return this.empleados.filter(emp =>
     emp.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
     emp.cargo.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-    emp.email.toLowerCase().includes(this.searchTerm.toLowerCase())
+    emp.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+    emp.telefono.includes(this.searchTerm)
   );
 }
 
