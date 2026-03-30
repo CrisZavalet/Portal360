@@ -13,7 +13,14 @@ export class AuthService {
     password: '123456',
     role: 'Empleado',
     fnac:'1994-10-15',
-    vacaciones: 22
+    iban:'ES7620770024003102575766',
+    area: 'IT',
+    puesto: 'Diseñadora UX/UI',
+    telefono: '555-1234',
+    dia_incorporacion: '2024-02-03',
+    vacaciones: 22,
+    ubicacion: 'Madrid',
+    estado: 'Activo'
   }
 
   ;
