@@ -33,6 +33,7 @@ Login() {
         const success = this.authService.login(username, password);
      if (success) {
         localStorage.setItem('token', '123456');
+        localStorage.setItem('role', this.authService.getUser().role);
     this.router.navigate(['/']);
   } else {
     this.openModalError('El usuario o la contraseña son incorrectos. \nPor favor completa los datos correctamente.');
