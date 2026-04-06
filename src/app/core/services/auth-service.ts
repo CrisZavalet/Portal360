@@ -21,6 +21,7 @@ export class AuthService {
     vacaciones: 22,
     ubicacion: 'Madrid',
     estado: 'Activo'
+    
   }
 
   ;
@@ -42,6 +43,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem('user');
       localStorage.removeItem('token');
+      localStorage.removeItem('role');
   }
 
   getUser() {
@@ -50,6 +52,10 @@ export class AuthService {
 
   isLogged(): boolean {
     return !!localStorage.getItem('user');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('user');
   }
 }
 
