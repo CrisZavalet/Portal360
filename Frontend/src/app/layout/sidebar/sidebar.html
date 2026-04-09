@@ -1,0 +1,201 @@
+<aside
+  class="relative h-screen flex flex-col justify-between transition-all duration-300 backdrop-blur-2xl border-r border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.4)] bg-slate-900/40 overflow-hidden lg:translate-x-0"
+  [class.w-20]="collapsed"
+  [class.w-64]="!collapsed"
+  [class.-translate-x-full]="mobileOpen"
+  [class.translate-x-0]="mobileOpen"
+>
+  @if (open) {
+    <div class="fixed inset-0 z-40" (click)="open = !open"></div>
+  }
+
+  <div class="flex flex-col flex-1">
+    <div
+      class="p-4 relative"
+      [ngClass]="
+        collapsed ? 'flex flex-col items-center gap-4' : 'flex items-center justify-center'
+      "
+    >
+      @if (!collapsed) {
+        <img src="./assets/PORTAL360.png" alt="Logo" class="w-40 object-contain" />
+      }
+
+      @if (collapsed) {
+        <img
+          src="./assets/icons/logo_responsive_2.png"
+          alt="Logo"
+          class="w-10 h-10 object-contain"
+        />
+      }
+
+      <img
+        src="./assets/menu-hamburger.png"
+        alt="Menu"
+        class="w-5 cursor-pointer transition-all duration-300 hover:rotate-90"
+        [ngClass]="collapsed ? '' : 'absolute right-4'"
+        (click)="toggle.emit()"
+      />
+    </div>
+
+    <nav class="flex-1 space-y-2 p-4">
+      <a
+        routerLink="/dashboard"
+        (click)="closeMobile.emit()"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="/assets/icons/dashboard.png" class="w-4 h-4" />
+        </div>
+        @if (!collapsed) {
+          <span>Dashboard</span>
+        }
+      </a>
+
+      <a
+        routerLink="my-time"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/fichaje.png" alt="" class="w-5 h-5" />
+        </div>
+        @if (!collapsed) {
+          <span>Fichaje</span>
+        }
+      </a>
+
+      <a
+        routerLink="/paysheet"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/nominas.png" alt="" class="w-5 h-5" />
+        </div>
+        @if (!collapsed) {
+          <span>Nóminas</span>
+        }
+      </a>
+
+      <a
+        routerLink="/documents"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/documentos.png" alt="" class="w-5 h-5" />
+        </div>
+        @if (!collapsed) {
+          <span>Documentos</span>
+        }
+      </a>
+
+      <a
+        routerLink="/absences"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/ausencia.png" alt="" class="w-5 h-5" />
+        </div>
+        @if (!collapsed) {
+          <span>Ausencias</span>
+        }
+      </a>
+
+      <a
+        routerLink="/benefits"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/beneficios.png" alt="" class="w-5 h-5" />
+        </div>
+        @if (!collapsed) {
+          <span>Beneficios</span>
+        }
+      </a>
+
+      <a
+        routerLink="/employees"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/empleados.png" alt="" class="w-5 h-5" />
+        </div>
+        @if (!collapsed) {
+          <span>Empleados</span>
+        }
+      </a>
+
+      <a
+        routerLink="/notifications"
+        routerLinkActive="bg-white/15 border border-white/20 text-white"
+        (click)="closeMobile.emit()"
+        class="flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 hover:border hover:border-white/20"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <img src="./assets/icons/notificaciones.png" alt="" class="w-5 h-5" />
+        </div>
+
+        @if (!collapsed) {
+          <span>Notificaciones</span>
+        }
+      </a>
+    </nav>
+  </div>
+
+  <div class="relative p-4 border-t border-white/10 cursor-pointer">
+    <div
+      class="flex items-center justify-between bg-slate-800 hover:bg-slate-700 transition rounded-xl p-4 "
+    (click)="open = !open">
+      <div class="flex items-center gap-3"(click)="open = !open" >
+        <img src="./assets/profile.png" alt="Perfil" class="w-10 h-auto rounded-full" />
+
+        @if (!collapsed) {
+          <div class="text-left" >
+            <div class="text-xs text-white/80 font-medium">{{ name_user }} {{ suername_user }}</div>
+            <div class="text-xs text-slate-400">{{ rol_user }}</div>
+          </div>
+        }
+      </div>
+
+      @if (!collapsed) {
+        <div class="relative z-50 cursor-pointer" >
+          <button class="p-1 backdrop-blur-md rounded-xl">
+            <img class="w-5" src="./assets/ic--outline-more-vert.png" />
+          </button>
+
+          @if (open) {
+            <div
+              class="absolute bottom-14 right-0 w-48 backdrop-blur-2xl bg-gradient-to-br from-white/30 to-white/5 border border-white/20 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.3)] p-2 z-50"
+            >
+              <button (click)="perfile()" class="w-full text-left px-3 py-2 hover:bg-white/20 rounded-lg ">
+                Perfil
+              </button>
+
+              <button (click)="config()" class="w-full text-left px-3 py-2 hover:bg-white/20 rounded-lg">
+                Configuración
+              </button>
+
+              <button
+                (click)="logout()"
+                class="w-full text-left px-3 py-2 hover:bg-red-500/20 text-red-400 rounded-lg"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</aside>
