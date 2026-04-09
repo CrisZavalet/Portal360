@@ -1,16 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-empleados',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './empleados.html',
   styleUrl: './empleados.css',
 })
 export class Empleados {
 
+  constructor(private fb: FormBuilder) {}
 searchTerm: string = '';
+openModalEmpleado = false;
+modalOpen = false;
+step = 1;
+form: any;
+auth = inject(AuthService);
+role = this.auth.getRole();
 
 empleados = [
   {
@@ -28,6 +36,31 @@ empleados = [
     estado: 'Inactivo'
   }
 ];
+
+ngOnInit() {
+this.form = this.fb.group({
+  // Personal
+  nombre: ['', Validators.required],
+  apellido: ['', Validators.required],
+  direccion: [''],
+  email: ['', [Validators.required, Validators.email]],
+  telefono: [''],
+  nacimiento: [''],
+  ubicacion: [''],
+  iban: [''],
+
+  departamento: [''],
+  puesto: [''],
+  fechaInicio: [''],
+  estado: ['Activo'],
+
+  // Cuenta
+  usuario: [''],
+  password: ['', Validators.required],
+  confirmPassword: ['', Validators.required],
+});
+}
+
 empleadosFiltrados() {
   return this.empleados.filter(emp =>
     emp.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -43,4 +76,54 @@ getEstadoClase(estado: string): string {
     ? 'bg-green-100 text-green-700'
     : 'bg-red-100 text-red-700';
 }
+
+openModal() {
+  this.openModalEmpleado = true;
+}
+
+closeModal() {
+  this.openModalEmpleado = false;
+}
+
+
+nextStep() {
+ 
+  this.form.markAllAsTouched();
+if (this.step === 1 && this.form.get('nombre')?.invalid) return;
+  if (this.step === 1 && this.form.get('apellido')?.invalid) return;
+  if (this.step === 1 && this.form.get('email')?.invalid) return;
+    // if (this.form.invalid) return;
+  if (this.step === 2) {
+    this.generarUsuario();
+  }
+
+  this.step++;
+}
+
+prevStep() {
+  this.step--;
+}
+
+generarUsuario() {
+  const nombre = this.form.value.nombre || '';
+  const apellido = this.form.value.apellido || '';
+const apellidos = apellido.split(' ');
+const user = (nombre.charAt(0) + apellidos[0] + (apellidos[1]?.charAt(0) || '')).toLowerCase();
+
+  this.form.patchValue({ usuario: user });
+
+  this.generarPassword();
+}
+
+generarPassword() {
+  const random = Math.random().toString(36).slice(-8);
+  this.form.patchValue({ password: random, confirmPassword: random });
+}
+
+crearEmpleado() {
+  if (this.form.invalid) return;
+
+  console.log(this.form.value);
+  this.modalOpen = false;
+} 
 }

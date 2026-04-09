@@ -8,10 +8,10 @@ export class AuthService {
     id: 1,
     name: 'Florencia Macarena ',
     surname: 'Sandoval Perez',
-    username:'FlorSan',
+    username:'fsandovalp',
     email: 'florencia@portal360.com',
     password: '123456',
-    role: 'Empleado',
+    role: 'RRHH',
     fnac:'1994-10-15',
     iban:'ES7620770024003102575766',
     area: 'IT',
@@ -23,6 +23,7 @@ export class AuthService {
     estado: 'Activo'
     
   }
+
 
   ;
   
@@ -56,6 +57,20 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('user');
+  }
+
+
+  getRole(): string | null {
+    return localStorage.getItem('role');
+  }
+
+   isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  hasRole(roles: string[]): boolean {
+    const userRole = this.getRole();
+    return roles.includes(userRole || '');
   }
 }
 
