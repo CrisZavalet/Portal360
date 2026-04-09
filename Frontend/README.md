@@ -22,7 +22,7 @@ This will download and install all packages listed in `package.json`.
 =======
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.15.
 >>>>>>> origin
-
+   
 ## Development server
 
 To start a local development server, run:
