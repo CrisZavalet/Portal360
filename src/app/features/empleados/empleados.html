@@ -1,7 +1,7 @@
 <div>
-  <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Empleados</h1>
+  <h1 class="text-2xl font-bold text-gray-800 dark:text-white ">Empleados</h1>
 
-  <div class="mt-6 flex justify-center">
+  <div class="mt-6 flex justify-center mb-4">
   
   <label class="input w-full md:w-1/2 px-4 py-2 rounded-xl
              bg-white/30 backdrop-blur-md
@@ -29,11 +29,13 @@
 </label>
 
 
-
   </div>
+@if(role === 'Administracion' || role === 'RRHH') {
+<button  (click)="openModal()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5 hover:shadow-xl mb-4"> <img src="./assets/icons/plus.svg" /> Nuevo Empleado</button>
+}
 
-  <div class="hidden md:block mt-10">
-    <table class="w-full text-slate-800 dark:text-slate-200 
+<div class="hidden md:block mt-70 md:mt-70">
+    <table class="w-full text-slate-800 dark:text-slate-200  
                   bg-white/10 backdrop-blur-lg 
                   border border-white/20 
                   rounded-2xl shadow-2xl overflow-hidden">
@@ -116,3 +118,197 @@
 
   </div>
 </div>
+
+@if (openModalEmpleado) {
+<dialog
+  open
+  (click)="openModalEmpleado = false"
+  class="modal backdrop-blur-xl bg-white/30 dark:bg-slate-900/30 border border-white/30 rounded-2xl shadow-xl"
+>
+
+
+  <div
+    class="modal-box max-w-2xl rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/30 shadow-xl max-h-[90vh] overflow-y-auto"
+    (click)="$event.stopPropagation()"
+  >
+  <form [formGroup]="form">
+    <h3 class="font-bold text-xl text-slate-800 dark:text-white">
+      Nuevo empleado
+    </h3>
+
+    <!-- 🔹 STEPS -->
+    <div class="flex justify-between mt-4 text-sm  text-slate-600 dark:text-slate-300">
+      <span [class.font-bold]="step === 1">Datos personales</span>
+      <span [class.font-bold]="step === 2">Información laboral</span>
+      <span [class.font-bold]="step === 3">Crear cuenta</span>
+      <span [class.font-bold]="step === 4">Resumen</span>
+    </div>
+
+    <div class="w-full bg-gray-200 h-1 rounded-full mt-3">
+  <div
+    class="bg-indigo-600 h-1 rounded-full transition-all duration-300"
+    [style.width.%]="step === 1 ? 25 : step === 2 ? 50 : step === 3 ? 75 : 100"
+  ></div>
+</div>
+
+    @if (step === 1) {
+      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in">
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Nombre<span class="text-red-500">*</span></legend>
+          <input class="input input-bordered" formControlName="nombre" />
+          @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
+    <p class="text-red-500 text-xs mt-1">
+      El nombre es obligatorio
+    </p>
+  }
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Apellido<span class="text-red-500">*</span></legend>
+          <input class="input input-bordered" formControlName="apellido" />
+            @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
+    <p class="text-red-500 text-xs mt-1">
+      El apellido es obligatorio
+    </p>
+  }
+        </fieldset>
+
+        <fieldset class="fieldset md:col-span-2">
+          <legend class="fieldset-legend mb-1">Dirección</legend>
+          <input class="input input-bordered w-full" formControlName="direccion" />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Email <span class="text-red-500">*</span></legend>
+          <input class="input input-bordered" formControlName="email" />
+           @if (form.get('email')?.touched && form.get('email')?.invalid) {
+    <p class="text-red-500 text-xs mt-1">
+      @if (form.get('email')?.errors?.['required']) {
+        El email es obligatorio
+      }
+      @if (form.get('email')?.errors?.['email']) {
+        Formato de email inválido
+      }
+    </p>
+  }
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Teléfono</legend>
+          <input class="input input-bordered" formControlName="telefono" />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Nacimiento</legend>
+          <input type="date" class="input input-bordered" formControlName="nacimiento" />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Ubicación</legend>
+          <input class="input input-bordered" formControlName="ubicacion" />
+        </fieldset>
+
+        <fieldset class="fieldset md:col-span-2">
+          <legend class="fieldset-legend mb-1">IBAN</legend>
+          <input class="input input-bordered w-full" formControlName="iban" placeholder="ES00 0000 0000 0000 0000 0000" />
+        </fieldset>
+
+      </div>
+    }
+
+    @if (step === 2) {
+      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in relative overflow-hidden">
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Departamento</legend>
+          <input class="input input-bordered" formControlName="departamento" />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Puesto</legend>
+          <input class="input input-bordered" formControlName="puesto" />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Fecha inicio</legend>
+          <input type="date" class="input input-bordered" formControlName="fechaInicio" />
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Estado</legend>
+          <select class="select select-bordered" formControlName="estado">
+            <option>Activo</option>
+            <option>Inactivo</option>
+          </select>
+        </fieldset>
+
+      </div>
+    }
+
+    @if (step === 3) {
+      <div class="mt-5 space-y-4">
+
+        <fieldset class="fieldset">
+      
+          <legend class="fieldset-legend mb-1">Usuario</legend>
+          <input class="input input-bordered w-full" formControlName="usuario"  />
+          <!-- <span>Nomenclatura: {{ form.value.nombre | lowercase }}.{{ form.value.apellido | lowercase }}</span> -->
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend mb-1">Contraseña</legend>
+          <input class="input input-bordered w-full" formControlName="password" />
+        </fieldset>
+
+        <button
+          type="button"
+          (click)="generarPassword()"
+          class="text-sm text-indigo-600 hover:underline"
+        >
+          Generar nueva contraseña
+        </button>
+
+      </div>
+    }
+
+    @if (step === 4) {
+      <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
+        <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
+        <p><b>Email:</b> {{ form.value.email }}</p>
+        <p><b>Departamento:</b> {{ form.value.departamento }}</p>
+        <p><b>Puesto:</b> {{ form.value.puesto }}</p>
+        <p><b>Usuario:</b> {{ form.value.usuario }}</p>
+        <p><b>Contraseña:</b> {{ form.value.password }}</p>
+      </div>
+    }
+
+    <div class="modal-action flex justify-between">
+
+      @if (step > 1) {
+        <button (click)="prevStep()" class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4">
+          Atrás
+        </button>
+      }
+
+      <div class="ml-auto flex gap-3">
+
+        @if (step < 4) {
+          <button (click)="nextStep()" class="btn bg-indigo-600 text-white px-4">
+            Continuar
+          </button>
+        }
+
+        @if (step === 4) {
+          <button (click)="crearEmpleado()" class="btn bg-green-600 text-white px-4 hover:bg-green-700 transition">
+            Crear empleado
+          </button>
+        }
+
+      </div>
+
+    </div>
+</form>
+  </div>
+</dialog>
+}
