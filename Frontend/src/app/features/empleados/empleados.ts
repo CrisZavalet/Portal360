@@ -19,9 +19,11 @@ step = 1;
 form: any;
 auth = inject(AuthService);
 role = this.auth.getRole();
-
+  open:any = false;
+openId: number | null = null;
 empleados = [
   {
+    id: 1,
     nombre: 'Florencia Sandoval',
     cargo: 'Desarrolladora',
     email: 'florencia.sandoval@empresa.com',
@@ -29,6 +31,7 @@ empleados = [
     estado: 'Activo'
   },
   {
+    id: 2,
     nombre: 'Juan Pérez',
     cargo: 'Diseñador',
     email: 'juan.perez@empresa.com',
