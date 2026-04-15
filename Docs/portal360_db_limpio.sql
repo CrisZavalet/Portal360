@@ -155,6 +155,10 @@ CREATE TABLE solicitud (
     id_estado         INT       NOT NULL REFERENCES estado_solicitud(id_estado),
     titulo            VARCHAR(255),
     descripcion       TEXT,
+    fecha_inicio      DATE,
+    fecha_fin         DATE,
+    hora_inicio       TIME,
+    hora_fin          TIME,
     fecha_resolucion  TIMESTAMP,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
