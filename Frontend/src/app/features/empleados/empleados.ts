@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
@@ -11,7 +11,7 @@ import { AuthService } from '../../core/services/auth-service';
 })
 export class Empleados {
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,private eRef: ElementRef) {}
 searchTerm: string = '';
 openModalEmpleado = false;
 modalOpen = false;
@@ -21,18 +21,30 @@ auth = inject(AuthService);
 role = this.auth.getRole();
   open:any = false;
 openId: number | null = null;
+openDropdownId:  'editar' | 'fichajes' | 'nomina' | 'documentos' | 'mensaje'| null = null;
+empleadoSeleccionado: any = null;
 empleados = [
   {
     id: 1,
-    nombre: 'Florencia Sandoval',
+    nombre: 'Florencia Macarena',
+    apellido: 'Sandoval Perez',
+     direccion: 'Calle Falsa 123',
+     nacimiento: '1994-10-15',
+     ubicacion: 'Madrid',
+     iban: 'ES7620770024003102575766',
+     departamento: 'IT',
+     puesto: 'Diseñadora UX/UI',
+     fechaInicio: '2024-02-03',
     cargo: 'Desarrolladora',
     email: 'florencia.sandoval@empresa.com',
     telefono: '555-1234',
-    estado: 'Activo'
+    estado: 'Activo',
+    usuario: 'fsanp',
   },
   {
     id: 2,
-    nombre: 'Juan Pérez',
+    nombre: 'Juan',
+    apellido: 'Pérez',
     cargo: 'Diseñador',
     email: 'juan.perez@empresa.com',
     telefono: '555-5678',
@@ -57,7 +69,6 @@ this.form = this.fb.group({
   fechaInicio: [''],
   estado: ['Activo'],
 
-  // Cuenta
   usuario: [''],
   password: ['', Validators.required],
   confirmPassword: ['', Validators.required],
@@ -129,4 +140,35 @@ crearEmpleado() {
   console.log(this.form.value);
   this.modalOpen = false;
 } 
+
+@HostListener('document:click', ['$event'])
+handleClickOutside(event: Event) {
+  if (!this.eRef.nativeElement.contains(event.target)) {
+    this.openId = null;
+  }
+}
+toggleDropdown(id: number, event: Event) {
+  event.stopPropagation(); 
+  this.openId = this.openId === id ? null : id;
+}
+
+abrirModal(tipo: any, emp: any) {
+  this.openDropdownId = tipo;
+  this.empleadoSeleccionado = emp;
+}
+
+cerrarModal() {
+  this.openDropdownId = null;
+  this.empleadoSeleccionado = null;     
+}
+
+guardarCambios() {
+  console.log('Guardando cambios para', this.empleadoSeleccionado);
+  this.cerrarModal(); 
+}
+
+modificarEmpleado() {
+  console.log('Modificando empleado', this.empleadoSeleccionado);
+  this.cerrarModal();
+}
 }

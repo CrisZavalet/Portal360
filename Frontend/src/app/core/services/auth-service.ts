@@ -23,9 +23,7 @@ export class AuthService {
     estado: 'Activo'
     
   }
-
-
-  ;
+ 
   
  login(username: string, password: string): boolean {
     if (
