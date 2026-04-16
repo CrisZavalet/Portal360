@@ -70,7 +70,9 @@ CREATE TABLE fichaje (
     id_fichaje SERIAL PRIMARY KEY,
     id_empleado INT NOT NULL REFERENCES empleado(id_empleado) ON DELETE CASCADE,
     tipo VARCHAR(10) CHECK (tipo IN ('ENTRADA', 'SALIDA')),
-    fecha_hora TIMESTAMP,
+    hora_inicio TIME,
+    hora_fin TIME,
+    fecha DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE tipo_documento (
@@ -217,6 +219,28 @@ INSERT INTO empleado_puesto (id_empleado, id_puesto, fecha_inicio)
 VALUES (1, 3, '2024-01-01'),
     (2, 1, '2024-02-15'),
     (3, 2, '2023-12-01');
+-- Fichajes
+INSERT INTO fichaje (
+        id_empleado,
+        tipo,
+        hora_inicio,
+        hora_fin,
+        fecha
+    )
+VALUES (
+        2,
+        'ENTRADA',
+        '09:00:00',
+        NULL,
+        '2026-05-10'
+    ),
+    (
+        2,
+        'SALIDA',
+        NULL,
+        '18:00:00',
+        '2026-05-10'
+    );
 -- Tipos y Estados
 INSERT INTO tipo_documento (id_tipo, nombre)
 VALUES (1, 'Contrato'),
