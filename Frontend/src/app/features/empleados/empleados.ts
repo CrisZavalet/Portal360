@@ -171,4 +171,9 @@ modificarEmpleado() {
   console.log('Modificando empleado', this.empleadoSeleccionado);
   this.cerrarModal();
 }
+
+eliminarEmpleado() {
+  console.log('Eliminando empleado', this.empleadoSeleccionado);
+  this.cerrarModal(); 
+}
 }
