@@ -38,4 +38,9 @@ public class FichajeController {
     public List<Fichaje> historial(@PathVariable Integer empleadoId) {
         return fichajeRepository.findByEmpleado_IdEmpleado(empleadoId);
     }
+
+    @GetMapping
+    public List<Fichaje> getAllFichajes() {
+        return fichajeRepository.findAll();
+    }
 }
