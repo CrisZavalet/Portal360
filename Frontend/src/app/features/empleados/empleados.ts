@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
+import { Fichaje } from "../fichaje/fichaje";
 
 @Component({
   selector: 'app-empleados',
@@ -21,6 +22,7 @@ auth = inject(AuthService);
 role = this.auth.getRole();
   open:any = false;
 openId: number | null = null;
+estadoFichaje: 'pendiente' | 'aprobado' | 'rechazado'| null = null;
 openDropdownId:  'editar' | 'fichajes' | 'nomina' | 'documentos' | 'mensaje'| null = null;
 empleadoSeleccionado: any = null;
 empleados = [
@@ -51,6 +53,29 @@ empleados = [
     estado: 'Inactivo'
   }
 ];
+
+fichajes = [
+  {
+    dia: 'Hoy',
+    entrada: '08:00',
+    salida: '17:30',
+    estado: 'pendiente'
+  },
+   {
+    dia: 'Ayer',
+    entrada: '08:15',
+    salida: '16:45',
+    estado: 'aprobado'
+  },
+    {
+    dia: '20/01/2026',
+    entrada: '09:00',
+    salida: '18:00',
+    estado: 'rechazado'
+  }
+];
+
+
 
 ngOnInit() {
 this.form = this.fb.group({
@@ -175,5 +200,21 @@ modificarEmpleado() {
 eliminarEmpleado() {
   console.log('Eliminando empleado', this.empleadoSeleccionado);
   this.cerrarModal(); 
+}
+
+aprobarFichaje(f: any) {
+  f.estado = 'aprobado';
+}
+
+rechazarFichaje(f: any) {
+  f.estado = 'rechazado';
+}
+
+aprobarTodos() {
+  this.fichajes.forEach(f => {
+    if (f.estado === 'pendiente') {
+      f.estado = 'aprobado';
+    }
+  });
 }
 }

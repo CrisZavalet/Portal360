@@ -1,45 +1,44 @@
 <div>
-  <h1 class="text-2xl font-bold text-gray-800 dark:text-white ">Empleados</h1>
+  <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Empleados</h1>
 
   <div class="mt-6 flex justify-center mb-4">
-  
-  <label class="input w-full md:w-1/2 px-4 py-2 rounded-xl
-             bg-white/30 backdrop-blur-md
-             border border-white/30
-             text-slate-800 dark:text-white
-             placeholder-slate-500
-             focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg
-             transition ">
-  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <g
-      stroke-linejoin="round"
-      stroke-linecap="round"
-      stroke-width="2.5"
-      stroke-color="indigo-500"
-      fill="none"
-      stroke="currentColor"
+    <label
+      class="input w-full md:w-1/2 px-4 py-2 rounded-xl bg-white/30 backdrop-blur-md border border-white/30 text-slate-800 dark:text-white placeholder-slate-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg transition"
     >
-      <circle cx="11" cy="11" r="8"></circle>
-      <path d="m21 21-4.3-4.3"></path>
-    </g>
-  </svg> 
-  <input type="search" [(ngModel)]="searchTerm"
- class="grow dark:text-white" placeholder="Buscar empleado..." />
- 
-</label>
-
-
+      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g
+          stroke-linejoin="round"
+          stroke-linecap="round"
+          stroke-width="2.5"
+          stroke-color="indigo-500"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </g>
+      </svg>
+      <input
+        type="search"
+        [(ngModel)]="searchTerm"
+        class="grow dark:text-white"
+        placeholder="Buscar empleado..."
+      />
+    </label>
   </div>
-@if(role === 'Administracion' || role === 'RRHH') {
-<button  (click)="openModal()" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5 hover:shadow-xl mb-4"> <img src="./assets/icons/plus.svg" /> Nuevo Empleado</button>
-}
+  @if (role === 'Administracion' || role === 'RRHH') {
+    <button
+      (click)="openModal()"
+      class="flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 hover:-translate-y-0.5 hover:shadow-xl mb-4"
+    >
+      <img src="./assets/icons/plus.svg" /> Nuevo Empleado
+    </button>
+  }
 
-<div class="hidden md:block mt-70 md:mt-70">
-    <table class="w-full text-slate-800 dark:text-slate-200  
-                  bg-white/10 backdrop-blur-lg 
-                  border border-white/20 
-                  rounded-2xl shadow-2xl overflow-visible">
-
+  <div class="hidden md:block mt-70 md:mt-70">
+    <table
+      class="w-full text-slate-800 dark:text-slate-200 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-visible"
+    >
       <thead class="text-xs uppercase tracking-wider text-slate-500">
         <tr>
           <th class="p-4 text-left">Nombre</th>
@@ -47,77 +46,75 @@
           <th class="p-4 text-left">Email</th>
           <th class="p-4 text-left">Teléfono</th>
           <th class="p-4 text-left">Estado</th>
-          @if(role === 'Administracion' || role === 'RRHH') {
-
-          <th class="p-4 text-left">Acciones</th>
+          @if (role === 'Administracion' || role === 'RRHH') {
+            <th class="p-4 text-left">Acciones</th>
           }
         </tr>
       </thead>
 
       <tbody>
         @for (emp of empleadosFiltrados(); track emp) {
-        <tr class="bg-white/40 border-t border-white/40 hover:bg-white/40 transition">
-          <td class="p-4">{{ emp.nombre }} {{ emp.apellido }}</td>
-          <td class="p-4">{{ emp.cargo }}</td>
-          <td class="p-4">{{ emp.email }}</td>
-          <td class="p-4">{{ emp.telefono }}</td>
-          <td class="p-4">
-  <span class="px-2 py-1 text-xs rounded-full"
-        [ngClass]="getEstadoClase(emp.estado)">
-    {{ emp.estado }}
-  </span>
-</td>
-@if(role === 'Administracion' || role === 'RRHH') {
+          <tr class="bg-white/40 border-t border-white/40 hover:bg-white/40 transition">
+            <td class="p-4">{{ emp.nombre }} {{ emp.apellido }}</td>
+            <td class="p-4">{{ emp.cargo }}</td>
+            <td class="p-4">{{ emp.email }}</td>
+            <td class="p-4">{{ emp.telefono }}</td>
+            <td class="p-4">
+              <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.estado)">
+                {{ emp.estado }}
+              </span>
+            </td>
+            @if (role === 'Administracion' || role === 'RRHH') {
+              <td class="relative p-2 text-slate-600 dark:text-slate-300">
+                <button
+                  (click)="toggleDropdown(emp.id, $event)"
+                  class="flex justify-center p-2 bg-indigo-100 backdrop-blur-xl border border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-200/10 transition transition-all duration-300 dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white"
+                >
+                  <img class="w-5 h-5" src="./assets/icons/three-dots.svg" alt="" />
+                </button>
+                @if (openId === emp.id) {
+                  <div
+                    class="absolute right-0 w-52 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg py-1"
+                  >
+                    <button
+                      (click)="abrirModal('editar', emp)"
+                      class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      ✏️ Editar Empleado
+                    </button>
 
-<td class="relative  p-2 text-slate-600 dark:text-slate-300 " >
-      
-  <button (click)="toggleDropdown(emp.id, $event)" class=" flex justify-center p-2 bg-indigo-100  backdrop-blur-xl border border-white/20
-    hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-200/10 transition  transition-all duration-300  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white"><img class="w-5 h-5" src="./assets/icons/three-dots.svg" alt=""></button>
-   @if (openId === emp.id) {
-   <div
-    class="absolute right-0 w-52 z-50
-           bg-white dark:bg-slate-800
-           border border-gray-200 dark:border-slate-700
-           rounded-lg
-           shadow-lg
-           py-1">
+                    <button
+                      (click)="abrirModal('fichajes', emp)"
+                      class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      🕒 Ver fichajes
+                    </button>
 
-    <button (click)="abrirModal('editar', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      ✏️ Editar Empleado 
-    </button>
+                    <button
+                      (click)="abrirModal('nomina', emp)"
+                      class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      📄 Subir nómina
+                    </button>
 
-    <button (click)="abrirModal('fichajes', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      🕒 Ver fichajes
-    </button>
+                    <button
+                      (click)="abrirModal('documentos', emp)"
+                      class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      📁 Subir documentos
+                    </button>
 
-    <button (click)="abrirModal('nomina', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      📄 Subir nómina
-    </button>
-
-    <button (click)="abrirModal('documentos', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      📁 Subir documentos
-    </button>
-
-    <button (click)="abrirModal('mensaje', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      📩 Enviar Mensaje
-    </button>
-
-  </div>
-  }
-
-</td>
-}
-        </tr>
+                    <button
+                      (click)="abrirModal('mensaje', emp)"
+                      class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      📩 Enviar Mensaje
+                    </button>
+                  </div>
+                }
+              </td>
+            }
+          </tr>
         }
       </tbody>
     </table>
@@ -125,495 +122,615 @@
 
   <!-- ////////////////////////////////////////VISTA MOVIL/////////////////////////////////////////////////////////////////////////////// -->
   <div class="md:hidden mt-5 space-y-4">
-
     @for (emp of empleadosFiltrados(); track emp) {
-    <div class=" relative p-4 rounded-2xl
-                bg-white/40 backdrop-blur-lg
-                border border-white/20 shadow-xl">
+      <div
+        class="relative p-4 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/20 shadow-xl"
+      >
+        <div class="space-y-3 text-sm text-slate-800 dark:text-white">
+          @if (role === 'Administracion' || role === 'RRHH') {
+            <div class="flex justify-end relative">
+              <button
+                (click)="toggleDropdown(emp.id, $event)"
+                class="flex items-center gap-1 px-1 py-1 rounded-xl text-white text-sm font-medium hover:bg-indigo-200 transition-all duration-300 hover:-translate-y-0.5"
+              >
+                <img class="w-5 h-5" src="./assets/icons/three-dots.svg" alt="" />
+              </button>
+            </div>
 
-      <div class="space-y-3 text-sm text-slate-800 dark:text-white">
+            @if (openId === emp.id) {
+              <div
+                class="absolute right-0 w-52 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg py-1"
+              >
+                <button
+                  (click)="abrirModal('editar', emp)"
+                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                >
+                  ✏️ Editar Empleado
+                </button>
 
-        @if(role === 'Administracion' || role === 'RRHH') {
-        <div class="flex justify-end  relative">
-          <button (click)="toggleDropdown(emp.id, $event)" class="flex  items-center gap-1 px-1 py-1 rounded-xl text-white text-sm font-medium hover:bg-indigo-200 transition-all duration-300 hover:-translate-y-0.5"> <img class="w-5 h-5" src="./assets/icons/three-dots.svg" alt="">
-          </button>  
+                <button
+                  (click)="abrirModal('fichajes', emp)"
+                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                >
+                  🕒 Ver fichajes
+                </button>
+
+                <button
+                  (click)="abrirModal('nomina', emp)"
+                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                >
+                  📄 Subir nómina
+                </button>
+
+                <button
+                  (click)="abrirModal('documentos', emp)"
+                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                >
+                  📁 Subir documentos
+                </button>
+
+                <button
+                  (click)="abrirModal('mensaje', emp)"
+                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                >
+                  📩 Enviar Mensaje
+                </button>
+              </div>
+            }
+          }
+
+          <div class="flex justify-between">
+            <span class="font-medium">Nombre</span>
+            <span>{{ emp.nombre }} {{ emp.apellido }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-medium">Cargo</span>
+            <span>{{ emp.cargo }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-medium">Email</span>
+            <span class="text-xs break-all">{{ emp.email }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-medium">Teléfono</span>
+            <span>{{ emp.telefono }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="font-medium">Estado</span>
+            <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.estado)">
+              {{ emp.estado }}
+            </span>
+          </div>
         </div>
-
-        @if (openId === emp.id) {
-   <div
-    class="absolute right-0 w-52 z-50
-           bg-white dark:bg-slate-800
-           border border-gray-200 dark:border-slate-700
-           rounded-lg
-           shadow-lg
-           py-1">
-
-    <button (click)="abrirModal('editar', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      ✏️ Editar Empleado 
-    </button>
-
-    <button (click)="abrirModal('fichajes', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      🕒 Ver fichajes
-    </button>
-
-    <button (click)="abrirModal('nomina', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      📄 Subir nómina
-    </button>
-
-    <button (click)="abrirModal('documentos', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      📁 Subir documentos
-    </button>
-
-    <button (click)="abrirModal('mensaje', emp)" class="flex items-center gap-2 w-full px-4 py-2 text-sm
-                   text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-      📩 Enviar Mensaje
-    </button>
-
-  </div>
-  }
-
-
-        }
-
-        <div class="flex justify-between">
-          <span class="font-medium">Nombre</span>
-          <span>{{ emp.nombre }} {{ emp.apellido }}</span>
-        </div>
-
-        <div class="flex justify-between">
-          <span class="font-medium">Cargo</span>
-          <span>{{ emp.cargo }}</span>
-        </div>
-
-        <div class="flex justify-between">
-          <span class="font-medium">Email</span>
-          <span class="text-xs break-all">{{ emp.email }}</span>
-        </div>
-
-        <div class="flex justify-between">
-          <span class="font-medium">Teléfono</span>
-          <span>{{ emp.telefono }}</span>
-        </div>
-
-        <div class="flex justify-between">
-          <span class="font-medium">Estado</span>
-          <span class="px-2 py-1 text-xs rounded-full"
-                [ngClass]="getEstadoClase(emp.estado)">
-            {{ emp.estado }}
-          </span>
-        </div>
-
-
       </div>
-    </div>
     }
 
     @if (empleadosFiltrados().length === 0) {
-    <div class="text-center text-sm text-slate-500">
-      No se encontraron empleados
-    </div>
+      <div class="text-center text-sm text-slate-500">No se encontraron empleados</div>
     }
-
   </div>
 </div>
 
 @if (openModalEmpleado) {
-<dialog
-  open
-  (click)="openModalEmpleado = false"
-  class="modal backdrop-blur-xl bg-white/30 dark:bg-slate-900/30 border border-white/30 rounded-2xl shadow-xl"
->
-
-
-  <div
-    class="modal-box max-w-2xl rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/30 shadow-xl max-h-[90vh] overflow-y-auto"
-    (click)="$event.stopPropagation()"
+  <dialog
+    open
+    (click)="openModalEmpleado = false"
+    class="modal backdrop-blur-xl bg-white/30 dark:bg-slate-900/30 border border-white/30 rounded-2xl shadow-xl"
   >
-  <form [formGroup]="form">
-    <h3 class="font-bold text-xl text-slate-800 dark:text-white">
-      Nuevo empleado
-    </h3>
+    <div
+      class="modal-box max-w-2xl rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/30 shadow-xl max-h-[90vh] overflow-y-auto"
+      (click)="$event.stopPropagation()"
+    >
+      <form [formGroup]="form">
+        <h3 class="font-bold text-xl text-slate-800 dark:text-white">Nuevo empleado</h3>
 
-    <!-- 🔹 STEPS -->
-    <div class="flex justify-between mt-4 text-sm  text-slate-600 dark:text-slate-300">
-      <span [class.font-bold]="step === 1">Datos personales</span>
-      <span [class.font-bold]="step === 2">Información laboral</span>
-      <span [class.font-bold]="step === 3">Crear cuenta</span>
-      <span [class.font-bold]="step === 4">Resumen</span>
-    </div>
+        <!-- 🔹 STEPS -->
+        <div class="flex justify-between mt-4 text-sm text-slate-600 dark:text-slate-300">
+          <span [class.font-bold]="step === 1">Datos personales</span>
+          <span [class.font-bold]="step === 2">Información laboral</span>
+          <span [class.font-bold]="step === 3">Crear cuenta</span>
+          <span [class.font-bold]="step === 4">Resumen</span>
+        </div>
 
-    <div class="w-full bg-gray-200 h-1 rounded-full mt-3">
-  <div
-    class="bg-indigo-600 h-1 rounded-full transition-all duration-300"
-    [style.width.%]="step === 1 ? 25 : step === 2 ? 50 : step === 3 ? 75 : 100"
-  ></div>
-</div>
+        <div class="w-full bg-gray-200 h-1 rounded-full mt-3">
+          <div
+            class="bg-indigo-600 h-1 rounded-full transition-all duration-300"
+            [style.width.%]="step === 1 ? 25 : step === 2 ? 50 : step === 3 ? 75 : 100"
+          ></div>
+        </div>
 
-    @if (step === 1) {
-      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in">
+        @if (step === 1) {
+          <div
+            class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in"
+          >
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">
+                Nombre<span class="text-red-500">*</span>
+              </legend>
+              <input class="input input-bordered" formControlName="nombre" />
+              @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">El nombre es obligatorio</p>
+              }
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Nombre<span class="text-red-500">*</span></legend>
-          <input class="input input-bordered" formControlName="nombre" />
-          @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
-    <p class="text-red-500 text-xs mt-1">
-      El nombre es obligatorio
-    </p>
-  }
-        </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">
+                Apellido<span class="text-red-500">*</span>
+              </legend>
+              <input class="input input-bordered" formControlName="apellido" />
+              @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">El apellido es obligatorio</p>
+              }
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Apellido<span class="text-red-500">*</span></legend>
-          <input class="input input-bordered" formControlName="apellido" />
-            @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
-    <p class="text-red-500 text-xs mt-1">
-      El apellido es obligatorio
-    </p>
-  }
-        </fieldset>
+            <fieldset class="fieldset md:col-span-2">
+              <legend class="fieldset-legend mb-1">Dirección</legend>
+              <input class="input input-bordered w-full" formControlName="direccion" />
+            </fieldset>
 
-        <fieldset class="fieldset md:col-span-2">
-          <legend class="fieldset-legend mb-1">Dirección</legend>
-          <input class="input input-bordered w-full" formControlName="direccion" />
-        </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">
+                Email <span class="text-red-500">*</span>
+              </legend>
+              <input class="input input-bordered" formControlName="email" />
+              @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">
+                  @if (form.get('email')?.errors?.['required']) {
+                    El email es obligatorio
+                  }
+                  @if (form.get('email')?.errors?.['email']) {
+                    Formato de email inválido
+                  }
+                </p>
+              }
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Email <span class="text-red-500">*</span></legend>
-          <input class="input input-bordered" formControlName="email" />
-           @if (form.get('email')?.touched && form.get('email')?.invalid) {
-    <p class="text-red-500 text-xs mt-1">
-      @if (form.get('email')?.errors?.['required']) {
-        El email es obligatorio
-      }
-      @if (form.get('email')?.errors?.['email']) {
-        Formato de email inválido
-      }
-    </p>
-  }
-        </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Teléfono</legend>
+              <input class="input input-bordered" formControlName="telefono" />
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Teléfono</legend>
-          <input class="input input-bordered" formControlName="telefono" />
-        </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Nacimiento</legend>
+              <input type="date" class="input input-bordered" formControlName="nacimiento" />
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Nacimiento</legend>
-          <input type="date" class="input input-bordered" formControlName="nacimiento" />
-        </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Ubicación</legend>
+              <input class="input input-bordered" formControlName="ubicacion" />
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Ubicación</legend>
-          <input class="input input-bordered" formControlName="ubicacion" />
-        </fieldset>
+            <fieldset class="fieldset md:col-span-2">
+              <legend class="fieldset-legend mb-1">IBAN</legend>
+              <input
+                class="input input-bordered w-full"
+                formControlName="iban"
+                placeholder="ES00 0000 0000 0000 0000 0000"
+              />
+            </fieldset>
+          </div>
+        }
 
-        <fieldset class="fieldset md:col-span-2">
-          <legend class="fieldset-legend mb-1">IBAN</legend>
-          <input class="input input-bordered w-full" formControlName="iban" placeholder="ES00 0000 0000 0000 0000 0000" />
-        </fieldset>
+        @if (step === 2) {
+          <div
+            class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in relative overflow-hidden"
+          >
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Departamento</legend>
+              <input class="input input-bordered" formControlName="departamento" />
+            </fieldset>
 
-      </div>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Puesto</legend>
+              <input class="input input-bordered" formControlName="puesto" />
+            </fieldset>
 
-    }
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Fecha inicio</legend>
+              <input type="date" class="input input-bordered" formControlName="fechaInicio" />
+            </fieldset>
 
-    @if (step === 2) {
-      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in relative overflow-hidden">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Estado</legend>
+              <select class="select select-bordered" formControlName="estado">
+                <option>Activo</option>
+                <option>Inactivo</option>
+              </select>
+            </fieldset>
+          </div>
+        }
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Departamento</legend>
-          <input class="input input-bordered" formControlName="departamento" />
-        </fieldset>
+        @if (step === 3) {
+          <div class="mt-5 space-y-4">
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Usuario</legend>
+              <input class="input input-bordered w-full" formControlName="usuario" />
+              <!-- <span>Nomenclatura: {{ form.value.nombre | lowercase }}.{{ form.value.apellido | lowercase }}</span> -->
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Puesto</legend>
-          <input class="input input-bordered" formControlName="puesto" />
-        </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend mb-1">Contraseña</legend>
+              <input class="input input-bordered w-full" formControlName="password" />
+            </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Fecha inicio</legend>
-          <input type="date" class="input input-bordered" formControlName="fechaInicio" />
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Estado</legend>
-          <select class="select select-bordered" formControlName="estado">
-            <option>Activo</option>
-            <option>Inactivo</option>
-          </select>
-        </fieldset>
-
-      </div>
-    }
-
-    @if (step === 3) {
-      <div class="mt-5 space-y-4">
-
-        <fieldset class="fieldset">
-      
-          <legend class="fieldset-legend mb-1">Usuario</legend>
-          <input class="input input-bordered w-full" formControlName="usuario"  />
-          <!-- <span>Nomenclatura: {{ form.value.nombre | lowercase }}.{{ form.value.apellido | lowercase }}</span> -->
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Contraseña</legend>
-          <input class="input input-bordered w-full" formControlName="password" />
-        </fieldset>
-
-        <button
-          type="button"
-          (click)="generarPassword()"
-          class="text-sm text-indigo-600 hover:underline"
-        >
-          Generar nueva contraseña
-        </button>
-
-      </div>
-    }
-
-    @if (step === 4) {
-      <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
-        <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
-        <p><b>Email:</b> {{ form.value.email }}</p>
-        <p><b>Departamento:</b> {{ form.value.departamento }}</p>
-        <p><b>Puesto:</b> {{ form.value.puesto }}</p>
-        <p><b>Usuario:</b> {{ form.value.usuario }}</p>
-        <p><b>Contraseña:</b> {{ form.value.password }}</p>
-      </div>
-    }
-
-    <div class="modal-action flex justify-between">
-      @if(step === 1) {
-      <button class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4"  (click)="closeModal()"> Cancelar </button>
-      }
-      @if (step > 1) {
-        <button (click)="prevStep()" class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4">
-          Atrás
-        </button>
-      }
-
-      <div class="ml-auto flex gap-3">
-
-        @if (step < 4) {
-          <button (click)="nextStep()" class="btn bg-indigo-600 text-white px-4">
-            Continuar
-          </button>
+            <button
+              type="button"
+              (click)="generarPassword()"
+              class="text-sm text-indigo-600 hover:underline"
+            >
+              Generar nueva contraseña
+            </button>
+          </div>
         }
 
         @if (step === 4) {
-          <button (click)="crearEmpleado()" class="btn bg-green-600 text-white px-4 hover:bg-green-700 transition">
-            Crear empleado
-          </button>
+          <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
+            <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
+            <p><b>Email:</b> {{ form.value.email }}</p>
+            <p><b>Departamento:</b> {{ form.value.departamento }}</p>
+            <p><b>Puesto:</b> {{ form.value.puesto }}</p>
+            <p><b>Usuario:</b> {{ form.value.usuario }}</p>
+            <p><b>Contraseña:</b> {{ form.value.password }}</p>
+          </div>
         }
 
-      </div>
+        <div class="modal-action flex justify-between">
+          @if (step === 1) {
+            <button
+              class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4"
+              (click)="closeModal()"
+            >
+              Cancelar
+            </button>
+          }
+          @if (step > 1) {
+            <button
+              (click)="prevStep()"
+              class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4"
+            >
+              Atrás
+            </button>
+          }
 
+          <div class="ml-auto flex gap-3">
+            @if (step < 4) {
+              <button (click)="nextStep()" class="btn bg-indigo-600 text-white px-4">
+                Continuar
+              </button>
+            }
+
+            @if (step === 4) {
+              <button
+                (click)="crearEmpleado()"
+                class="btn bg-green-600 text-white px-4 hover:bg-green-700 transition"
+              >
+                Crear empleado
+              </button>
+            }
+          </div>
+        </div>
+      </form>
     </div>
-</form>
-  </div>
-</dialog>
+  </dialog>
 }
 
 @if (openDropdownId) {
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center
-           bg-black/40 backdrop-blur-sm"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
     (click)="cerrarModal()"
   >
     <div
       class="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-lg p-6 animate-fadeIn"
       (click)="$event.stopPropagation()"
     >
-
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+      <!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
       @if (openDropdownId === 'editar') {
+        <form [formGroup]="form">
+          <div>
+            <button (click)="cerrarModal()" class="text-gray-500 hover:text-gray-700 transition">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
 
+          <div class="flex">
+            <div>
+              <h3 class="font-bold text-xl text-slate-800 dark:text-white">Editar empleado</h3>
+            </div>
+            <div class="ml-auto">
+              <button
+                (click)="eliminarEmpleado()"
+                class="bg-red-500 text-white hover:bg-red-600 py-2 px-4 rounded"
+              >
+                Eliminar Empleado
+              </button>
+            </div>
+          </div>
+          <div class="flex justify-between mt-4 text-sm text-slate-600 dark:text-slate-300">
+            <span [class.font-bold]="step === 1">Datos personales</span>
+            <span [class.font-bold]="step === 2">Información laboral</span>
+            <span [class.font-bold]="step === 3">Resumen</span>
+          </div>
 
- <form [formGroup]="form"> 
-  <div>
-        <button (click)="cerrarModal()" class="text-gray-500 hover:text-gray-700 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-  </div>
+          <div class="w-full bg-gray-200 h-1 rounded-full mt-3">
+            <div
+              class="bg-indigo-600 h-1 rounded-full transition-all duration-300"
+              [style.width.%]="step === 1 ? 25 : step === 2 ? 50 : step === 3 ? 75 : 100"
+            ></div>
+          </div>
 
-  <div class="flex">
-    <div>
-    <h3 class=" font-bold text-xl text-slate-800 dark:text-white">
-     Editar empleado
-    </h3>
-  </div>
-    <div class="ml-auto">
-       <button (click)="eliminarEmpleado()" class="bg-red-500 text-white hover:bg-red-600 py-2 px-4 rounded">Eliminar Empleado</button>
-    </div>
-</div>
-    <div class="flex justify-between mt-4 text-sm  text-slate-600 dark:text-slate-300">
-      <span [class.font-bold]="step === 1">Datos personales</span>
-      <span [class.font-bold]="step === 2">Información laboral</span>
-      <span [class.font-bold]="step === 3">Resumen</span>
-    </div>
+          @if (step === 1) {
+            <div
+              class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in"
+            >
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">
+                  Nombre<span class="text-red-500">*</span>
+                </legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="nombre"
+                  [(ngModel)]="empleadoSeleccionado.nombre"
+                />
+                @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
+                  <p class="text-red-500 text-xs mt-1">El nombre es obligatorio</p>
+                }
+              </fieldset>
 
-    <div class="w-full bg-gray-200 h-1 rounded-full mt-3">
-  <div
-    class="bg-indigo-600 h-1 rounded-full transition-all duration-300"
-    [style.width.%]="step === 1 ? 25 : step === 2 ? 50 : step === 3 ? 75 : 100"
-  ></div>
-</div>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">
+                  Apellido<span class="text-red-500">*</span>
+                </legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="apellido"
+                  [(ngModel)]="empleadoSeleccionado.apellido"
+                />
+                @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
+                  <p class="text-red-500 text-xs mt-1">El apellido es obligatorio</p>
+                }
+              </fieldset>
 
-    @if (step === 1) {
-      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in">
+              <fieldset class="fieldset md:col-span-2">
+                <legend class="fieldset-legend mb-1">Dirección</legend>
+                <input
+                  class="input input-bordered w-full"
+                  formControlName="direccion"
+                  [(ngModel)]="empleadoSeleccionado.direccion"
+                />
+              </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Nombre<span class="text-red-500">*</span></legend>
-          <input class="input input-bordered" formControlName="nombre" [(ngModel)]="empleadoSeleccionado.nombre"/>
-          @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
-    <p class="text-red-500 text-xs mt-1">
-      El nombre es obligatorio
-    </p>
-  }
-        </fieldset>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">
+                  Email <span class="text-red-500">*</span>
+                </legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="email"
+                  [(ngModel)]="empleadoSeleccionado.email"
+                />
+                @if (form.get('email')?.touched && form.get('email')?.invalid) {
+                  <p class="text-red-500 text-xs mt-1">
+                    @if (form.get('email')?.errors?.['required']) {
+                      El email es obligatorio
+                    }
+                    @if (form.get('email')?.errors?.['email']) {
+                      Formato de email inválido
+                    }
+                  </p>
+                }
+              </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Apellido<span class="text-red-500">*</span></legend>
-          <input class="input input-bordered" formControlName="apellido" [(ngModel)]="empleadoSeleccionado.apellido"/>
-            @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
-    <p class="text-red-500 text-xs mt-1">
-      El apellido es obligatorio
-    </p>
-  }
-        </fieldset>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Teléfono</legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="telefono"
+                  [(ngModel)]="empleadoSeleccionado.telefono"
+                />
+              </fieldset>
 
-        <fieldset class="fieldset md:col-span-2">
-          <legend class="fieldset-legend mb-1">Dirección</legend>
-          <input class="input input-bordered w-full" formControlName="direccion" [(ngModel)]="empleadoSeleccionado.direccion" />
-        </fieldset>
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Nacimiento</legend>
+                <input
+                  type="date"
+                  class="input input-bordered"
+                  formControlName="nacimiento"
+                  [(ngModel)]="empleadoSeleccionado.nacimiento"
+                />
+              </fieldset>
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Email <span class="text-red-500">*</span></legend>
-          <input class="input input-bordered" formControlName="email" [(ngModel)]="empleadoSeleccionado.email"/>
-           @if (form.get('email')?.touched && form.get('email')?.invalid) {
-    <p class="text-red-500 text-xs mt-1">
-      @if (form.get('email')?.errors?.['required']) {
-        El email es obligatorio
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Ubicación</legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="ubicacion"
+                  [(ngModel)]="empleadoSeleccionado.ubicacion"
+                />
+              </fieldset>
+
+              <fieldset class="fieldset md:col-span-2">
+                <legend class="fieldset-legend mb-1">IBAN</legend>
+                <input
+                  class="input input-bordered w-full"
+                  formControlName="iban"
+                  [(ngModel)]="empleadoSeleccionado.iban"
+                />
+              </fieldset>
+            </div>
+          }
+
+          @if (step === 2) {
+            <div
+              class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in relative overflow-hidden"
+            >
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Departamento</legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="departamento"
+                  [(ngModel)]="empleadoSeleccionado.departamento"
+                />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Puesto</legend>
+                <input
+                  class="input input-bordered"
+                  formControlName="puesto"
+                  [(ngModel)]="empleadoSeleccionado.puesto"
+                />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Fecha inicio</legend>
+                <input
+                  type="date"
+                  class="input input-bordered"
+                  formControlName="fechaInicio"
+                  [(ngModel)]="empleadoSeleccionado.fechaInicio"
+                />
+              </fieldset>
+
+              <fieldset class="fieldset">
+                <legend class="fieldset-legend mb-1">Estado</legend>
+                <select
+                  class="select select-bordered"
+                  formControlName="estado"
+                  [(ngModel)]="empleadoSeleccionado.estado"
+                >
+                  <option>Activo</option>
+                  <option>Inactivo</option>
+                </select>
+              </fieldset>
+            </div>
+          }
+
+          @if (step === 3) {
+            <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
+              <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
+              <p><b>Email:</b> {{ form.value.email }}</p>
+              <p><b>Departamento:</b> {{ form.value.departamento }}</p>
+              <p><b>Puesto:</b> {{ form.value.puesto }}</p>
+            </div>
+          }
+
+          <div class="modal-action flex justify-between">
+            @if (step === 1) {
+              <button
+                class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4"
+                (click)="cerrarModal()"
+              >
+                Cancelar
+              </button>
+            }
+
+            @if (step > 1) {
+              <button
+                (click)="prevStep()"
+                class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4"
+              >
+                Atrás
+              </button>
+            }
+
+            <div class="ml-auto flex gap-3">
+              @if (step < 3) {
+                <button (click)="nextStep()" class="btn bg-indigo-600 text-white px-4">
+                  Continuar
+                </button>
+              }
+
+              @if (step === 3) {
+                <button
+                  (click)="modificarEmpleado()"
+                  class="btn bg-green-600 text-white px-4 hover:bg-green-700 transition"
+                >
+                  Modificar empleado
+                </button>
+              }
+            </div>
+          </div>
+        </form>
       }
-      @if (form.get('email')?.errors?.['email']) {
-        Formato de email inválido
-      }
-    </p>
-  }
-        </fieldset>
+      <!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Teléfono</legend>
-          <input class="input input-bordered" formControlName="telefono" [(ngModel)]="empleadoSeleccionado.telefono"/>
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Nacimiento</legend>
-          <input type="date" class="input input-bordered" formControlName="nacimiento" [(ngModel)]="empleadoSeleccionado.nacimiento" />
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Ubicación</legend>
-          <input class="input input-bordered" formControlName="ubicacion" [(ngModel)]="empleadoSeleccionado.ubicacion" />
-        </fieldset>
-
-        <fieldset class="fieldset md:col-span-2">
-          <legend class="fieldset-legend mb-1">IBAN</legend>
-          <input class="input input-bordered w-full" formControlName="iban" [(ngModel)]="empleadoSeleccionado.iban" />
-        </fieldset>
-
-      </div>
-    }
-
-    @if (step === 2) {
-      <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in relative overflow-hidden">
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Departamento</legend>
-          <input class="input input-bordered" formControlName="departamento" [(ngModel)]="empleadoSeleccionado.departamento" />
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Puesto</legend>
-          <input class="input input-bordered" formControlName="puesto" [(ngModel)]="empleadoSeleccionado.puesto" />
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Fecha inicio</legend>
-          <input type="date" class="input input-bordered" formControlName="fechaInicio" [(ngModel)]="empleadoSeleccionado.fechaInicio" />
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend class="fieldset-legend mb-1">Estado</legend>
-          <select class="select select-bordered" formControlName="estado" [(ngModel)]="empleadoSeleccionado.estado">
-            <option>Activo</option>
-            <option>Inactivo</option>
-          </select>
-        </fieldset>
-
-      </div>
-    }
-
-
-    @if (step === 3) {
-      <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
-        <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
-        <p><b>Email:</b> {{ form.value.email }}</p>
-        <p><b>Departamento:</b> {{ form.value.departamento }}</p>
-        <p><b>Puesto:</b> {{ form.value.puesto }}</p>
-       
-      </div>
-    }
-
-    <div class="modal-action flex justify-between">
-
-       @if(step === 1) {
-      <button class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4"  (click)="cerrarModal()"> Cancelar </button>
-      }
-
-      @if (step > 1) {
-        <button (click)="prevStep()" class="btn bg-gray-300 text-gray-700 hover:bg-gray-400 transition px-4">
-          Atrás
-        </button>
-      }
-
-      <div class="ml-auto flex gap-3">
-
-        @if (step < 3) {
-          <button (click)="nextStep()" class="btn bg-indigo-600 text-white px-4">
-            Continuar
+      @if (openDropdownId === 'fichajes') {
+        <div class="mb-2">
+          <button (click)="cerrarModal()" class="text-gray-500 hover:text-gray-700 transition">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
+        </div>
+        <button
+          (click)="aprobarTodos()"
+          class="mb-2 px-3 py-1 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700"
+        >
+          Aprobar todos
+        </button>
+        @for (f of fichajes; track f) {
+          <div
+            class="flex justify-between items-center p-3 rounded-lg bg-gray-50 dark:bg-slate-800"
+          >
+            <div>
+              <p class="text-sm font-medium">{{ f.dia }}</p>
+              <p class="text-xs text-slate-500">{{ f.entrada }} → {{ f.salida }}</p>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span
+                class="text-xs px-2 py-1 rounded-full"
+                [ngClass]="{
+                  'bg-yellow-100 text-yellow-700': f.estado === 'pendiente',
+                  'bg-green-100 text-green-700': f.estado === 'aprobado',
+                  'bg-red-100 text-red-700': f.estado === 'rechazado',
+                }"
+              >
+                {{ f.estado }}
+              </span>
+
+              @if (f.estado === 'pendiente') {
+                <button (click)="aprobarFichaje(f)" class="text-green-600 text-xs hover:underline">
+                  <img src="./assets/icons/check.png" alt="aprobar" class="w-5 h-5" />
+                </button>
+
+                <button (click)="rechazarFichaje(f)" class="text-red-600 text-xs hover:underline">
+                  <img src="./assets/icons/cancel.png" alt="rechazar" class="w-5 h-5" />
+                </button>
+              }
+            </div>
+          </div>
         }
-
-        @if (step === 3) {
-          <button (click)="modificarEmpleado()" class="btn bg-green-600 text-white px-4 hover:bg-green-700 transition">
-           Modificar empleado
-          </button>
-        }
-
-      </div>
-
-    </div>
-</form>
-
-}
-<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
-
- 
-
-
+      }
     </div>
   </div>
 }
