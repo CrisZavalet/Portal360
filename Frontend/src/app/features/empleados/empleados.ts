@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
 import { Fichaje } from "../fichaje/fichaje";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-empleados',
@@ -12,7 +13,8 @@ import { Fichaje } from "../fichaje/fichaje";
 })
 export class Empleados {
 
-  constructor(private fb: FormBuilder,private eRef: ElementRef) {}
+  constructor(private fb: FormBuilder,  private route: ActivatedRoute
+, private eRef: ElementRef, private router: Router) {}
 searchTerm: string = '';
 openModalEmpleado = false;
 modalOpen = false;
@@ -217,4 +219,11 @@ aprobarTodos() {
     }
   });
 }
+
+fichajeEmpleado (id:any){
+   this.router.navigate(['../clock-in', id], {
+    relativeTo: this.route
+  });
+}
+
 }

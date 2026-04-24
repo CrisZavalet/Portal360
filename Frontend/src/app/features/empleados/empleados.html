@@ -3,9 +3,9 @@
 
   <div class="mt-6 flex justify-center mb-4">
     <label
-      class="input w-full md:w-1/2 px-4 py-2 rounded-xl bg-white/30 backdrop-blur-md border border-white/30 text-slate-800 dark:text-white placeholder-slate-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg transition"
+      class="flex input w-full md:w-1/2 px-4 py-2 rounded-xl bg-white/30 backdrop-blur-md border border-white/30 text-slate-800 dark:text-white placeholder-slate-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg transition"
     >
-      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg class=" h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <g
           stroke-linejoin="round"
           stroke-linecap="round"
@@ -18,10 +18,10 @@
           <path d="m21 21-4.3-4.3"></path>
         </g>
       </svg>
-      <input
+      <input 
         type="search"
         [(ngModel)]="searchTerm"
-        class="grow dark:text-white"
+        class="ml-3 grow dark:text-white text-sm bg-transparent focus:outline-none placeholder-slate-500"
         placeholder="Buscar empleado..."
       />
     </label>
@@ -84,7 +84,7 @@
                     </button>
 
                     <button
-                      (click)="abrirModal('fichajes', emp)"
+                      (click)="fichajeEmpleado(emp.id)"
                       class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
                     >
                       🕒 Ver fichajes
@@ -148,12 +148,12 @@
                   ✏️ Editar Empleado
                 </button>
 
-                <button
-                  (click)="abrirModal('fichajes', emp)"
-                  class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
-                >
-                  🕒 Ver fichajes
-                </button>
+                 <button
+                      (click)="fichajeEmpleado(emp.id)"
+                      class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      🕒 Ver fichajes
+                    </button>
 
                 <button
                   (click)="abrirModal('nomina', emp)"

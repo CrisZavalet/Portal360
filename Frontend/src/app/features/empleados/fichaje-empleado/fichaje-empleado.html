@@ -1,0 +1,30 @@
+<div class="p-6">
+
+  <!-- HEADER -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+    @for(emp of empleado; track emp){
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800 dark:text-white">
+        Fichajes
+      </h2>
+      <p class="text-sm text-slate-500 dark:text-slate-400">
+        {{ emp.nombre }} {{ emp.apellido }}
+      </p>
+    </div>
+}
+    <!-- ACCIONES -->
+    <div class="flex items-center gap-2">
+
+      <button (click)="aprobarTodos()"
+        class="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+        [disabled]="!tienePendientes()">
+        ✔ Aprobar todos
+      </button>
+
+    </div>
+
+  </div>
+
+ 
+
+</div>
