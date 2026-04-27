@@ -8,14 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/documento")
+@RequestMapping("/api/documents")
+@CrossOrigin(origins = "*")
 public class DocumentoController {
 
     @Autowired
     private DocumentoRepository documentoRepository;
 
     @GetMapping
-    public List<Documento> getAllDocumentos() {
+    public List<Documento> getAllDocuments() {
         return documentoRepository.findAll();
+    }
+
+    @GetMapping("/employee/{empleadoId}")
+    public List<Documento> getDocumentsByEmployee(@PathVariable Integer empleadoId) {
+        return documentoRepository.findByEmpleado_IdEmpleado(empleadoId);
     }
 }
