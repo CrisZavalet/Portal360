@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/solicitudes")
+@RequestMapping("/api/absences")
 @CrossOrigin(origins = "*")
 
 public class SolicitudController {
@@ -19,8 +19,8 @@ public class SolicitudController {
     private SolicitudRepository solicitudRepository;
 
     // Este es el GET que devuelve la lista de todas las solicitudes
-    @GetMapping("/todas")
-    public List<Solicitud> listarTodas() {
+    @GetMapping("/all")
+    public List<Solicitud> getAll() {
         return solicitudRepository.findAll();
     }
 

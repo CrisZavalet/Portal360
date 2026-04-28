@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/empleados")
+@RequestMapping("/api/employees")
 @CrossOrigin(origins = "*") // Esto es para que React pueda leerlo sin errores de CORS
 public class EmpleadoController {
 
@@ -19,8 +19,8 @@ public class EmpleadoController {
     private EmpleadoRepository empleadoRepository;
 
     // Este es el GET que devuelve la lista de todos los empleados
-    @GetMapping("/todos")
-    public List<Empleado> listarTodos() {
+    @GetMapping("/all")
+    public List<Empleado> getAllEmployEmployees() {
         return empleadoRepository.findAll();
     }
 }
