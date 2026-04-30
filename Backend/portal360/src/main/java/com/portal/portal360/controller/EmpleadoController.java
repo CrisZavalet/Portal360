@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
-@CrossOrigin(origins = "*") // Esto es para que React pueda leerlo sin errores de CORS
+@CrossOrigin(origins = "*")
 public class EmpleadoController {
 
     @Autowired

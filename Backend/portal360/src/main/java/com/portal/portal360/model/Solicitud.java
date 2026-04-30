@@ -21,21 +21,21 @@ public class Solicitud {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_solicitud")
-    private Long idSolicitud;
+    private Integer idSolicitud;
 
     @Column(name = "id_empleado")
-    private String idEmpleado;
+    private Integer idEmpleado;
 
     @Column(name = "id_tipo")
-    private String idTipo;
+    private Integer idTipo;
 
     @Column(name = "id_estado")
-    private String idEstado;
+    private Integer idEstado;
 
     @Column(name = "titulo")
     private String titulo;
 
-        @Column(name = "descripcion")
+    @Column(name = "descripcion")
     private String descripcion;
 
     @Column(name = "fecha_inicio")
