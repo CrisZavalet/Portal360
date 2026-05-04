@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
     List<Documento> findByEmpleado_IdEmpleado(Integer empleadoId);
+    List<Documento> findByIdEmpleadoAndIdTipoOrderByCreatedAtDesc(Integer idEmpleado, Integer idTipo);
 }
