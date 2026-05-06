@@ -20,8 +20,8 @@ public class DocumentoController {
         return documentoRepository.findAll();
     }
 
-    @GetMapping("/employee/{empleadoId}")
-    public List<Documento> getDocumentsByEmployee(@PathVariable Integer empleadoId) {
-        return documentoRepository.findByEmpleado_IdEmpleado(empleadoId);
+    @GetMapping("/{idEmployee}")
+    public List<Documento> getDocumentsByEmployee(@PathVariable Integer idEmployee) {
+        return documentoRepository.findByIdEmployee(idEmployee);
     }
 }

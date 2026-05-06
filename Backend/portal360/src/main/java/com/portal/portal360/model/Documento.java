@@ -29,6 +29,7 @@ public class Documento {
     @Column(name = "id_archivo")
     private Long idFile; 
 
+    @Column(name = "titulo")
     private String title;
 
     @Column(name = "created_at", insertable = false, updatable = false)

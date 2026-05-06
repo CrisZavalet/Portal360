@@ -19,15 +19,20 @@ public class Empleado {
     @Column(unique = true, nullable = false)
     private String dni;
 
+    @Column(name = "nombre")
     private String name;
+
+    @Column(name = "apellido")
     private String lastName;
 
     @Column(name = "fecha_nacimiento")
     private LocalDate dateOfBirth;
 
+    @Column(name = "telefono")
     private String phone;
 
-    private boolean active = true;
+    @Column(name = "activo")
+    private Boolean active = true;
 
     @Column(name = "id_usuario")
     private Integer idUser; 

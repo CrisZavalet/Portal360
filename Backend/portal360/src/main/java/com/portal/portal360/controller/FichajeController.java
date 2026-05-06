@@ -23,33 +23,33 @@ public class FichajeController {
         return fichajeRepository.findAll();
     }
 
-    @GetMapping("/employee/{empleadoId}")
-    public List<Fichaje> getClockingsByEmployee(@PathVariable Integer empleadoId) {
-        return fichajeRepository.findByEmpleado_IdEmpleado(empleadoId);
+    @GetMapping("/employee/{idEmployee}")
+    public List<Fichaje> getClockingsByEmployee(@PathVariable Integer idEmployee) {
+        return fichajeRepository.findByIdEmployee(idEmployee);
     }
 
     @PostMapping("/check-in")
     public ResponseEntity<?> checkIn(@RequestBody Fichaje fichaje) {
-        fichaje.setTipo(Fichaje.TipoFichaje.ENTRADA);
-        fichaje.setHoraInicio(LocalTime.now());
-        fichaje.setFecha(LocalDate.now());
+        fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
+        fichaje.setStartHour(LocalTime.now());
+        fichaje.setDate(LocalDate.now());
         return ResponseEntity.ok(fichajeRepository.save(fichaje));
     }
 
     @PostMapping("/check-out/{id}")
     public ResponseEntity<?> checkOut(@PathVariable Integer id) {
         return fichajeRepository.findById(id).map(f -> {
-            f.setTipo(Fichaje.TipoFichaje.SALIDA);
-            f.setHoraFin(LocalTime.now());
+            f.setType(Fichaje.TipoFichaje.SALIDA);
+            f.setEndHour(LocalTime.now());
             return ResponseEntity.ok(fichajeRepository.save(f));
         }).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/employee/{empleadoId}/range")
+    @GetMapping("/employee/{idEmployee}/range")
     public List<Fichaje> getClockingsByDateRange(
-            @PathVariable Integer empleadoId,
+            @PathVariable Integer idEmployee,
             @RequestParam LocalDate startDate,
             @RequestParam LocalDate endDate) {
-        return fichajeRepository.findByEmpleado_IdEmpleadoAndFechaBetween(empleadoId, startDate, endDate);
+        return fichajeRepository.findByIdEmployeeAndDateBetween(idEmployee, startDate, endDate);
     }
 }

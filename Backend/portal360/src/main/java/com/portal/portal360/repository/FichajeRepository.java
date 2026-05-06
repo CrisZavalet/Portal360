@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface FichajeRepository extends JpaRepository<Fichaje, Integer> {
-    List<Fichaje> findByEmpleado_IdEmpleado(Integer empleadoId);
-    List<Fichaje> findByEmpleado_IdEmpleadoAndFechaBetween(Integer empleadoId, LocalDate startDate, LocalDate endDate);
+    
+    // Ahora puedes usar el nombre corto que querías
+    List<Fichaje> findByIdEmployee(Integer idEmployee);
+
+    // Y aquí usamos 'Date' porque así se llama tu variable en Fichaje.java
+    List<Fichaje> findByIdEmployeeAndDateBetween(Integer idEmployee, LocalDate startDate, LocalDate endDate);
 }
