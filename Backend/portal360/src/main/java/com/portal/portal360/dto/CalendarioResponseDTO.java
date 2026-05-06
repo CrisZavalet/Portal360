@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CalendarioResponseDTO {
-    private Integer anio;
-    private List<EventoCalendarioDTO> eventos;
+    private Integer year;
+    private List<EventoCalendarioDTO> events;
 
     
 }

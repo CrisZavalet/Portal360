@@ -18,18 +18,18 @@ public class Documento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_documento")
-    private Long idDocumento;
+    private Long idDocument;
 
     @Column(name = "id_empleado")
-    private Integer idEmpleado; 
+    private Integer idEmployee; 
 
     @Column(name = "id_tipo")
-    private Integer idTipo; // Tipo 2 para nóminas
+    private Integer idType; // Tipo 2 para nóminas
 
     @Column(name = "id_archivo")
-    private Long idArchivo; 
+    private Long idFile; 
 
-    private String titulo;
+    private String title;
 
     @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt; // Para fecha de emisión

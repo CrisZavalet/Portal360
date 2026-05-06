@@ -14,21 +14,21 @@ public class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_empleado")
-    private Integer idEmpleado;
+    private Integer idEmployee;
 
     @Column(unique = true, nullable = false)
     private String dni;
 
-    private String nombre;
-    private String apellidos;
+    private String name;
+    private String lastName;
 
     @Column(name = "fecha_nacimiento")
-    private LocalDate fechaNacimiento;
+    private LocalDate dateOfBirth;
 
-    private String telefono;
+    private String phone;
 
-    private boolean activo = true;
+    private boolean active = true;
 
     @Column(name = "id_usuario")
-    private Integer idUsuario; 
+    private Integer idUser; 
 }

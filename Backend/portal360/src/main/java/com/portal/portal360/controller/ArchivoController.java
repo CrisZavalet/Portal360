@@ -26,33 +26,33 @@ public class ArchivoController {
     @Autowired
     private ArchivoRepository archivoRepository;
 
-    @GetMapping("/{id}/show")
-    public ResponseEntity<Resource> verArchivo(@PathVariable Long id) {
-        return procesarArchivo(id, "inline");
+    @GetMapping("/{idFile}/show")
+    public ResponseEntity<Resource> showFile(@PathVariable Long idFile) {
+        return processFile(idFile, "inline");
     }
 
-    @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> descargarArchivo(@PathVariable Long id) {
-        return procesarArchivo(id, "attachment");
+    @GetMapping("/{idFile}/download")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long idFile) {
+        return processFile(idFile, "attachment");
     }
 
-    private ResponseEntity<Resource> procesarArchivo(Long id, String modo) { // OJO: Esta API habría que mirarla bien
+    private ResponseEntity<Resource> processFile(Long id, String modo) { // OJO: Esta API habría que mirarla bien
         // Buscamos los metadatos en la BD para saber el nombre y tipo (MIME)
-        Archivo archivoInfo = archivoRepository.findById(id)
+        Archivo fileInfo = archivoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Archivo no encontrado"));
 
         try {
             //  Cargamos el archivo físico del disco
             // Aquí usamos la 'storageKey' que guardamos al crear la solicitud
-            Path path = Paths.get(archivoInfo.getStorageKey());
-            Resource recurso = new UrlResource(path.toUri());
+            Path path = Paths.get(fileInfo.getStorageKey());
+            Resource resource = new UrlResource(path.toUri());
 
             // Configuramos la respuesta con los Headers adecuados para mostrar o descargar el archivo
             return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(archivoInfo.getMimeType())) // Ej: application/pdf
+                    .contentType(MediaType.parseMediaType(fileInfo.getMimeType())) // Ej: application/pdf
                     .header(HttpHeaders.CONTENT_DISPOSITION, 
-                            modo + "; filename=\"" + archivoInfo.getNombreArchivo() + "\"") // inline o attachment
-                    .body(recurso);
+                            modo + "; filename=\"" + fileInfo.getNameFile() + "\"") // inline o attachment
+                    .body(resource);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

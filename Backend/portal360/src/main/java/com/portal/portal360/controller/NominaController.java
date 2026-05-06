@@ -39,24 +39,24 @@ public class NominaController {
     @Autowired
     private ArchivoRepository archivoRepository;
 
-    @GetMapping("/paysheet/me")
+    @GetMapping("/me")
     public ResponseEntity<Map<String, Object>> getNominas(
-            @RequestParam(required = false) Integer idEmpleado) {
+            @RequestParam(required = false) Integer idEmployee) {
 
-        Integer idFiltro = (idEmpleado == null) ? 2 : idEmpleado;
+        Integer idFiltro = (idEmployee == null) ? 2 : idEmployee;
 
-        List<Documento> documentos = documentoRepository.findByIdEmpleadoAndIdTipoOrderByCreatedAtDesc(idFiltro, 2);
+        List<Documento> documentos = documentoRepository.findByIdEmployeeAndIdTypeOrderByCreatedAtDesc(idFiltro, 2);
 
         List<NominaDTO> listaFinal = documentos.stream().map(doc -> {
             // Formateamos la fecha (created_at) para la columna 'Fecha Emisión'
             String fechaFormateada = doc.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
             // El 'Periodo' se extrae del título
-            String periodo = doc.getTitulo();
+            String periodo = doc.getTitle();
 
             return new NominaDTO(
-                    doc.getIdArchivo(), // ID para el mostrar y descargar el archivo
-                    doc.getTitulo(), // Nombre que aparecerá en la primera columna
+                    doc.getIdFile(), // ID para el mostrar y descargar el archivo
+                    doc.getTitle(), // Nombre que aparecerá en la primera columna
                     periodo,
                     "Ordinaria", // Valor fijo de ejemplo
                     fechaFormateada,
@@ -70,16 +70,16 @@ public class NominaController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/paysheet/download-year")
+    @GetMapping("/download-year")
     public void descargarNominasAnio(
             @RequestParam Integer anio,
-            @RequestParam(required = false) Integer idEmpleado,
+            @RequestParam(required = false) Integer idEmployee,
             HttpServletResponse response) throws IOException {
 
-        Integer idFiltro = (idEmpleado == null) ? 2 : idEmpleado;
+        Integer idFiltro = (idEmployee == null) ? 2 : idEmployee;
 
         // Buscamos los documentos de ese empleado, tipo nómina (2) y del año seleccionado
-        List<Documento> documentos = documentoRepository.findByIdEmpleadoAndIdTipoOrderByCreatedAtDesc(idFiltro, 2);
+        List<Documento> documentos = documentoRepository.findByIdEmployeeAndIdTypeOrderByCreatedAtDesc(idFiltro, 2);
 
         // Filtramos por año en Java para no complicar la query
         List<Documento> nominasAnio = documentos.stream()
@@ -94,13 +94,13 @@ public class NominaController {
         try (ZipOutputStream zipOut = new ZipOutputStream(response.getOutputStream())) {
             for (Documento doc : nominasAnio) {
                 // Buscamos la info del archivo para obtener la ruta física (storage_key)
-                Archivo archivoInfo = archivoRepository.findById(doc.getIdArchivo()).orElse(null);
+                Archivo archivoInfo = archivoRepository.findById(doc.getIdFile()).orElse(null);
 
                 if (archivoInfo != null) {
                     Path path = Paths.get(archivoInfo.getStorageKey());
                     if (Files.exists(path)) {
                         // Añadimos una "entrada" al ZIP (un archivo dentro del paquete)
-                        ZipEntry zipEntry = new ZipEntry(archivoInfo.getNombreArchivo());
+                        ZipEntry zipEntry = new ZipEntry(archivoInfo.getNameFile());
                         zipOut.putNextEntry(zipEntry);
                         Files.copy(path, zipOut);
                         zipOut.closeEntry();

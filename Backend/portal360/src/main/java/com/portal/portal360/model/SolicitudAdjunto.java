@@ -10,11 +10,11 @@ public class SolicitudAdjunto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_adjunto")
-    private Integer idAdjunto;
+    private Integer idAttach;
 
     @Column(name = "id_solicitud")
-    private Integer idSolicitud;
+    private Integer idRequest;
 
     @Column(name = "id_archivo")
-    private Long idArchivo;
+    private Long idFile;
 }

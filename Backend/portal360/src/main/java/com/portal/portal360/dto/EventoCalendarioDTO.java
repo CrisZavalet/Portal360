@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoCalendarioDTO {
-    private String fecha;  // Formato "yyyy-MM-dd" 
-    private String tipo;   
-    private String nombre; // Título de la solicitud 
+    private String date;  // Formato "yyyy-MM-dd" 
+    private String type;   
+    private String name; // Título de la solicitud 
 }

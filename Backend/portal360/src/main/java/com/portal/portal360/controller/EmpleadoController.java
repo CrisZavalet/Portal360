@@ -20,7 +20,7 @@ public class EmpleadoController {
 
     // Este es el GET que devuelve la lista de todos los empleados
     @GetMapping("/all")
-    public List<Empleado> getAllEmployEmployees() {
+    public List<Empleado> getAllEmployees() {
         return empleadoRepository.findAll();
     }
 }

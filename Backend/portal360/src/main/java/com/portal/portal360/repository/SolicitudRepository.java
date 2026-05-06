@@ -11,21 +11,21 @@ import com.portal.portal360.model.Solicitud;
 
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 @Query("SELECT new com.portal.portal360.dto.EventoCalendarioDTO(" +
-       "CAST(s.fechaInicio as string), " + 
+       "CAST(s.startDate as string), " + 
        "CASE " +
-       "  WHEN s.idTipo = 1 THEN 'Vacaciones' " +
-       "  WHEN s.idTipo = 2 THEN 'Baja Boda' " +
-       "  WHEN s.idTipo = 3 THEN 'Baja Larga' " +
-       "  WHEN s.idTipo = 4 THEN 'Baja Paternidad' " +
-       "  WHEN s.idTipo = 5 THEN 'Incapacidad Temporal' " +
-       "  WHEN s.idTipo = 6 THEN 'Permiso de operación' " +
+       "  WHEN s.idType = 1 THEN 'Vacaciones' " +
+       "  WHEN s.idType = 2 THEN 'Baja Boda' " +
+       "  WHEN s.idType = 3 THEN 'Baja Larga' " +
+       "  WHEN s.idType = 4 THEN 'Baja Paternidad' " +
+       "  WHEN s.idType = 5 THEN 'Incapacidad Temporal' " +
+       "  WHEN s.idType = 6 THEN 'Permiso de operación' " +
        "  ELSE 'Otro' END, " +         
-       "s.titulo) " +
+       "s.title) " +
        "FROM Solicitud s " +
-       "WHERE s.idEmpleado = :idEmpleado " + // :idEmpleado debe ser Integer
-       "AND YEAR(s.fechaInicio) = :anio") 
-List<EventoCalendarioDTO> findEventosByEmpleadoAndAnio(
-    @Param("idEmpleado") Integer idEmpleado, 
-    @Param("anio") int anio
+       "WHERE s.idEmployee = :idEmployee " + 
+       "AND YEAR(s.startDate) = :year") 
+List<EventoCalendarioDTO> findEventosByEmployeeAndYear(
+    @Param("idEmployee") Integer idEmployee, 
+    @Param("year") int year
 );
 }

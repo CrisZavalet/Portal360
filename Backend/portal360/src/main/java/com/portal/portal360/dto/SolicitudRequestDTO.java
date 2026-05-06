@@ -5,11 +5,11 @@ import java.util.Date;
 
 @Data
 public class SolicitudRequestDTO {
-    private String idTipo;      // El valor del Select
-    private String comentario;  // Del Textarea
-    private String tipoDuracion; // "hours", "day", "days"
-    private Date fecha;         // Para "horas" o "un día"
-    private Integer horas;      // Solo para "horas"
-    private Date fechaInicio;   // Para "varios días"
-    private Date fechaFin;      // Para "varios días"
+    private String idType;      // El valor del Select
+    private String comments;  // Del Textarea
+    private String typeDuration; // "hours", "day", "days"
+    private Date date;         // Para "horas" o "un día"
+    private Integer hours;      // Solo para "horas"
+    private Date startDate;   // Para "varios días"
+    private Date endDate;      // Para "varios días"
 }

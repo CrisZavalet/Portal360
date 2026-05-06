@@ -21,29 +21,29 @@ public class Solicitud {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_solicitud")
-    private Integer idSolicitud;
+    private Integer idRequest;
 
     @Column(name = "id_empleado")
-    private Integer idEmpleado;
+    private Integer idEmployee;
 
     @Column(name = "id_tipo")
-    private Integer idTipo;
+    private Integer idType;
 
     @Column(name = "id_estado")
-    private Integer idEstado;
+    private Integer idState;
 
     @Column(name = "titulo")
-    private String titulo;
+    private String title;
 
     @Column(name = "descripcion")
-    private String descripcion;
+    private String description;
 
     @Column(name = "fecha_inicio")
-    private Date fechaInicio;
+    private Date startDate;
 
     @Column(name = "fecha_fin")
-    private Date fechaFin;
+    private Date endDate;
 
     @Column(name = "fecha_resolucion")
-    private Date fechaResolucion;
+    private Date endDateResolution;
 }
