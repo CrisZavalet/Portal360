@@ -1,5 +1,7 @@
 package com.portal.portal360.repository;
 
+import com.portal.portal360.model.Documento;
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
