@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Portal360Application<portal360>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.portal.portal360.Portal360Application",
+            "projectName": "portal360",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

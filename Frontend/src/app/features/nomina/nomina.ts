@@ -24,13 +24,13 @@ meses = [
   'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
 ];
 nomina: Nominas[] = [
-  { archivo: new Date(2026, 1, 10), periodo: 'Enero 2026', tipo: 'Ordinaria', fechaEmision: new Date(2026, 1, 15), estado: 'Disponible', accion: 'Descargar' },
-  { archivo: new Date(2026, 0, 10), periodo: 'Diciembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2026, 0, 15), estado: 'Disponible', accion: 'Descargar' },
-  { archivo: new Date(2025, 11, 10), periodo: 'Noviembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 11, 15), estado: 'Disponible', accion: 'Descargar' },
-  { archivo: new Date(2025, 10, 10), periodo: 'Octubre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 10, 15), estado: 'Disponible', accion: 'Descargar' },
-  { archivo: new Date(2025, 9, 10), periodo: 'Septiembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 9, 15), estado: 'Disponible', accion: 'Descargar' },
-  { archivo: new Date(2025, 8, 10), periodo: 'Agosto 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 8, 15), estado: 'Disponible', accion: 'Descargar' },
-  { archivo: new Date(2025, 7, 10), periodo: 'Julio 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 7, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Enero 2026', tipo: 'Ordinaria', fechaEmision: new Date(2026, 1, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Diciembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2026, 0, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Noviembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 11, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Octubre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 10, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Septiembre 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 9, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Agosto 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 8, 15), estado: 'Disponible', accion: 'Descargar' },
+  { periodo: 'Julio 2025', tipo: 'Ordinaria', fechaEmision: new Date(2025, 7, 15), estado: 'Disponible', accion: 'Descargar' },
 
 ];
 selectedYear = signal(new Date().getFullYear());
