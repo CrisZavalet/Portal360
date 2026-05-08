@@ -22,7 +22,7 @@ public class Empleado {
     @Column(name = "nombre")
     private String name;
 
-    @Column(name = "apellido")
+    @Column(name = "apellidos")
     private String lastName;
 
     @Column(name = "fecha_nacimiento")
@@ -36,4 +36,7 @@ public class Empleado {
 
     @Column(name = "id_usuario")
     private Integer idUser; 
+
+    @Column (name = "iban")
+    private String iban;
 }
