@@ -32,7 +32,10 @@
    - 6.3 [Registro de Entrada (Check-in)](#63-registro-de-entrada-check-in)
    - 6.4 [Registro de Salida (Check-out)](#64-registro-de-salida-check-out)
    - 6.5 [Fichajes por Rango de Fechas](#65-fichajes-por-rango-de-fechas)
-7. [Notas Técnicas](#7-notas-técnicas)
+7. [Perfil](#7-perfil)
+   - 7.1 [Obtener Perfil](#71-obtener-perfil)
+   - 7.2 [Editar Perfil](#72-editar-perfil)
+8. [Notas Técnicas](#7-notas-técnicas)
 
 ---
 
@@ -780,10 +783,97 @@ GET /api/clockings/employee/2/range?startDate=2026-05-01&endDate=2026-05-31
   }
 ]
 ```
+## 7. Perfil
+
+### 7.1. Obtener Perfil
+
+Devuelve los datos del perfil de un empleado concreto. Utiliza un `ProfileDTO` para devolver únicamente los campos necesarios para la vista de perfil, evitando exponer datos innecesarios.
+
+| Campo | Detalle |
+|---|---|
+| **Método** | `GET` |
+| **Ruta** | `/api/profile/{id}` |
+| **Autorización** | Bearer Token |
+
+### Parámetros de Ruta
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+|---|---|---|---|
+| `id` | `Integer` | SÍ | Identificador del empleado. Mapeado a `empleado.id_empleado`. |
+
+### Caso de Prueba
+### Respuesta Exitosa `200 OK`
+
+```json
+{
+  "idEmployee": 1,
+  "name": "Lucía",
+  "lastName": "Sanz Castro",
+  "dni": "22222222B",
+  "phone": "611000001",
+  "dateOfBirth": "1990-01-10",
+  "iban": null
+}
+```
+
+### Respuesta de Error `404 Not Found`
+
+> Se devuelve si el `id` indicado no existe en la tabla `empleado`.
 
 ---
 
-## 7. Notas Técnicas
+### 7.2. Editar Perfil
+
+Actualiza los datos editables del perfil de un empleado. Solo permite modificar los campos que el empleado puede cambiar desde la vista de perfil.
+
+| Campo | Detalle |
+|---|---|
+| **Método** | `PUT` |
+| **Ruta** | `/api/profile/{id}` |
+| **Content-Type** | `application/json` |
+| **Autorización** | Bearer Token |
+
+### Parámetros de Ruta
+
+| Parámetro | Tipo | Obligatorio | Descripción |
+|---|---|---|---|
+| `id` | `Integer` | SÍ | Identificador del empleado a actualizar. |
+
+### Cuerpo de la Petición
+
+```json
+{
+  "name": "Lucía",
+  "lastName": "Sanz Castro",
+  "phone": "611000099",
+  "dateOfBirth": "1990-01-10",
+  "iban": "ES00 0000 0000 0000 0000 0001"
+}
+```
+
+### Respuesta Exitosa `200 OK`
+
+```json
+{
+  "idEmployee": 1,
+  "name": "Lucía",
+  "lastName": "Sanz Castro",
+  "dni": "22222222B",
+  "phone": "611000099",
+  "dateOfBirth": "1990-01-10",
+  "iban": "ES00 0000 0000 0000 0000 0001"
+}
+```
+
+### Respuesta de Error `404 Not Found`
+
+> Se devuelve si el `id` indicado no existe en la tabla `empleado`.
+
+---
+
+---
+
+## 8. Notas Técnicas
 
 ### DTOs (Data Transfer Objects)
 

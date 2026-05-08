@@ -183,7 +183,8 @@ INSERT INTO empleado (
         nombre,
         apellidos,
         fecha_nacimiento,
-        telefono
+        telefono,
+        iban,
     )
 VALUES (
         2,
@@ -191,7 +192,8 @@ VALUES (
         'Lucía',
         'Sanz Castro',
         '1990-01-10',
-        '611000001'
+        '611000001',
+        'ES00 0000 0000 0000 0000 0000'
     ),
     (
         3,
@@ -199,7 +201,8 @@ VALUES (
         'Marcos',
         'López Ruiz',
         '1985-11-25',
-        '611000002'
+        '611000002',
+        'ES00 0000 0000 0000 0000 0001'
     ),
     (
         4,
@@ -207,7 +210,8 @@ VALUES (
         'Elena',
         'Belmonte Gil',
         '1993-07-14',
-        '611000003'
+        '611000003',
+        'ES00 0000 0000 0000 0000 0010'
     );
 -- Puestos
 INSERT INTO puesto (nombre)

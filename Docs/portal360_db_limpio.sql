@@ -60,6 +60,7 @@ CREATE TABLE empleado (
     apellidos        VARCHAR(150),
     fecha_nacimiento DATE,
     telefono         VARCHAR(20),
+    iban             VARCHAR(34),
     activo           BOOLEAN      DEFAULT TRUE,
     created_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
