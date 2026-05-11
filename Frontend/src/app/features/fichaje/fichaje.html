@@ -4,29 +4,17 @@
 Aquí podrás comprobar el horario registrado, revisar el cómputo de horas y acceder al historial completo de tu actividad.</p>
     <div class=" items-center justify-end mt-4  flex ">
         <div class="relative">
-  <button  (click)="open = !open" class=" p-3 bg-indigo-100  backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.25)]
-       hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-200/10 transition  transition-all duration-300  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white"><img class="w-5 h-5" src="./assets/icons/three-dots.svg" alt=""></button>
-   @if (open) {
-    <div class="absolute top-full right-0 mt-2
-           w-48
-           backdrop-blur-sm bg-gradient-to-br from-white/40 to-white/10
-           border border-white/40
-           rounded-2xl
-           shadow-xl shadow-black/20
-           p-2
-           animate-fadeIn
-           z-50">
 
-      <button class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg transition">
-        Editar
-      </button>
+        <button 
+(click)="openExportModal()" 
+class="flex items-center gap-2 p-3 bg-indigo-600 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.25)] text-white 
+hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-500 transition-all duration-300 dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
 
-      <button (click)="openExportModal()" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg transition">
-        Exportar
-      </button>
+  <img class="w-5 h-5" src="./assets/icons/material-symbols--download.svg" alt="">
+  <span>Exportar</span>
 
-    </div>
-  }
+</button>
+ 
 </div>
   
     </div>
