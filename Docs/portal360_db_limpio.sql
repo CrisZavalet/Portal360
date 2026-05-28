@@ -186,3 +186,12 @@ CREATE TABLE solicitud_adjunto (
     id_solicitud INT NOT NULL REFERENCES solicitud(id_solicitud) ON DELETE CASCADE,
     id_archivo   INT NOT NULL REFERENCES archivo(id_archivo) ON DELETE CASCADE
 );
+
+CREATE TABLE configuracion (
+    id_configuracion SERIAL PRIMARY KEY,
+    id_usuario INT NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    notif_email BOOLEAN DEFAULT true,
+    notif_fichaje BOOLEAN DEFAULT true,
+    notif_ausencia BOOLEAN DEFAULT true,
+    two_factor_auth BOOLEAN DEFAULT false
+);
