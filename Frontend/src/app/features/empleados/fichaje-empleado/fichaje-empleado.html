@@ -1,30 +1,137 @@
-<div class="p-6">
-
+<div class="p-0 md:p-2">
   <!-- HEADER -->
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
-    @for(emp of empleado; track emp){
-    <div>
-      <h2 class="text-2xl font-bold text-slate-800 dark:text-white">
-        Fichajes
-      </h2>
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {{ emp.nombre }} {{ emp.apellido }}
-      </p>
-    </div>
-}
+    @if (empleadoselectado) {
+      <div>
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Fichajes de  {{ empleadoselectado.nombre }} {{ empleadoselectado.apellido }}</h2>
+        <!-- <p class="text-xl text-indigo-500 dark:text-slate-400">
+          {{ empleadoselectado.nombre }} {{ empleadoselectado.apellido }}
+        </p> -->
+      </div>
+    }
     <!-- ACCIONES -->
     <div class="flex items-center gap-2">
-
-      <button (click)="aprobarTodos()"
+      <!-- <button (click)="aprobarTodos()"
         class="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
         [disabled]="!tienePendientes()">
         ✔ Aprobar todos
-      </button>
-
+      </button> -->
     </div>
-
   </div>
 
- 
+  <div class="hidden md:block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl">
 
+  <table class="w-full table-fixed text-sm bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-visible">
+
+    <thead class="text-xs uppercase tracking-wider text-slate-500 ">
+      <tr>
+        <th class="px-4 py-3 text-left font-semibold">Fecha</th>
+        <th class="px-4 py-3 text-left font-semibold">Entrada</th>
+        <th class="px-4 py-3 text-left font-semibold">Salida</th>
+        <th class="px-4 py-3 text-left font-semibold">Horas</th>
+        <th class="px-4 py-3 text-left font-semibold">Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for(fichaje of fichajes; track fichaje.id){
+
+        <tr
+          class="border-t border-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+
+          <td class="px-4 py-3">
+            {{ formatearFecha(fichaje.fecha) }}
+          </td>
+          
+          <td class="px-4 py-3">
+            <span class="text-green-600 font-medium">
+              {{ fichaje.entrada }}
+            </span>
+          </td>
+
+          <td class="px-4 py-3">
+            <span class="text-red-500 font-medium">
+              {{ fichaje.salida }}
+            </span>
+          </td>
+
+          <td class="px-3 py-3">
+            {{ fichaje.totalHoras }}
+          </td>
+
+          <td class="px-4 py-3">
+            <div class="flex gap-2">
+
+              <button
+                (click)="aprobarFichaje(fichaje)"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg
+                       bg-green-600 text-white
+                       hover:bg-green-200
+                       dark:bg-green-500/20 dark:text-green-300">
+                ✔ Aprobar
+              </button>
+
+              <button
+                (click)="rechazarFichaje(fichaje)"
+                class="px-3 py-1.5 text-xs font-medium rounded-lg
+                       bg-red-600 text-white
+                       hover:bg-red-200
+                       dark:bg-red-500/20 dark:text-red-300">
+                ✘ Rechazar
+              </button>
+
+            </div>
+          </td>
+
+        </tr>
+
+      }
+    </tbody>
+
+  </table>
+
+</div>
+
+  <div class="md:hidden space-y-3">
+    @for (fichaje of fichajes; track fichaje.id) {
+      <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow">
+        <div class="font-semibold">
+          {{ formatearFecha(fichaje.fecha) }}
+        </div>
+
+        <div class="mt-2 text-sm">
+          <p>
+            <span class="font-medium">Entrada:</span>
+            <span class="text-green-600">{{ fichaje.entrada }}</span>
+          </p>
+
+          <p>
+            <span class="font-medium">Salida:</span>
+            <span class="text-red-600">{{ fichaje.salida }}</span>
+          </p>
+
+          <p>
+            <span class="font-medium">Horas:</span>
+            {{ fichaje.totalHoras }}
+          </p>
+        </div>
+
+        <div class="flex gap-2 mt-4">
+          <button
+            (click)="aprobarFichaje(fichaje)"
+            class="flex-1 px-3 py-2 rounded-lg bg-green-600 text-white"
+          >
+            ✔ Aprobar
+          </button>
+
+          <button
+            (click)="rechazarFichaje(fichaje)"
+            class="flex-1 px-3 py-2 rounded-lg bg-red-600 text-white"
+          >
+            ✘ Rechazar
+          </button>
+        </div>
+      </div>
+    }
+  </div>
 </div>

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-fichaje-empleado',
@@ -9,6 +10,8 @@ import { Component } from '@angular/core';
 })
 export class FichajeEmpleado {
 // empleado: any;
+id: any;
+empleadoselectado: any;
 jornada = 8;
  empleado = [
   {
@@ -28,14 +31,46 @@ jornada = 8;
     estado: 'Activo',
     usuario: 'fsanp',
   },
+
+{
+   id: 2,
+    nombre: 'Juan',
+    apellido: 'Pérez',
+    cargo: 'Diseñador',
+    email: 'juan.perez@empresa.com',
+    telefono: '555-5678',
+    estado: 'Inactivo'
+
+  },
+
  ]
 
 fichajes = [
-  { dia: 'Lunes', entrada: '08:00', salida: '17:00', estado: 'pendiente' },
-  { dia: 'Martes', entrada: '08:15', salida: '17:30', estado: 'pendiente' },
+ { id: 1, fecha: new Date(2026, 1, 10), entrada: '08:00', salida: '16:00', totalHoras: 8, estado: 'pendiente' },
+  { id: 2, fecha: new Date(2026, 1, 15), entrada: '09:00', salida: '17:30', totalHoras: 8.5, estado: 'pendiente' },
+  { id: 3, fecha: new Date(2026, 0, 20), entrada: '08:15', salida: '16:15', totalHoras: 8, estado: 'pendiente' }
 ];
 
-// 🔹 Calcula horas trabajadas
+constructor( private route: ActivatedRoute) {}
+ngOnInit() {
+  
+    this.id = this.route.snapshot.params['id'];
+    console.log('ID del empleado:', this.id);
+  if (this.id) {
+    // this.loadFleetDetails(this.id);
+    // this.loadCallOut()
+    this.datosEmpleado(this.id);
+
+  }
+ }
+
+datosEmpleado (id: any) {
+  //  this.empleado.find((e) => e.id == id);
+  this.empleadoselectado = this.empleado.find((e) => e.id == id);
+  console.log(this.empleadoselectado);
+}
+
+
 horasTrabajadas(entrada: string, salida: string): number {
   if (!entrada || !salida) return 0;
 
@@ -48,7 +83,7 @@ horasTrabajadas(entrada: string, salida: string): number {
   return (fin - inicio) / 60;
 }
 
-// 🔹 Determina si hay horas extra o falta tiempo
+
 getEstadoFichaje(f: any): 'ok' | 'extra' | 'retraso' {
   const horas = this.horasTrabajadas(f.entrada, f.salida);
 
@@ -57,36 +92,42 @@ getEstadoFichaje(f: any): 'ok' | 'extra' | 'retraso' {
   return 'ok';
 }
 
-// 🔹 Aprobar uno
+
 aprobarFichaje(f: any) {
-  f.estado = 'aprobado';
+  f.aprobado = true;
+  console.log('Fichaje aprobado:', f);
 }
 
-// 🔹 Rechazar uno
+
 rechazarFichaje(f: any) {
-  f.estado = 'rechazado';
+  f.aprobado = false;
+  console.log('Fichaje rechazado:', f);
 }
 
 // 🔹 Aprobar todos los pendientes
-aprobarTodos() {
-  this.fichajes = this.fichajes.map(f => {
-    if (f.estado === 'pendiente') {
-      return { ...f, estado: 'aprobado' };
-    }
-    return f;
-  });
-}
+// aprobarTodos() {
+//   this.fichajes = this.fichajes.map(f => {
+//     if (f. === true) {
+//       return { ...f, aprobado: true };
+//     }
+//     return f;
+//   });
+// }
 
-// 🔹 (Opcional PRO) Calcular horas extra exactas
-horasExtra(f: any): number {
-  return this.horasTrabajadas(f.entrada, f.salida) - this.jornada;
-}
+// // 🔹 (Opcional PRO) Calcular horas extra exactas
+// horasExtra(f: any): number {
+//   return this.horasTrabajadas(f.entrada, f.salida) - this.jornada;
+// }
 
-tienePendientes(): boolean {
-  return this.fichajes?.some(f => f.estado === 'pendiente');
-}
+// tienePendientes(): boolean {
+//   return this.fichajes?.some(f => f.aprobado === false) || false;
+// }
 
-contadorPendientes(): number {
-  return this.fichajes?.filter(f => f.estado === 'pendiente').length || 0;
+// contadorPendientes(): number {
+//   return this.fichajes?.filter(f => f.aprobado === false).length || 0;
+// }
+
+formatearFecha(fecha: Date): string {
+  return new Date(fecha).toLocaleDateString('es-ES');
 }
 }
