@@ -1,21 +1,37 @@
 <div class="p-0 md:p-2">
   <!-- HEADER -->
+   <button
+  (click)="volver()"
+  class="bg-white flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 mb-4">
+
+  <svg xmlns="http://www.w3.org/2000/svg"
+       fill="none"
+       viewBox="0 0 24 24"
+       stroke-width="1.5"
+       stroke="currentColor"
+       class="size-5">
+    <path stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+  </svg>
+
+  Volver
+</button>
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
     @if (empleadoselectado) {
       <div>
         <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Fichajes de  {{ empleadoselectado.nombre }} {{ empleadoselectado.apellido }}</h2>
-        <!-- <p class="text-xl text-indigo-500 dark:text-slate-400">
-          {{ empleadoselectado.nombre }} {{ empleadoselectado.apellido }}
-        </p> -->
       </div>
     }
-    <!-- ACCIONES -->
+   
     <div class="flex items-center gap-2">
-      <!-- <button (click)="aprobarTodos()"
+  
+       <button (click)="aprobarTodos()"
         class="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
         [disabled]="!tienePendientes()">
         ✔ Aprobar todos
-      </button> -->
+      </button>
+
     </div>
   </div>
 
@@ -29,6 +45,7 @@
         <th class="px-4 py-3 text-left font-semibold">Entrada</th>
         <th class="px-4 py-3 text-left font-semibold">Salida</th>
         <th class="px-4 py-3 text-left font-semibold">Horas</th>
+        <th class="px-4 py-3 text-left font-semibold">Tipo</th>
         <th class="px-4 py-3 text-left font-semibold">Acciones</th>
       </tr>
     </thead>
@@ -55,30 +72,36 @@
             </span>
           </td>
 
+          
           <td class="px-3 py-3">
             {{ fichaje.totalHoras }}
+          </td>
+          <td class="px-4 py-3 ">
+            <span class="px-3 py-1 text-xs font-medium rounded-full
+  bg-indigo-100 text-indigo-700
+  dark:bg-indigo-500/20 dark:text-indigo-300">
+     {{ fichaje.tipo }}
+  </span>
+           
           </td>
 
           <td class="px-4 py-3">
             <div class="flex gap-2">
 
-              <button
-                (click)="aprobarFichaje(fichaje)"
-                class="px-3 py-1.5 text-xs font-medium rounded-lg
-                       bg-green-600 text-white
-                       hover:bg-green-200
-                       dark:bg-green-500/20 dark:text-green-300">
-                ✔ Aprobar
-              </button>
-
-              <button
-                (click)="rechazarFichaje(fichaje)"
-                class="px-3 py-1.5 text-xs font-medium rounded-lg
-                       bg-red-600 text-white
-                       hover:bg-red-200
-                       dark:bg-red-500/20 dark:text-red-300">
-                ✘ Rechazar
-              </button>
+            <select
+  [value]="fichaje.estado"
+  (change)="cambiarEstado(fichaje, $any($event.target).value)"
+  class="rounded-full px-3 py-1 text-xs font-medium border-0 cursor-pointer"
+  [ngClass]="{
+    'bg-yellow-100 text-yellow-700': fichaje.estado === 'pendiente',
+    'bg-green-100 text-green-700': fichaje.estado === 'aprobado',
+    'bg-red-100 text-red-700': fichaje.estado === 'rechazado'
+  }"
+>
+  <option value="pendiente">Pendiente</option>
+  <option value="aprobado">Aprobado</option>
+  <option value="rechazado">Rechazado</option>
+</select>
 
             </div>
           </td>
@@ -93,45 +116,50 @@
 </div>
 
   <div class="md:hidden space-y-3">
-    @for (fichaje of fichajes; track fichaje.id) {
-      <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow">
-        <div class="font-semibold">
+
+  @for (fichaje of fichajes; track fichaje.id) {
+
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow">
+
+      <div class="flex justify-between items-center mb-3">
+        <span class="font-semibold">
           {{ formatearFecha(fichaje.fecha) }}
-        </div>
+        </span>
 
-        <div class="mt-2 text-sm">
-          <p>
-            <span class="font-medium">Entrada:</span>
-            <span class="text-green-600">{{ fichaje.entrada }}</span>
-          </p>
-
-          <p>
-            <span class="font-medium">Salida:</span>
-            <span class="text-red-600">{{ fichaje.salida }}</span>
-          </p>
-
-          <p>
-            <span class="font-medium">Horas:</span>
-            {{ fichaje.totalHoras }}
-          </p>
-        </div>
-
-        <div class="flex gap-2 mt-4">
-          <button
-            (click)="aprobarFichaje(fichaje)"
-            class="flex-1 px-3 py-2 rounded-lg bg-green-600 text-white"
-          >
-            ✔ Aprobar
-          </button>
-
-          <button
-            (click)="rechazarFichaje(fichaje)"
-            class="flex-1 px-3 py-2 rounded-lg bg-red-600 text-white"
-          >
-            ✘ Rechazar
-          </button>
-        </div>
+        <select
+          [value]="fichaje.estado"
+          (change)="cambiarEstado(fichaje, $any($event.target).value)"
+          class="rounded-full px-3 py-1 text-xs font-medium border-0"
+          [ngClass]="{
+            'bg-yellow-100 text-yellow-700': fichaje.estado === 'pendiente',
+            'bg-green-100 text-green-700': fichaje.estado === 'aprobado',
+            'bg-red-100 text-red-700': fichaje.estado === 'rechazado'
+          }"
+        >
+          <option value="pendiente">Pendiente</option>
+          <option value="aprobado">Aprobado</option>
+          <option value="rechazado">Rechazado</option>
+        </select>
       </div>
-    }
-  </div>
+
+      <div class="space-y-1 text-sm">
+        <p>
+          <strong>Entrada:</strong> {{ fichaje.entrada }}
+        </p>
+
+        <p>
+          <strong>Salida:</strong> {{ fichaje.salida }}
+        </p>
+
+        <p>
+          <strong>Horas:</strong> {{ fichaje.totalHoras }}
+        </p>
+      </div>
+
+    </div>
+
+  }
+
+</div>
+
 </div>

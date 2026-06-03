@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-fichaje-empleado',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './fichaje-empleado.html',
   styleUrl: './fichaje-empleado.css',
 })
@@ -46,26 +47,24 @@ jornada = 8;
  ]
 
 fichajes = [
- { id: 1, fecha: new Date(2026, 1, 10), entrada: '08:00', salida: '16:00', totalHoras: 8, estado: 'pendiente' },
-  { id: 2, fecha: new Date(2026, 1, 15), entrada: '09:00', salida: '17:30', totalHoras: 8.5, estado: 'pendiente' },
-  { id: 3, fecha: new Date(2026, 0, 20), entrada: '08:15', salida: '16:15', totalHoras: 8, estado: 'pendiente' }
+ { id: 1, fecha: new Date(2026, 1, 10), entrada: '08:00', salida: '16:00', totalHoras: 8, estado: 'pendiente', tipo: 'Presencial' },
+  { id: 2, fecha: new Date(2026, 1, 15), entrada: '09:00', salida: '17:30', totalHoras: 8.5, estado: 'pendiente', tipo: 'Presencial' },
+  { id: 3, fecha: new Date(2026, 0, 20), entrada: '08:15', salida: '16:15', totalHoras: 8, estado: 'pendiente', tipo: 'Presencial' }
 ];
 
-constructor( private route: ActivatedRoute) {}
+constructor( private route: ActivatedRoute, private router: Router) {}
 ngOnInit() {
   
     this.id = this.route.snapshot.params['id'];
     console.log('ID del empleado:', this.id);
   if (this.id) {
-    // this.loadFleetDetails(this.id);
-    // this.loadCallOut()
+
     this.datosEmpleado(this.id);
 
   }
  }
 
 datosEmpleado (id: any) {
-  //  this.empleado.find((e) => e.id == id);
   this.empleadoselectado = this.empleado.find((e) => e.id == id);
   console.log(this.empleadoselectado);
 }
@@ -104,30 +103,46 @@ rechazarFichaje(f: any) {
   console.log('Fichaje rechazado:', f);
 }
 
-// 🔹 Aprobar todos los pendientes
-// aprobarTodos() {
-//   this.fichajes = this.fichajes.map(f => {
-//     if (f. === true) {
-//       return { ...f, aprobado: true };
-//     }
-//     return f;
-//   });
-// }
-
-// // 🔹 (Opcional PRO) Calcular horas extra exactas
-// horasExtra(f: any): number {
-//   return this.horasTrabajadas(f.entrada, f.salida) - this.jornada;
-// }
-
-// tienePendientes(): boolean {
-//   return this.fichajes?.some(f => f.aprobado === false) || false;
-// }
-
-// contadorPendientes(): number {
-//   return this.fichajes?.filter(f => f.aprobado === false).length || 0;
-// }
 
 formatearFecha(fecha: Date): string {
   return new Date(fecha).toLocaleDateString('es-ES');
 }
+
+
+volver() {
+  this.router.navigate(['/employees']);
+}
+
+cambiarEstado(fichaje: any, estado: string) {
+  fichaje.estado = estado;
+
+  switch (estado) {
+    case 'aprobado':
+      this.aprobarFichaje(fichaje);
+      break;
+
+    case 'rechazado':
+      this.rechazarFichaje(fichaje);
+      break;
+
+    case 'pendiente':
+      // lógica si quieres permitir volver a pendiente
+      break;
+  }
+}
+
+aprobarTodos() {
+  this.fichajes.forEach(fichaje => {
+    if (fichaje.estado === 'pendiente') {
+      fichaje.estado = 'aprobado';
+    }
+  });
+}
+
+tienePendientes(): boolean {
+  return this.fichajes.some(
+    fichaje => fichaje.estado === 'pendiente'
+  );
+}
+
 }

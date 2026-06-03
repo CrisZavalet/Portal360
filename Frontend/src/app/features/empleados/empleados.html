@@ -3,7 +3,7 @@
 
   <div class="mt-6 flex justify-center mb-4">
     <label
-      class="flex input w-full md:w-1/2 px-4 py-2 rounded-xl bg-white/30 backdrop-blur-md border border-white/30 text-slate-800 dark:text-white placeholder-slate-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg transition"
+      class="flex input w-full md:w-1/2 px-4 py-2 rounded-xl bg-white backdrop-blur-md border border-white/30 text-slate-800 dark:text-white placeholder-slate-500 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-white/30 focus-within:bg-white/50 focus-within:backdrop-blur-lg transition"
     >
       <svg class=" h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <g
@@ -54,7 +54,7 @@
 
       <tbody>
         @for (emp of empleadosFiltrados(); track emp) {
-          <tr class="bg-white/40 border-t border-white/40 hover:bg-white/40 transition">
+          <tr class="bg-white border-t border-white/40 hover:bg-white/40 transition">
             <td class="p-4">{{ emp.nombre }} {{ emp.apellido }}</td>
             <td class="p-4">{{ emp.cargo }}</td>
             <td class="p-4">{{ emp.email }}</td>
