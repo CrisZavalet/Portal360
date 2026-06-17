@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './fichaje-empleado.css',
 })
 export class FichajeEmpleado {
-// empleado: any;
 id: any;
 empleadoselectado: any;
 jornada = 8;
@@ -126,7 +125,6 @@ cambiarEstado(fichaje: any, estado: string) {
       break;
 
     case 'pendiente':
-      // lógica si quieres permitir volver a pendiente
       break;
   }
 }

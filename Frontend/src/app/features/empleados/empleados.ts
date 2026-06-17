@@ -212,13 +212,7 @@ rechazarFichaje(f: any) {
   f.estado = 'rechazado';
 }
 
-aprobarTodos() {
-  this.fichajes.forEach(f => {
-    if (f.estado === 'pendiente') {
-      f.estado = 'aprobado';
-    }
-  });
-}
+
 
 fichajeEmpleado (id:any){
    this.router.navigate(['../clock-in', id], {
@@ -226,4 +220,21 @@ fichajeEmpleado (id:any){
   });
 }
 
+subirNomina (id:any){
+   this.router.navigate(['../paysheet', id], {
+    relativeTo: this.route
+  });
+}
+
+subirDocumentos (id:any){
+   this.router.navigate(['../clock-in', id], {
+    relativeTo: this.route
+  });
+}
+
+
+enviarMensaje (){
+   
+     
+}
 }

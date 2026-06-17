@@ -20,9 +20,11 @@ import { RoleGuard } from './core/guards/role.guard';
 import { Role } from './models/role.enum';
 import { BandejaEntrada } from './features/bandeja-entrada/bandeja-entrada';
 import { FichajeEmpleado } from './features/empleados/fichaje-empleado/fichaje-empleado';
+import { NominaEmpleado } from './features/empleados/nomina-empleado/nomina-empleado';
+import { loginGuard } from './core/guards/login-guard';
 export const routes: Routes = [
    { path: 'access', component: Login },
-  { path: 'login', component: LoginWeb },
+  { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
   { path: 'signup', component: Signup },
   { path: 'forgot-password', component: ForgotPassword },
   {
@@ -40,8 +42,8 @@ export const routes: Routes = [
       { path: 'profile', component: Perfil, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
       { path: 'config', component: Configurations, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
       {path:'inbox', component:BandejaEntrada, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      {path:'clock-in/:id', component:FichajeEmpleado, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      
+      {path:'clock-in/:id', component:FichajeEmpleado, canActivate: [RoleGuard],data: { roles: [ Role.ADMIN, Role.RRHH] } },
+      {path:'paysheet/:id', component:NominaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
