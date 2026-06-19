@@ -1,0 +1,7 @@
+::host :ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
+  background-color: #4f46e5 !important; 
+}
+
+::host :ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: #4f46e5 !important;
+}

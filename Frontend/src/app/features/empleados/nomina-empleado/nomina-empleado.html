@@ -58,13 +58,13 @@
       <thead>
         <tr class="border-b bg-gray-50">
           <th class="px-4 py-3 text-left font-semibold text-gray-700">
-            Empleado
+            Periodo
           </th>
           <th class="px-4 py-3 text-left font-semibold text-gray-700">
-            Mes
+            Tipo
           </th>
           <th class="px-4 py-3 text-left font-semibold text-gray-700">
-            Fecha subida
+            Fecha Emisión
           </th>
           <th class="px-4 py-3 text-left font-semibold text-gray-700">
             Estado
@@ -76,21 +76,20 @@
       </thead>
 
       <tbody>
-
+   @for(nomina of nominasFiltradas; track $index){
         <tr
-          *ngFor="let nomina of nominasFiltradas"
           class="border-b hover:bg-gray-50">
 
           <td class="px-4 py-3">
-            {{ nomina.empleado }}
+            {{ nomina.periodo }}
           </td>
 
           <td class="px-4 py-3">
-            {{ nomina.mes }}
+            {{ nomina.tipo }}
           </td>
 
           <td class="px-4 py-3">
-            {{ nomina.fechaSubida }}
+            {{ nomina.fechaEmision }}
           </td>
 
           <td class="px-4 py-3">
@@ -111,22 +110,22 @@
             
 
               <button
-                class="px-3 py-1 text-blue-600 hover:text-blue-800">
-                Ver
+                class="px-3 py-1 text-blue-600 hover:text-blue-800 shrink-0">
+                <img src="assets/icons/eye-outline.svg" alt="Ver" class="w-5 h-5 ">
               </button>
 
               <button
-                class="px-3 py-1 text-green-600 hover:text-green-800">
-                Descargar
+                class="px-3 py-1 text-green-600 hover:text-green-800 shrink-0">
+                <img src="assets/icons/download.svg" alt="Descargar" class="w-5 h-5">
               </button>
 
             </div>
           </td>
-
         </tr>
-
+        }
+      
         <tr>
-            @if(nominasFiltradas.length===0){
+            @if(nominasFiltradas.length===0) {
             <td colspan="5" class="py-6 text-center text-gray-500">
               No se encontraron nóminas.
             </td>
@@ -162,27 +161,61 @@
 
     <div class="p-4 space-y-4">
 
-      <div>
+      
+   <mat-form-field color="primary">
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [value]="fecha">
+
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+
+  <mat-datepicker
+    #picker
+    startView="multi-year"
+    (monthSelected)="setMonthAndYear($event, picker)">
+  </mat-datepicker>
+</mat-form-field>
+
+
+       <div>
         <label class="block text-sm font-medium mb-1">
-          Empleado
+          Tipo
         </label>
 
-        <input
-          type="text"
-          [value]="empleadoselectado?.nombre"
-          disabled
-          class="w-full border rounded-lg px-3 py-2 bg-gray-100">
+        <select
+    [(ngModel)]="tipoNomina"
+    class="w-full border rounded-lg px-3 py-2">
+
+    <option value="">Seleccione un tipo</option>
+
+    @for (tipo of tiposNomina; track tipo) {
+      <option [value]="tipo">
+        {{ tipo }}
+      </option>
+    }
+  </select>
       </div>
 
-      <div>
+       <div>
         <label class="block text-sm font-medium mb-1">
-          Mes
+          Estado
         </label>
 
-        <input
-          type="month"
-          [(ngModel)]="mesNomina"
-          class="w-full border rounded-lg px-3 py-2">
+      
+  <select
+    [(ngModel)]="estado"
+    class="w-full border rounded-lg px-3 py-2">
+
+    <option value="">Seleccione un estado</option>
+
+@for (estadoItem of estados; track estadoItem) {
+<option
+      [value]="estadoItem.id">
+      {{ estadoItem.nombre }}
+    </option>
+  }
+  </select>
       </div>
 
       <div>

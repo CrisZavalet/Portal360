@@ -22,6 +22,7 @@ import { BandejaEntrada } from './features/bandeja-entrada/bandeja-entrada';
 import { FichajeEmpleado } from './features/empleados/fichaje-empleado/fichaje-empleado';
 import { NominaEmpleado } from './features/empleados/nomina-empleado/nomina-empleado';
 import { loginGuard } from './core/guards/login-guard';
+import { DocumentosEmpleado } from './features/empleados/documentos-empleado/documentos-empleado';
 export const routes: Routes = [
    { path: 'access', component: Login },
   { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
@@ -44,6 +45,7 @@ export const routes: Routes = [
       {path:'inbox', component:BandejaEntrada, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
       {path:'clock-in/:id', component:FichajeEmpleado, canActivate: [RoleGuard],data: { roles: [ Role.ADMIN, Role.RRHH] } },
       {path:'paysheet/:id', component:NominaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
+      {path:'documents/:id', component:DocumentosEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

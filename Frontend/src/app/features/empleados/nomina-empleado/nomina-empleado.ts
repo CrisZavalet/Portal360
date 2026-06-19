@@ -2,15 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-nomina-empleado',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule],
   templateUrl: './nomina-empleado.html',
   styleUrl: './nomina-empleado.css',
 })
 export class NominaEmpleado {
 busqueda = '';
+nomina=[];
 modalVisible = false;
 mesNomina = '';
 archivoSeleccionado: File | null = null;
@@ -18,7 +24,29 @@ archivoSeleccionado: File | null = null;
   empleadoselectado: any;
   searchTerm = '';
   nominasFiltradas: any[] = [];
-nominas: any[] = [];
+  estadoNomina = '';
+  fecha = new Date();
+tipoNomina = '';
+estado = '';
+estados = [
+  { id: 'DISPONIBLE', nombre: 'Disponible' },
+  { id: 'NO_DISPONIBLE', nombre: 'No disponible' }
+];
+
+tiposNomina = [
+  'Ordinaria',
+  'Extra',
+  'Atrasos',
+  'Liquidación'
+];
+nominas = [
+  {periodo: 'Enero 2024', tipo: 'Ordinaria', fechaEmision: '2024-01-31', estado: 'Disponible', empleado: 'Florencia Macarena Sandoval Perez'},
+  {periodo: 'Febrero 2024', tipo: 'Ordinaria', fechaEmision: '2024-02-29', estado: 'Disponible', empleado: 'Florencia Macarena Sandoval Perez'},
+  {periodo: 'Marzo 2024', tipo: 'Ordinaria', fechaEmision: '2024-03-31', estado: 'Disponible', empleado: 'Florencia Macarena Sandoval Perez'},
+  {periodo: 'Abril 2024', tipo: 'Ordinaria', fechaEmision: '2024-04-30', estado: 'Disponible', empleado: 'Florencia Macarena Sandoval Perez'},
+  {periodo: 'Mayo 2024', tipo: 'Ordinaria', fechaEmision: '2024-05-31', estado: 'Disponible', empleado: 'Florencia Macarena Sandoval Perez'},
+
+];
    empleado = [
   {
     id: 1,
@@ -35,7 +63,7 @@ nominas: any[] = [];
     email: 'florenciasandoval@quazzartech.com',
     telefono: '555-1234',
     estado: 'Activo',
-    usuario: 'fsanp',
+    usuario: 'fsandovalp',
   },
 
 {
@@ -58,6 +86,7 @@ ngOnInit() {
     console.log('ID del empleado:', this.id);
   if (this.id) {
     this.datosEmpleado(this.id);
+     this.nominasFiltradas = [...this.nominas];
   }
  }
 
@@ -71,12 +100,12 @@ datosEmpleado (id: any) {
 }
 
 filtrarNominas() {
-  const search = this.searchTerm.toLowerCase();
+  const search = this.busqueda.toLowerCase();
 
   this.nominasFiltradas = this.nominas.filter(n =>
-    n.empleado.toLowerCase().includes(search) ||
-    n.mes.toLowerCase().includes(search) ||
-    n.anio.toString().includes(search)
+    n.periodo.toLowerCase().includes(search) ||
+    n.tipo.toLowerCase().includes(search) ||
+    n.fechaEmision.toString().includes(search)
   );
 }
 
@@ -99,7 +128,7 @@ guardarNomina(): void {
   formData.append('archivo', this.archivoSeleccionado);
   formData.append('mes', this.mesNomina);
   formData.append('empleadoId', this.empleadoselectado.id);
-
+  formData.append('tipo', this.tipoNomina);
   // llamada API
 
   this.cerrarNomina()
@@ -107,5 +136,10 @@ guardarNomina(): void {
 
 onFileSelected(event: any) {
   this.archivoSeleccionado = event.target.files[0];
+}
+
+setMonthAndYear(date: Date, datepicker: any) {
+  this.fecha = date;
+  datepicker.close();
 }
 }
