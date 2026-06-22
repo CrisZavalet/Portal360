@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS usuario_rol CASCADE;
 DROP TABLE IF EXISTS rol CASCADE;
 DROP TABLE IF EXISTS usuario CASCADE;
 -- =============================================================================
--- CREACIÓN DE TABLAS 
+-- CREACIÓN DE TABLAS (DDL)
 -- =============================================================================
 CREATE TABLE usuario (
     id_usuario SERIAL PRIMARY KEY,
@@ -70,7 +70,9 @@ CREATE TABLE fichaje (
     id_fichaje SERIAL PRIMARY KEY,
     id_empleado INT NOT NULL REFERENCES empleado(id_empleado) ON DELETE CASCADE,
     tipo VARCHAR(10) CHECK (tipo IN ('ENTRADA', 'SALIDA')),
-    fecha_hora TIMESTAMP,
+    hora_inicio TIME,
+    hora_fin TIME,
+    fecha DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE tipo_documento (
@@ -103,6 +105,7 @@ CREATE TABLE estado_solicitud (
     id_estado INT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL UNIQUE
 );
+-- Tabla Solicitud
 CREATE TABLE solicitud (
     id_solicitud SERIAL PRIMARY KEY,
     id_empleado INT NOT NULL REFERENCES empleado(id_empleado) ON DELETE CASCADE,
@@ -110,9 +113,22 @@ CREATE TABLE solicitud (
     id_estado INT NOT NULL REFERENCES estado_solicitud(id_estado),
     titulo VARCHAR(255),
     descripcion TEXT,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    hora_inicio TIME,
+    hora_fin TIME,
     fecha_resolucion TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    -- Validación: fecha inicio <= fecha fin, y si hay horas, fin > inicio
+    CONSTRAINT check_fechas_horas CHECK (
+        (fecha_fin >= fecha_inicio)
+        AND (
+            hora_inicio IS NULL
+            OR hora_fin IS NULL
+            OR hora_fin > hora_inicio
+        )
+    )
 );
 CREATE TABLE solicitud_historial (
     id_historial SERIAL PRIMARY KEY,
@@ -204,16 +220,34 @@ VALUES (1, 3, '2024-01-01'),
     (2, 1, '2024-02-15'),
     (3, 2, '2023-12-01');
 -- Fichajes
-INSERT INTO fichaje (id_empleado, tipo, fecha_hora)
-VALUES (2, 'ENTRADA', '2026-04-13 08:00:00'),
-    (2, 'SALIDA', '2026-04-13 17:00:00');
--- Tipos Documento y Solicitud
+INSERT INTO fichaje (
+        id_empleado,
+        tipo,
+        hora_inicio,
+        hora_fin,
+        fecha
+    )
+VALUES (
+        2,
+        'ENTRADA',
+        '09:00:00',
+        NULL,
+        '2026-05-10'
+    ),
+    (
+        2,
+        'SALIDA',
+        NULL,
+        '18:00:00',
+        '2026-05-10'
+    );
+-- Tipos y Estados
 INSERT INTO tipo_documento (id_tipo, nombre)
 VALUES (1, 'Contrato'),
     (2, 'Nómina');
 INSERT INTO tipo_solicitud (id_tipo, nombre)
 VALUES (1, 'Vacaciones'),
-    (2, 'Baja');
+    (2, 'Horas Libres');
 INSERT INTO estado_solicitud (id_estado, nombre)
 VALUES (1, 'Pendiente'),
     (2, 'Aprobada');
@@ -226,51 +260,49 @@ INSERT INTO archivo (
         creado_por
     )
 VALUES (
-        'key_c1',
-        'contrato_lucia.pdf',
-        'application/pdf',
-        500000,
-        1
-    ),
-    (
-        'key_vacaciones_elena',
-        'vacaciones_elena.pdf',
+        'key_vacaciones_marcos',
+        'solicitud_vacaciones.pdf',
         'application/pdf',
         200000,
-        4
-    ),
-    (
-        'key_n1',
-        'nomina_marcos.pdf',
-        'application/pdf',
-        300000,
-        1
+        3
     );
--- Documentos
-INSERT INTO documento (
-        id_documento,
-        id_empleado,
-        id_tipo,
-        id_archivo,
-        titulo
-    )
-VALUES (1, 1, 1, 1, 'Contrato Lucía'),
-    (2, 2, 2, 2, 'Nómina Marzo Marcos');
--- Solicitudes y su Historial
+-- Solicitudes (Ejemplos con los nuevos campos)
 INSERT INTO solicitud (
         id_empleado,
         id_tipo,
         id_estado,
         titulo,
-        descripcion
+        descripcion,
+        fecha_inicio,
+        fecha_fin,
+        hora_inicio,
+        hora_fin
     )
-VALUES (
+VALUES -- Caso 1: Vacaciones de varios días (sin horas)
+    (
+        2,
+        1,
+        1,
+        'Vacaciones Agosto',
+        'Primera quincena de agosto',
+        '2026-08-01',
+        '2026-08-15',
+        NULL,
+        NULL
+    ),
+    -- Caso 2: Horas libres en un solo día
+    (
         3,
+        2,
         1,
-        1,
-        'Vacaciones Navidad',
-        'Días del 24 al 31 de diciembre'
+        'Asuntos Propios',
+        'Salida para trámite bancario',
+        '2026-05-10',
+        '2026-05-10',
+        '10:00:00',
+        '12:30:00'
     );
+-- Historial
 INSERT INTO solicitud_historial (
         id_solicitud,
         id_usuario,
@@ -278,7 +310,17 @@ INSERT INTO solicitud_historial (
         accion,
         comentario
     )
-VALUES (1, 4, 1, 'CREADA', 'Registro inicial');
--- Adjuntos
-INSERT INTO solicitud_adjunto (id_solicitud, id_archivo)
-VALUES (1, 2);
+VALUES (
+        1,
+        2,
+        1,
+        'CREADA',
+        'Registro inicial de vacaciones'
+    ),
+    (
+        2,
+        3,
+        1,
+        'CREADA',
+        'Registro inicial de horas libres'
+    );

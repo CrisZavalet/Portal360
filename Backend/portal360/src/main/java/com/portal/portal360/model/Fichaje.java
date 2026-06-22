@@ -2,6 +2,7 @@ package com.portal.portal360.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,21 +18,25 @@ public class Fichaje {
     @Column(name = "id_fichaje")
     private Integer idFichaje;
 
+    @Column(name = "id_empleado", insertable = false, updatable = false)
+    private Integer idEmployee;
 
     @ManyToOne
     @JoinColumn(name = "id_empleado", nullable = false)
-    private Empleado empleado;
+    private Empleado employee;
 
+    @Column(name = "tipo")
     @Enumerated(EnumType.STRING)
-    private TipoFichaje tipo;
+    private TipoFichaje type;
 
     @Column(name = "hora_inicio")
-    private LocalTime horaInicio;
+    private LocalTime startHour;
 
     @Column(name = "hora_fin")
-    private LocalTime horaFin;
+    private LocalTime endHour;
 
-    private LocalDate fecha;
+    @Column(name = "fecha")
+    private LocalDate date;
 
     // El enum para asegurar que no haya errores de escritura
     public enum TipoFichaje {
