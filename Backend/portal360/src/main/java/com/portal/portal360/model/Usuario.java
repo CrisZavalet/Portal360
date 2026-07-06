@@ -11,12 +11,12 @@ import lombok.*;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idUsuario;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "password")
+    @Column(name = "password_hash")
     private String password;
     @Column(name = "activo")
-    private Boolean active;
+    private Boolean activo;
 }

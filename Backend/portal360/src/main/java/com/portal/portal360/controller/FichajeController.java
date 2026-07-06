@@ -1,6 +1,7 @@
 package com.portal.portal360.controller;
 
 import com.portal.portal360.model.Fichaje;
+import com.portal.portal360.repository.EmpleadoRepository;
 import com.portal.portal360.repository.FichajeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/clockings")
 @CrossOrigin(origins = "*")
@@ -17,6 +19,8 @@ public class FichajeController {
 
     @Autowired
     private FichajeRepository fichajeRepository;
+    @Autowired
+private EmpleadoRepository empleadoRepository;
 
     @GetMapping
     public List<Fichaje> getAllClockings() {
@@ -28,21 +32,35 @@ public class FichajeController {
         return fichajeRepository.findByIdEmployee(idEmployee);
     }
 
-    @PostMapping("/check-in")
-    public ResponseEntity<?> checkIn(@RequestBody Fichaje fichaje) {
-        fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
-        fichaje.setStartHour(LocalTime.now());
-        fichaje.setDate(LocalDate.now());
-        return ResponseEntity.ok(fichajeRepository.save(fichaje));
+    @PostMapping("/check-in/{idEmployee}")
+    public ResponseEntity<?> checkIn(@PathVariable Integer idEmployee) {
+    
+        return empleadoRepository.findById(idEmployee)
+                .map(empleado -> {
+    
+                    Fichaje fichaje = new Fichaje();
+                    fichaje.setEmployee(empleado);
+                    fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
+                    fichaje.setDate(LocalDate.now());
+                    fichaje.setStartHour(LocalTime.now());
+    
+                    return ResponseEntity.ok(fichajeRepository.save(fichaje));
+    
+                }).orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/check-out/{id}")
-    public ResponseEntity<?> checkOut(@PathVariable Integer id) {
-        return fichajeRepository.findById(id).map(f -> {
-            f.setType(Fichaje.TipoFichaje.SALIDA);
-            f.setEndHour(LocalTime.now());
-            return ResponseEntity.ok(fichajeRepository.save(f));
-        }).orElse(ResponseEntity.notFound().build());
+    @PostMapping("/check-out/{idEmployee}")
+    public ResponseEntity<?> checkOut(@PathVariable Integer idEmployee) {
+    
+        return fichajeRepository
+                .findFirstByIdEmployeeAndEndHourIsNullOrderByDateDescStartHourDesc(idEmployee)
+                .map(fichaje -> {
+                    fichaje.setType(Fichaje.TipoFichaje.SALIDA);
+                    fichaje.setEndHour(LocalTime.now());
+    
+                    return ResponseEntity.ok(fichajeRepository.save(fichaje));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/employee/{idEmployee}/range")
