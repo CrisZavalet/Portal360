@@ -101,7 +101,6 @@ updateClock() {
 
 }
 
-
 onMovementChange(value: 'entrada' | 'salida') {
   localStorage.setItem('fichaje', value);
 } 
@@ -128,6 +127,7 @@ onMovementChange(value: 'entrada' | 'salida') {
 
   closeModalError() {
     this.showErrorModal = false;
-
   }
+
+  
 }

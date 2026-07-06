@@ -1,0 +1,105 @@
+<div class="p-6">
+
+  <div
+    class="rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+
+    <h2 class="text-2xl font-semibold text-slate-700 dark:text-white mb-6">
+      Fichajes de empleados
+    </h2>
+
+    <div class="flex flex-col md:flex-row gap-4 mb-6">
+
+      <input
+        type="date"  [(ngModel)]="fechaSeleccionada"
+    (change)="cargarFichajes()"
+        class="border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
+
+      <input
+        type="text"
+        placeholder="Buscar empleado..."  [(ngModel)]="busqueda"
+    (input)="filtrar()"
+        class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
+
+    </div>
+
+    <div class="hidden md:block overflow-x-auto">
+
+      <table class="min-w-full">
+
+        <thead
+          class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200">
+
+          <tr>
+
+            <th class="px-6 py-3 text-left">Empleado</th>
+
+            <th class="px-6 py-3 text-left">Entrada</th>
+
+            <th class="px-6 py-3 text-left">Salida</th>
+
+            <th class="px-6 py-3 text-left">Horas</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+            @for (fichaje of fichajesFiltrados; track $index) {
+          <tr
+            class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
+            
+            <td class="px-6 py-4">{{ fichaje.empleado }}</td>
+            <td class="px-6 py-4">{{ fichaje.entrada }}</td>
+            <td class="px-6 py-4">{{ fichaje.salida }}</td>
+            <td class="px-6 py-4">{{ fichaje.horas }}</td>
+
+          </tr>
+        }
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="md:hidden space-y-4">
+
+    @for(fichaje of fichajesFiltrados; track $index) {  
+  <div
+    class="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm p-4">
+
+    <h3 class="font-semibold text-slate-800 dark:text-white">
+      {{ fichaje.empleado }}
+    </h3>
+
+    <div class="mt-3 space-y-2 text-sm">
+
+    <div class="flex justify-between">
+        <span class="text-slate-500">Fecha</span>
+        <span>{{ formatearFecha(fichaje.fecha) }}</span>
+      </div>
+
+      <div class="flex justify-between">
+        <span class="text-slate-500">Entrada</span>
+        <span>{{ fichaje.entrada || '--' }}</span>
+      </div>
+
+      <div class="flex justify-between">
+        <span class="text-slate-500">Salida</span>
+        <span>{{ fichaje.salida || '--' }}</span>
+      </div>
+
+      <div class="flex justify-between">
+        <span class="text-slate-500">Horas</span>
+        <span>{{ fichaje.horas || '--' }}</span>
+      </div>
+
+    </div>
+
+  </div>
+}
+
+</div>

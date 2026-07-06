@@ -11,7 +11,11 @@ import lombok.*;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+<<<<<<< HEAD
     private Long idUsuario;
+=======
+    private Long id_usuario;
+>>>>>>> 03aa3be (antes de un pull)
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
