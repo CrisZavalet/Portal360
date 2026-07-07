@@ -28,7 +28,14 @@ FROM Fichaje f
 JOIN FETCH f.employee
 WHERE f.date = :date
 """)
-List<Fichaje> findTodayClockings(LocalDate date);
+    List<Fichaje> findTodayClockings(LocalDate date);
 
+    @Query("""
+        SELECT f
+        FROM Fichaje f
+        JOIN FETCH f.employee
+        ORDER BY f.date DESC, f.startHour DESC
+        """)
+        List<Fichaje> findAllHistory();
 
 }

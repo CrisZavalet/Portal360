@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.portal.portal360.dto.ClockingHistoryDTO;
 import com.portal.portal360.dto.ClockingTodayDTO;
+import com.portal.portal360.dto.ClockingAllHistoryDTO;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,6 +35,24 @@ private EmpleadoRepository empleadoRepository;
     public List<Fichaje> getClockingsByEmployee(@PathVariable Integer idEmployee) {
         return fichajeRepository.findByIdEmployee(idEmployee);
     }
+
+    @GetMapping("/history")
+public List<ClockingAllHistoryDTO> getAllHistory() {
+
+    return fichajeRepository.findAllHistory()
+            .stream()
+            .map(f -> new ClockingAllHistoryDTO(
+                    f.getIdFichaje(),
+                    f.getEmployee().getIdEmployee(),
+                    f.getEmployee().getName(),
+                    f.getEmployee().getLastName(),
+                    f.getDate(),
+                    f.getStartHour(),
+                    f.getEndHour(),
+                    f.getEndHour() == null ? "EN_CURSO" : "FINALIZADO"
+            ))
+            .toList();
+}
 
     @PostMapping("/check-in/{idEmployee}")
     public ResponseEntity<?> checkIn(@PathVariable Integer idEmployee) {
