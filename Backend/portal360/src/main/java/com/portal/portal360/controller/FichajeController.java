@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.portal.portal360.dto.ClockingHistoryDTO;
+import com.portal.portal360.dto.ClockingTodayDTO;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/clockings")
@@ -70,4 +72,37 @@ private EmpleadoRepository empleadoRepository;
             @RequestParam LocalDate endDate) {
         return fichajeRepository.findByIdEmployeeAndDateBetween(idEmployee, startDate, endDate);
     }
+
+   @GetMapping("/employee/{idEmployee}/history")
+public List<ClockingHistoryDTO> getClockingHistory(@PathVariable Integer idEmployee) {
+
+    return fichajeRepository
+            .findByIdEmployeeOrderByDateDescStartHourDesc(idEmployee)
+            .stream()
+            .map(f -> new ClockingHistoryDTO(
+                    f.getIdFichaje(),
+                    f.getDate(),
+                    f.getStartHour(),
+                    f.getEndHour(),
+                    f.getEndHour() == null ? "EN_CURSO" : "FINALIZADO"
+            ))
+            .toList();
+}
+    @GetMapping("/today")
+public List<ClockingTodayDTO> getTodayClockings() {
+
+    return fichajeRepository.findTodayClockings(LocalDate.now())
+            .stream()
+            .map(f -> new ClockingTodayDTO(
+                    f.getEmployee().getIdEmployee(),
+                    f.getEmployee().getName(),
+                    f.getEmployee().getLastName(),
+                    f.getStartHour(),
+                    f.getEndHour(),
+                    f.getEndHour() == null
+            ))
+            .toList();
+
+}
+
 }
