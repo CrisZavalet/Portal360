@@ -36,7 +36,7 @@ ngOnInit() {
   cargarFichajes() {
 
 
-    this.TabletAuth.getEmpleados()
+    this.TabletAuth.getEmpleadosFichaje()
       .subscribe({
 
         next: (data) => {
@@ -111,6 +111,9 @@ paginaSiguiente() {
   }
 }
 
+listaEmpleado(){
+  this.router.navigate(['/admin/list-employees']);
+}
 
 
 }

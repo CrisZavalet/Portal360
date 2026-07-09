@@ -11,28 +11,28 @@
     <div>
         <div>
     <h2 class="text-2xl font-semibold text-slate-700 dark:text-white mb-6">
-      Lista de empleados
+      Fichajes de 
     </h2>
 
 </div>
 <div>
     <button type="button" class="rounded-md bg-indigo-600 px-4 py-2 mb-1 text-sm
-                  text-white hover:bg-indigo-500 " (click)="volver()">
+                  text-white hover:bg-indigo-500" (click)="volver()">
         Volver
     </button>   
 </div>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <!-- <div class="flex flex-col md:flex-row gap-4 mb-6">
 
    
       <input
         type="text"
-        placeholder="Buscar empleado..."  [(ngModel)]="busqueda"
+        placeholder="Buscar fichaje de hoy..."  [(ngModel)]="busqueda"
     (input)="filtrar()"
         class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
 
-    </div>
+    </div> -->
 
     <div class="hidden md:block overflow-x-auto">
 
@@ -43,21 +43,37 @@
 
           <tr>
 
-            <th class="px-6 py-3 text-left">Empleado</th>
+            <th class="px-6 py-3 text-left">Fecha</th>
 
+            <th class="px-6 py-3 text-left">Entrada</th>
+
+            <th class="px-6 py-3 text-left">Salida</th>
+
+            <th class="px-6 py-3 text-left">Estado</th>
           </tr>
 
         </thead>
 
         <tbody>
-            @for (empleado of empleadosPaginados; track $index) {
+            @for (fichaje of fichajesPaginados; track $index) {
           <tr
             class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
 
-            <td class="px-6 py-4">
-                <button (click)="verHistorial(empleado.idEmployee)">
-                {{ empleado.name }} {{ empleado.lastName }}</button>
-          </td> 
+            <td class="px-6 py-4">{{ fichaje. date}}</td>
+            <td class="px-6 py-4">{{ fichaje.startHour }}</td>
+            <td class="px-6 py-4">{{ fichaje.endHour }}</td>
+            <td>
+              @if(fichaje.status=='EN_CURSO') {
+                <div class="flex items-center gap-1 ">
+                  <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs " >Inicializado</span>
+                </div>
+              }
+              @else {
+                <div class="flex items-center gap-1 ">
+                  <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs  " >Finalizado</span>
+                </div>
+              }
+            </td>
 
           </tr>
         }
@@ -101,20 +117,43 @@
 
 <div class="md:hidden space-y-2 md:hidden max-h-[70vh] overflow-y-auto space-y-4">
 
-    @for(empleado of empleadosPaginados; track empleado.idEmployee) {  
+    @for(fichaje of fichajesPaginados; track $index) {  
  <div
   class="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm p-3">
 
+  <!-- Cabecera -->
   <div class="flex justify-between items-center mb-2">
 
     <h3 class="font-semibold text-slate-800 dark:text-white">
-      {{ empleado.name }} {{ empleado.lastName }}
+      {{ fichaje.date }}
     </h3>
 
-   
+    @if(fichaje.status=='EN_CURSO'){
+      <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+        Inicializado
+      </span>
+    } @else {
+      <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+        Finalizado
+      </span>
+    }
 
   </div>
 
+  <!-- Información -->
+  <div class="space-y-1 text-sm">
+
+    <div class="flex justify-between">
+      <span class="text-slate-500">Entrada</span>
+      <span>{{ fichaje.startHour || '--' }}</span>
+    </div>
+
+    <div class="flex justify-between">
+      <span class="text-slate-500">Salida</span>
+      <span>{{ fichaje.endHour || '--' }}</span>
+    </div>
+
+  </div>
 
 </div>
 }

@@ -26,6 +26,7 @@ import { DocumentosEmpleado } from './features/empleados/documentos-empleado/doc
 import { ViewAdmin } from './features/view/view-admin/view-admin';
 import { LayoutAdmin } from './features/view/layout-admin/layout-admin';
 import { ListaEmpleado } from './features/view/view-admin/lista-empleado/lista-empleado';
+import { ViewTime } from './features/view/view-admin/view-time/view-time';
 export const routes: Routes = [
    { path: 'access', component: Login },
   { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
@@ -56,6 +57,7 @@ export const routes: Routes = [
   {path:'admin', component:LayoutAdmin, canActivate: [RoleGuard] ,data: { roles: [Role.ADMIN, Role.RRHH] }, children:[
     {path:'view-time', component:ViewAdmin },
     {path:'list-employees', component:ListaEmpleado },
+    {path:'employee/:id', component:ViewTime },
 
   ] },
   { path: '**', component: NotFound, canActivate: [RoleGuard] ,data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } }
