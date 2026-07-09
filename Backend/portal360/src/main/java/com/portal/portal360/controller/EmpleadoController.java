@@ -1,5 +1,6 @@
 package com.portal.portal360.controller;
 
+import com.portal.portal360.dto.EmployeeDTO;
 import com.portal.portal360.model.Empleado;
 import com.portal.portal360.repository.EmpleadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,21 @@ public class EmpleadoController {
     public ResponseEntity<Empleado> createEmployee(@RequestBody Empleado empleado) {
         return ResponseEntity.ok(empleadoRepository.save(empleado));
     }
+
+    @GetMapping
+public List<EmployeeDTO> getEmployees() {
+
+    return empleadoRepository.findAll()
+            .stream()
+            .map(e -> new EmployeeDTO(
+                    e.getIdEmployee(),
+                    e.getDni(),
+                    e.getName(),
+                    e.getLastName(),
+                    e.getDateOfBirth(),
+                    e.getPhone(),
+                    e.getActive()
+            ))
+            .toList();
+}
 }
