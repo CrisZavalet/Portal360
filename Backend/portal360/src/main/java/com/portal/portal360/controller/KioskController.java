@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.portal.portal360.dto.KioskLoginResponseDTO;
 
 import java.util.Optional;
 
@@ -52,9 +53,18 @@ public ResponseEntity<?> login(@RequestBody Usuario usuario) {
                                 Fichaje fichaje = fichajeAbierto.get();
                                 fichaje.setEndHour(LocalTime.now());
 
-                                fichajeRepository.save(fichaje);
+                            fichajeRepository.save(fichaje);
+                            String role = u.getRoles().isEmpty()
+                            ? "SIN_ROL"
+                            : u.getRoles().get(0).getNombreRol();
 
-                                return ResponseEntity.ok("Salida registrada");
+                                return ResponseEntity.ok(
+                                    new KioskLoginResponseDTO(
+                                        "Salida registrada",
+                                        empleado.getIdEmployee(),
+                                        u.getRoles().get(0).getNombreRol()
+                                    )
+                                );
 
                             } else {
 
@@ -67,7 +77,16 @@ public ResponseEntity<?> login(@RequestBody Usuario usuario) {
 
                                 fichajeRepository.save(fichaje);
 
-                                return ResponseEntity.ok("Entrada registrada");
+                                String role = u.getRoles().isEmpty()
+        ? "SIN_ROL"
+        : u.getRoles().get(0).getNombreRol();
+                                return ResponseEntity.ok(
+                                    new KioskLoginResponseDTO(
+                                        "Salida registrada",
+                                        empleado.getIdEmployee(),
+                                        u.getRoles().get(0).getNombreRol()
+                                    )
+                                );
                             }
 
                         })

@@ -1,5 +1,5 @@
 package com.portal.portal360.model;
-
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +19,12 @@ public class Usuario {
     private String password;
     @Column(name = "activo")
     private Boolean activo;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+@JoinTable(
+    name = "usuario_rol",
+    joinColumns = @JoinColumn(name = "id_usuario"),
+    inverseJoinColumns = @JoinColumn(name = "id_rol")
+)
+private List<Rol> roles;
 }
