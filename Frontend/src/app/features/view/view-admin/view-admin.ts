@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FichajeEmpleados } from '../../../core/interfaces/fichajeEmpleados.interface';
+import { TabletAuth } from '../../../core/services/tablet-auth';
+import { EmpleadoFichaje } from '../../../core/interfaces/empleadoFichaje.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-admin',
@@ -13,12 +16,17 @@ export class ViewAdmin {
 
   busqueda = '';
 
-  fichajes: FichajeEmpleados[] = [];
+  fichajes: EmpleadoFichaje[] = [];
 
-  fichajesFiltrados: FichajeEmpleados[] = [];
+  fichajesFiltrados: EmpleadoFichaje[] = [];
+
+  paginaActual = 1;
+elementosPorPagina = 10;
+constructor( private TabletAuth: TabletAuth,private router:Router) {}
 
 ngOnInit() {
     this.cargarFichajes();
+
   }
 
   obtenerFechaHoy(): string {
@@ -27,46 +35,47 @@ ngOnInit() {
 
   cargarFichajes() {
 
-    // Aquí llamarás al servicio
 
-    this.fichajes = [
-      {
-        fecha: new Date('2026-07-06'),
-        empleado: 'Juan Pérez',
-        entrada: '08:00',
-        salida: '17:00',
-        horas: '9h'
-      },
-      {
-        fecha: new Date(),
-        empleado: 'María López',
-        entrada: '08:15',
-        salida: '17:15',
-        horas: '9h'
-      },
-      {
-        fecha: new Date(),
-        empleado: 'Carlos Ruiz',
-        entrada: '09:00',
-        salida: '18:00',
-        horas: '9h'
-      },
+    this.TabletAuth.getEmpleados()
+      .subscribe({
 
-    ];
+        next: (data) => {
+
+          this.fichajes = data;
+          this.fichajesFiltrados = data;
+
+        },
+
+        error: (err) => {
+
+          console.error(err);
+
+        }
+
+      });
+
+
+
+  
 
     this.fichajesFiltrados = this.fichajes;
+    console.log('Fichajes cargados:', this.fichajes);
+
+    
 
   }
 
-  filtrar() {
+ filtrar() {
 
-    const texto = this.busqueda.toLowerCase();
+  const texto = this.busqueda.toLowerCase();
 
-    this.fichajesFiltrados = this.fichajes.filter(f =>
-      f.empleado.toLowerCase().includes(texto)
-    );
+  this.fichajesFiltrados = this.fichajes.filter(f =>
+      `${f.name} ${f.lastName}`.toLowerCase().includes(texto)
+  );
 
-  }
+  this.paginaActual = 1;
+
+}
 
   formatearFecha(fecha: Date): string {
 
@@ -76,5 +85,32 @@ ngOnInit() {
 }
 
 
+get totalPaginas(): number {
+  return Math.ceil(
+    this.fichajesFiltrados.length / this.elementosPorPagina
+  );
 }
 
+get fichajesPaginados() {
+  const inicio = (this.paginaActual - 1) * this.elementosPorPagina;
+  const fin = inicio + this.elementosPorPagina;
+
+  return this.fichajesFiltrados.slice(inicio, fin);
+}
+
+
+paginaAnterior() {
+  if (this.paginaActual > 1) {
+    this.paginaActual--;
+  }
+}
+
+paginaSiguiente() {
+  if (this.paginaActual < this.totalPaginas) {
+    this.paginaActual++;
+  }
+}
+
+
+
+}

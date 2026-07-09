@@ -1,6 +1,6 @@
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img src="./assets/PORTAL360byQuazzar.png" alt="Your Company" class="mx-auto h-20 w-auto" />
+        <img src="./assets/PORTAL360byQuazzar.png" alt="PORTAL360" class="mx-auto h-20 w-auto" />
     </div>
 
 
@@ -34,15 +34,15 @@
 </mat-button-toggle-group>
 
             <div>
-                <label for="username" class="block text-sm/6 font-medium text-gray-100">Código de empleado</label>
+                <label for="email" class="block text-sm/6 font-medium text-gray-100">Código de empleado</label>
                 <div class="mt-2">
 
-                    <input id="username" type="text" name="username" formControlName="username" required
+                    <input id="email" type="text" name="email" formControlName="email" required
                         class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
                 </div>
             </div>
 
-            @if( loginForm.get('username')?.errors && loginForm.get('username')?.touched && loginForm.get('username')?.invalid) {
+            @if( loginForm.get('email')?.errors && loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
             <small class="text-red-500 text-sm mt-1">
                 El código de empleado es requerido.
             </small>

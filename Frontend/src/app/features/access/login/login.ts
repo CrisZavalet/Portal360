@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators, ReactiveFormsModule,FormBuilder,FormsModule} from '@angular/forms';
 import{ CommonModule } from '@angular/common';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { TabletAuth } from '../../../core/services/tablet-auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -22,18 +24,18 @@ isSubmitted = false;
 active: 'Entrada' | 'Salida' = 'Entrada';
 private clockInterval!: number;
 
-constructor(private fb: FormBuilder) {}
+constructor(private fb: FormBuilder, private TabletAuth: TabletAuth, private router: Router) {}
 
 ngOnInit() {
   const savedMovement = localStorage.getItem('fichaje');
   this.initClock();
 
   this.loginForm = new FormGroup({
-    username: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
-    fichaje: new FormControl(savedMovement, Validators.required),
-    dia: new FormControl(''),
-    hora: new FormControl('')
+      fichaje: new FormControl(savedMovement, Validators.required),
+      dia: new FormControl(''),
+      hora: new FormControl('')
   });
 
 
@@ -43,36 +45,49 @@ ngOnInit() {
   setActive(value: 'Entrada' | 'Salida') {
     this.active = value;
   }
-public get username() {
-        return this.loginForm.get('username');
+public get email() {
+        return this.loginForm.get('email');
     }
     public get password() {
         return this.loginForm.get('password');
     }
 
 Login() {
-      console.warn(this.loginForm.value);
 
-   const {date, time} = this.getCurrentDateTime();
-  console.log('Date:', date);
-  console.log('Time:', time);
-  if (this.loginForm.valid) {
-    const {username, password,fichaje} = this.loginForm.value;
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    this.loginForm.get('dia')?.setValue(date);
-    this.loginForm.get('hora')?.setValue(time);
-    // console.log('Fichaje:', this.loginForm.get('fichaje')?.value);
-    console.log(this.loginForm.value);
-    this.openModalSuccess('Haz inciado tu jornada exitosamente. \n¡Bienvenido/a ' + this.username?.value + '!');
-
-} else {
-    this.loginForm.markAllAsTouched();
-    this.openModalError('El usuario o la contraseña son incorrectos. \nPor favor completa los datos correctamente.');
-      return;
+  if (this.loginForm.invalid) {
+    return;
   }
+const { time } = this.getCurrentDateTime();
+
+  const { email, password } = this.loginForm.value;
+
+  console.log('Llamando al login...', email);
+
+  this.TabletAuth.login(email, password).subscribe({
+    next: (res) => {
+      if(localStorage.getItem('user')==='admin@portal360.com'){
+        localStorage.setItem('role', 'RRHH');
+this.router.navigate(['/admin/view-time']);
+return; 
+      }
+      console.log('Respuesta:', res);
+     this.openModalSuccess(
+      `${res}\n\nHora del fichaje: ${time}`
+    );
+
+          this.loginForm.reset({
+      fichaje: localStorage.getItem('fichaje')
+    });
+    },
+    error: (err) => {
+      console.error('Error:', err);
+          this.openModalError('Usuario o contraseña incorrectos.');
+
+    }
+  });
+
 }
+
   getCurrentDateTime(): { date: any; time: any; } {
      const now = new Date();
 
@@ -129,5 +144,5 @@ onMovementChange(value: 'entrada' | 'salida') {
     this.showErrorModal = false;
   }
 
-  
+
 }

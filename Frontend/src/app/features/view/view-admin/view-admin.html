@@ -1,22 +1,38 @@
-<div class="p-6">
+
+
+<div class="bg-slate-100 dark:bg-slate-700 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+
+    
+<div class="p-6 ">
 
   <div
     class="rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 p-6">
 
+    <div>
+        <div>
     <h2 class="text-2xl font-semibold text-slate-700 dark:text-white mb-6">
       Fichajes de empleados
     </h2>
 
+    <h3 class="text-lg font-semibold text-slate-700 dark:text-white mb-4">
+      Fecha: {{ fechaSeleccionada }}
+
+    </h3>
+</div>
+<div>
+    <button type="button" class="rounded-md bg-indigo-600 px-4 py-2 mb-1 text-sm
+                  text-white hover:bg-indigo-500">
+        Lista de empleado
+    </button>   
+</div>
+    </div>
+
     <div class="flex flex-col md:flex-row gap-4 mb-6">
 
-      <input
-        type="date"  [(ngModel)]="fechaSeleccionada"
-    (change)="cargarFichajes()"
-        class="border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
-
+   
       <input
         type="text"
-        placeholder="Buscar empleado..."  [(ngModel)]="busqueda"
+        placeholder="Buscar fichaje de hoy..."  [(ngModel)]="busqueda"
     (input)="filtrar()"
         class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
 
@@ -37,21 +53,31 @@
 
             <th class="px-6 py-3 text-left">Salida</th>
 
-            <th class="px-6 py-3 text-left">Horas</th>
-
+            <th class="px-6 py-3 text-left">Estado</th>
           </tr>
 
         </thead>
 
         <tbody>
-            @for (fichaje of fichajesFiltrados; track $index) {
+            @for (fichaje of fichajesPaginados; track fichaje.idEmployee) {
           <tr
             class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
-            
-            <td class="px-6 py-4">{{ fichaje.empleado }}</td>
-            <td class="px-6 py-4">{{ fichaje.entrada }}</td>
-            <td class="px-6 py-4">{{ fichaje.salida }}</td>
-            <td class="px-6 py-4">{{ fichaje.horas }}</td>
+
+            <td class="px-6 py-4">{{ fichaje.name }} {{ fichaje.lastName }}</td>
+            <td class="px-6 py-4">{{ fichaje.startHour }}</td>
+            <td class="px-6 py-4">{{ fichaje.endHour }}</td>
+            <td>
+              @if(fichaje.working==true) {
+                <div class="flex items-center gap-1 ">
+                  <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs " >Inicializado</span>
+                </div>
+              }
+              @else {
+                <div class="flex items-center gap-1 ">
+                  <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs  " >Finalizado</span>
+                </div>
+              }
+            </td>
 
           </tr>
         }
@@ -59,47 +85,83 @@
 
       </table>
 
+      <div class="mt-6 flex items-center justify-between">
+
+    <button
+        (click)="paginaAnterior()"
+        [disabled]="paginaActual === 1"
+        class="px-4 py-2 rounded-lg border disabled:opacity-40">
+
+        Anterior
+
+    </button>
+
+    <span class="text-sm">
+
+        Página {{ paginaActual }} de {{ totalPaginas }}
+
+    </span>
+
+    <button
+        (click)="paginaSiguiente()"
+        [disabled]="paginaActual === totalPaginas"
+        class="px-4 py-2 rounded-lg border disabled:opacity-40">
+
+        Siguiente
+
+    </button>
+
+</div>
+
     </div>
 
   </div>
 
 </div>
 
-<div class="md:hidden space-y-4">
+<div class="md:hidden space-y-2 md:hidden max-h-[70vh] overflow-y-auto space-y-4">
 
-    @for(fichaje of fichajesFiltrados; track $index) {  
-  <div
-    class="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm p-4">
+    @for(fichaje of fichajesPaginados; track fichaje.idEmployee) {  
+ <div
+  class="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm p-3">
+
+  <!-- Cabecera -->
+  <div class="flex justify-between items-center mb-2">
 
     <h3 class="font-semibold text-slate-800 dark:text-white">
-      {{ fichaje.empleado }}
+      {{ fichaje.name }} {{ fichaje.lastName }}
     </h3>
 
-    <div class="mt-3 space-y-2 text-sm">
+    @if(fichaje.working){
+      <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+        Inicializado
+      </span>
+    } @else {
+      <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+        Finalizado
+      </span>
+    }
+
+  </div>
+
+  <!-- Información -->
+  <div class="space-y-1 text-sm">
 
     <div class="flex justify-between">
-        <span class="text-slate-500">Fecha</span>
-        <span>{{ formatearFecha(fichaje.fecha) }}</span>
-      </div>
+      <span class="text-slate-500">Entrada</span>
+      <span>{{ fichaje.startHour || '--' }}</span>
+    </div>
 
-      <div class="flex justify-between">
-        <span class="text-slate-500">Entrada</span>
-        <span>{{ fichaje.entrada || '--' }}</span>
-      </div>
-
-      <div class="flex justify-between">
-        <span class="text-slate-500">Salida</span>
-        <span>{{ fichaje.salida || '--' }}</span>
-      </div>
-
-      <div class="flex justify-between">
-        <span class="text-slate-500">Horas</span>
-        <span>{{ fichaje.horas || '--' }}</span>
-      </div>
-
+    <div class="flex justify-between">
+      <span class="text-slate-500">Salida</span>
+      <span>{{ fichaje.endHour || '--' }}</span>
     </div>
 
   </div>
+
+</div>
 }
+
+</div>
 
 </div>

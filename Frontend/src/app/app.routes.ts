@@ -24,6 +24,8 @@ import { NominaEmpleado } from './features/empleados/nomina-empleado/nomina-empl
 import { loginGuard } from './core/guards/login-guard';
 import { DocumentosEmpleado } from './features/empleados/documentos-empleado/documentos-empleado';
 import { ViewAdmin } from './features/view/view-admin/view-admin';
+import { LayoutAdmin } from './features/view/layout-admin/layout-admin';
+import { ListaEmpleado } from './features/view/view-admin/lista-empleado/lista-empleado';
 export const routes: Routes = [
    { path: 'access', component: Login },
   { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
@@ -47,10 +49,14 @@ export const routes: Routes = [
       {path:'management-clock-in/:id', component:FichajeEmpleado, canActivate: [RoleGuard],data: { roles: [ Role.ADMIN, Role.RRHH] } },
       {path:'management-paysheet/:id', component:NominaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
       {path:'management-documents/:id', component:DocumentosEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
-      {path:'view-time', component:ViewAdmin },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
+  
+  {path:'admin', component:LayoutAdmin, canActivate: [RoleGuard] ,data: { roles: [Role.ADMIN, Role.RRHH] }, children:[
+    {path:'view-time', component:ViewAdmin },
+    {path:'list-employees', component:ListaEmpleado },
 
+  ] },
   { path: '**', component: NotFound, canActivate: [RoleGuard] ,data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } }
 ];
