@@ -31,70 +31,74 @@ public class KioskController {
 
     @Autowired
     private FichajeRepository fichajeRepository;
-
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody Usuario usuario) {
-
-    return usuarioRepository.findByEmailAndPassword(
-            usuario.getEmail(),
-            usuario.getPassword())
-            .map(u ->
-
-                empleadoRepository.findByIdUser(u.getIdUsuario().intValue())
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+    
+        return usuarioRepository.findByEmailAndPassword(
+                usuario.getEmail(),
+                usuario.getPassword())
+                .map(u -> empleadoRepository.findByIdUser(u.getIdUsuario().intValue())
                         .<ResponseEntity<?>>map(empleado -> {
-
-                            Optional<Fichaje> fichajeAbierto =
-                                    fichajeRepository.findFirstByIdEmployeeAndEndHourIsNullOrderByDateDescStartHourDesc(
-                                            empleado.getIdEmployee());
-
-                            if (fichajeAbierto.isPresent()) {
-
-                                // Registrar salida
-                                Fichaje fichaje = fichajeAbierto.get();
-                                fichaje.setEndHour(LocalTime.now());
-
-                            fichajeRepository.save(fichaje);
+    
+                            // Obtener el rol del usuario
                             String role = u.getRoles().isEmpty()
-                            ? "SIN_ROL"
-                            : u.getRoles().get(0).getNombreRol();
-
+                                    ? "SIN_ROL"
+                                    : u.getRoles().get(0).getNombreRol();
+    
+                            // Si es RRHH, no realiza fichaje
+                            if ("RRHH".equalsIgnoreCase(role)) {
                                 return ResponseEntity.ok(
-                                    new KioskLoginResponseDTO(
-                                        "Salida registrada",
-                                        empleado.getIdEmployee(),
-                                        u.getRoles().get(0).getNombreRol()
-                                    )
-                                );
-
-                            } else {
-
-                                // Registrar entrada
-                                Fichaje fichaje = new Fichaje();
-                                fichaje.setEmployee(empleado);
-                                fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
-                                fichaje.setDate(LocalDate.now());
-                                fichaje.setStartHour(LocalTime.now());
-
-                                fichajeRepository.save(fichaje);
-
-                                String role = u.getRoles().isEmpty()
-        ? "SIN_ROL"
-        : u.getRoles().get(0).getNombreRol();
-                                return ResponseEntity.ok(
-                                    new KioskLoginResponseDTO(
-                                        "Salida registrada",
-                                        empleado.getIdEmployee(),
-                                        u.getRoles().get(0).getNombreRol()
-                                    )
+                                        new KioskLoginResponseDTO(
+                                                null,
+                                                empleado.getIdEmployee(),
+                                                role
+                                        )
                                 );
                             }
-
+    
+                            // Buscar si existe un fichaje abierto
+                            Optional<Fichaje> fichajeAbierto =
+                                    fichajeRepository
+                                            .findFirstByIdEmployeeAndEndHourIsNullOrderByDateDescStartHourDesc(
+                                                    empleado.getIdEmployee());
+    
+                            // Si existe, registrar salida
+                            if (fichajeAbierto.isPresent()) {
+    
+                                Fichaje fichaje = fichajeAbierto.get();
+                                fichaje.setEndHour(LocalTime.now());
+    
+                                fichajeRepository.save(fichaje);
+    
+                                return ResponseEntity.ok(
+                                        new KioskLoginResponseDTO(
+                                                "Salida registrada",
+                                                empleado.getIdEmployee(),
+                                                role
+                                        )
+                                );
+    
+                            }
+    
+                            // Si no existe, registrar entrada
+                            Fichaje fichaje = new Fichaje();
+                            fichaje.setEmployee(empleado);
+                            fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
+                            fichaje.setDate(LocalDate.now());
+                            fichaje.setStartHour(LocalTime.now());
+    
+                            fichajeRepository.save(fichaje);
+    
+                            return ResponseEntity.ok(
+                                    new KioskLoginResponseDTO(
+                                            "Entrada registrada",
+                                            empleado.getIdEmployee(),
+                                            role
+                                    )
+                            );
+    
                         })
-                        .orElse(ResponseEntity.notFound().build())
-
-            )
-            .orElse(ResponseEntity.status(401).build());
-}
-
-
+                        .orElse(ResponseEntity.notFound().build()))
+                .orElse(ResponseEntity.status(401).build());
+    }
 }
