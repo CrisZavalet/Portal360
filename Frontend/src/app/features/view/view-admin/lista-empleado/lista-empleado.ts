@@ -78,6 +78,8 @@ get empleadosPaginados() {
 
  verHistorial(idEmployee: any) {
     this.router.navigate(['admin/employee/', idEmployee]);
+    localStorage.setItem('nameEmployee', this.empleados.find(e => e.idEmployee === idEmployee)?.name || '');
+    localStorage.setItem('apellidoEmployee', this.empleados.find(e => e.idEmployee === idEmployee)?.lastName || '');
   }
 
 paginaAnterior() {

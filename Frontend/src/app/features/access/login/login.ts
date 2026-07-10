@@ -4,6 +4,7 @@ import{ CommonModule } from '@angular/common';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { TabletAuth } from '../../../core/services/tablet-auth';
 import { Router } from '@angular/router';
+import { LoginTablet } from '../../../core/interfaces/loginTablet.interface';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ currentTime: string= '';
 isSubmitted = false;
 active: 'Entrada' | 'Salida' = 'Entrada';
 private clockInterval!: number;
-
+role!:LoginTablet;
 constructor(private fb: FormBuilder, private TabletAuth: TabletAuth, private router: Router) {}
 
 ngOnInit() {
@@ -65,14 +66,16 @@ const { time } = this.getCurrentDateTime();
 
   this.TabletAuth.login(email, password).subscribe({
     next: (res) => {
-      if(localStorage.getItem('user')==='admin@portal360.com'){
-        localStorage.setItem('role', 'RRHH');
+      console.log('Respuesta:', res);
+       console.log(res.role); 
+      localStorage.setItem('role', res.role);
+
+      if(localStorage.getItem('role')==='RRHH'){
 this.router.navigate(['/admin/view-time']);
 return; 
       }
-      console.log('Respuesta:', res);
      this.openModalSuccess(
-      `${res}\n\nHora del fichaje: ${time}`
+      `${res.message}\n\nHora del fichaje: ${time}`
     );
 
           this.loginForm.reset({

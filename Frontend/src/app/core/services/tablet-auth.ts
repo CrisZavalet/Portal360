@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { EmpleadoFichaje } from '../interfaces/empleadoFichaje.interface';
 import{Empleado} from '../interfaces/empleado.interface';
 import { HistorialFichajeEmpleado } from '../interfaces/historialFichajeEmpleado.interface';
+import { LoginTablet } from '../interfaces/loginTablet.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -15,20 +16,16 @@ private apiUrlEmpleados = 'http://localhost:8080/api/employees';
 private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
 private http=inject(HttpClient);
 
-login(email: string, password: string): Observable<string> {
+login(email: string, password: string): Observable<LoginTablet> {
 
   const body = {
-     email,
+    email,
     password
   };
 
   localStorage.setItem('user', email);
-  localStorage.setItem('role', 'RRHH');
 
-  return this.http.post(this.apiUrl, body, {
-    responseType: 'text'
-  });
-
+  return this.http.post<LoginTablet>(this.apiUrl, body);
 }
 
 getEmpleadosFichaje(){

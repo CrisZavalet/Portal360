@@ -43,6 +43,7 @@ ngOnInit() {
 
           this.fichajes = data;
           this.fichajesFiltrados = data;
+          console.log('Fichajes cargados:', this.fichajes);
 
         },
 
@@ -56,14 +57,15 @@ ngOnInit() {
 
 
 
-  
 
-    this.fichajesFiltrados = this.fichajes;
-    console.log('Fichajes cargados:', this.fichajes);
 
     
 
   }
+
+  formatHour(hour: string): string {
+  return hour?.slice(0, 5) ?? '';
+}
 
  filtrar() {
 

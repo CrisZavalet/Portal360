@@ -15,27 +15,26 @@
     </h2>
 
 </div>
-<div>
-    <button type="button" class="rounded-md bg-indigo-600 px-4 py-2 mb-1 text-sm
-                  text-white hover:bg-indigo-500 " (click)="volver()">
-        Volver
-    </button>   
-</div>
-    </div>
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
+  <button
+    type="button"
+    (click)="volver()"
+    class="rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-500">
+    Volver
+  </button>
 
-   
-      <input
-        type="text"
-        placeholder="Buscar empleado..."  [(ngModel)]="busqueda"
+  <input
+    type="text"
+    placeholder="Buscar empleado..."
+    [(ngModel)]="busqueda"
     (input)="filtrar()"
-        class="flex-1 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
+    class="w-full md:w-80 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 bg-white dark:bg-slate-900 dark:text-white">
 
-    </div>
+</div>
 
     <div class="hidden md:block overflow-x-auto">
-
+        <div class="max-h-[60vh] overflow-y-auto overflow-x-auto">
       <table class="min-w-full">
 
         <thead
@@ -101,14 +100,15 @@
 
 <div class="md:hidden space-y-2 md:hidden max-h-[70vh] overflow-y-auto space-y-4">
 
-    @for(empleado of empleadosPaginados; track empleado.idEmployee) {  
+    @for(empleado of empleadosPaginados; track $index) {  
  <div
   class="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm p-3">
 
   <div class="flex justify-between items-center mb-2">
 
     <h3 class="font-semibold text-slate-800 dark:text-white">
-      {{ empleado.name }} {{ empleado.lastName }}
+       <button (click)="verHistorial(empleado.idEmployee)">
+                {{ empleado.name }} {{ empleado.lastName }}</button>
     </h3>
 
    
@@ -120,5 +120,5 @@
 }
 
 </div>
-
+</div>
 </div>
