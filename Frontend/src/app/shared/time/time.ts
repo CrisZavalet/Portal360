@@ -28,9 +28,17 @@ ngOnInit() {
  
   this.todayKey = new Date().toISOString().split('T')[0];
 
-  this.segundosHoy = computed(() =>
-    this.workTimeService.workData()[this.todayKey] || 0
-  );
+  this.segundosHoy = computed(() => {
+
+    const todayKey = new Date().toISOString().split('T')[0];
+
+    return (
+        (this.workTimeService.workData()[todayKey] || 0)
+        +
+        this.workTimeService.currentSession()
+    );
+
+});
   this.segundosSemana = computed(() => {
     const today = new Date();
     const firstDay = new Date(today);

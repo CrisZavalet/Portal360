@@ -25,9 +25,65 @@ export class Fichaje implements OnInit, OnDestroy {
   constructor(private workTimeService: WorkTime) {}
 
   ngOnInit() {
-    this.currentDate = new Date().toLocaleDateString('es-ES', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
+   
+  // const working = localStorage.getItem('isWorking');
+
+  // if (working === 'true') {
+
+  //     const savedStart = Number(
+  //         localStorage.getItem('startTime')
+  //     );
+
+  //     this.startTime = savedStart;
+
+  //     this.isFichaje = true;
+
+  //     this.intervalId = setInterval(() => {
+
+  //         this.seconds = Math.floor(
+  //             (Date.now() - this.startTime) / 1000
+  //         );
+
+  //     },1000);
+
+  // }
+
+  const start = localStorage.getItem('startTime');
+
+if (start) {
+
+  this.startTime = Number(start);
+
+  this.isFichaje = true;
+
+  this.intervalId = setInterval(() => {
+
+    this.seconds = Math.floor(
+      (Date.now() - this.startTime) / 1000
+    );
+
+    this.workTimeService.updateCurrentSession(this.seconds);
+
+  }, 1000);
+
+}
+
+const paused = localStorage.getItem('isPaused');
+
+if (paused === 'true') {
+
+  this.accumulatedTime = Number(
+    localStorage.getItem('accumulatedTime') || '0'
+  );
+
+  this.seconds = Math.floor(this.accumulatedTime / 1000);
+
+  this.workTimeService.updateCurrentSession(this.seconds);
+
+  this.isFichaje = false;
+}
+
+
   }
 
   ngOnDestroy() {
@@ -40,55 +96,70 @@ export class Fichaje implements OnInit, OnDestroy {
     this.isFichaje = true;
     this.startTime = Date.now() - this.accumulatedTime;
 
+    localStorage.setItem(
+  'startTime',
+  this.startTime.toString()
+);
+
+localStorage.setItem(
+  'isWorking',
+  'true'
+);
+
     const startDate = new Date();
     this.horaFichaje = startDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       localStorage.setItem('Hora_fichaje', JSON.stringify(this.horaFichaje));
 
     this.intervalId = setInterval(() => {
-      this.seconds = Math.floor((Date.now() - this.startTime) / 1000);
-    }, 1000);
+
+  this.seconds = Math.floor((Date.now() - this.startTime) / 1000);
+
+  this.workTimeService.updateCurrentSession(this.seconds);
+
+},1000);
 
 
   }
 
   pause() {
-    if (!this.isFichaje) return;
-    clearInterval(this.intervalId);
-    
-    this.intervalId = null;
+   const paused = localStorage.getItem('isPaused');
 
-    this.accumulatedTime = Date.now() - this.startTime;
-    this.isFichaje = false;
+if (paused === 'true') {
+
+  this.accumulatedTime = Number(
+    localStorage.getItem('accumulatedTime') || '0'
+  );
+
+  this.seconds = Math.floor(this.accumulatedTime / 1000);
+
+  this.workTimeService.updateCurrentSession(this.seconds);
+
+  this.isFichaje = false;
+}
   }
 
   stop() {
-    clearInterval(this.intervalId);
-        this.accumulatedTime = Date.now() - this.startTime;
+    if (!this.isFichaje && this.accumulatedTime === 0) {
+    return;
+  }
 
-    console.log(this.accumulatedTime)
-    this.intervalId = null;
+  clearInterval(this.intervalId);
 
+  this.intervalId = null;
 
-  const sessionSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-  // const todayKey = new Date().toISOString().split('T')[0]; 
-  // const storedData = JSON.parse(localStorage.getItem('workData') || '{}');
-  // if (!storedData[todayKey]) {
-  //   storedData[todayKey] = 0;
-  // }
-  // storedData[todayKey] += sessionSeconds;
-  // localStorage.setItem('workData', JSON.stringify(storedData));
+  const sessionSeconds = this.seconds;
 
-  // console.log('Guardado:', storedData);
-   console.log('Guardado:', sessionSeconds);
+  this.workTimeService.addWorkSession(sessionSeconds);
 
-    this.workTimeService.addWorkSession(sessionSeconds);
+  this.seconds = 0;
+  this.accumulatedTime = 0;
+  this.startTime = 0;
+  this.isFichaje = false;
+  this.horaFichaje = null;
 
-    this.seconds = 0;
-    this.accumulatedTime = 0;
-    this.startTime = 0;
-    this.isFichaje = false;
-    
-    this.horaFichaje = null;
+  localStorage.removeItem('startTime');
+localStorage.removeItem('isWorking');
+  this.workTimeService.updateCurrentSession(0);
   }
 
   get formattedTime(): string {

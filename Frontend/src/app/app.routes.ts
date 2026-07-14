@@ -54,10 +54,10 @@ export const routes: Routes = [
     ]
   },
   
-  {path:'admin', component:LayoutAdmin, canActivate: [RoleGuard] ,data: { roles: [Role.ADMIN, Role.RRHH] }, children:[
-    {path:'view-time', component:ViewAdmin },
-    {path:'list-employees', component:ListaEmpleado },
-    {path:'employee/:id', component:ViewTime },
+  {path:'admin', component:LayoutAdmin , children:[
+    {path:'view-time', component:ViewAdmin, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
+    {path:'list-employees', component:ListaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
+    {path:'employee/:id', component:ViewTime, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
 
   ] },
   { path: '**', component: NotFound, canActivate: [RoleGuard] ,data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } }

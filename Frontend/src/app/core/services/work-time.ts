@@ -4,24 +4,27 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class WorkTime {
-    private storageKey = 'workData';
-  workData = signal<Record<string, number>>(
-    JSON.parse(localStorage.getItem(this.storageKey) || '{}')
-  );
+    workData = signal<{[key:string]:number}>({});
 
-  addWorkSession(seconds: number) {
-    const todayKey = new Date().toISOString().split('T')[0];
+  currentSession = signal(0);
 
-    const currentData = { ...this.workData() };
+  updateCurrentSession(seconds: number){
+      this.currentSession.set(seconds);
+  }
 
-    if (!currentData[todayKey]) {
-      currentData[todayKey] = 0;
-    }
+  addWorkSession(seconds:number){
 
-    currentData[todayKey] += seconds;
+      const todayKey = new Date().toISOString().split('T')[0];
 
-    this.workData.set(currentData);
+      this.workData.update(data=>{
 
-    localStorage.setItem(this.storageKey, JSON.stringify(currentData));
+          return{
+              ...data,
+              [todayKey]:(data[todayKey] || 0)+seconds
+          }
+
+      });
+
+      this.currentSession.set(0);
   }
 }
