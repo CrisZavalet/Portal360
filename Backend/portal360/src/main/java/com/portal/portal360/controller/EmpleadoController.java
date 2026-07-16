@@ -29,10 +29,27 @@ public class EmpleadoController {
     }
 
     @GetMapping
-public List<EmployeeDTO> getEmployees() {
+    public List<EmployeeDTO> getEmployees() {
 
-    return empleadoRepository.findAll()
-            .stream()
+        return empleadoRepository.findAll()
+                .stream()
+                .map(e -> new EmployeeDTO(
+                        e.getIdEmployee(),
+                        e.getDni(),
+                        e.getName(),
+                        e.getLastName(),
+                        e.getDateOfBirth(),
+                        e.getPhone(),
+                        e.getActive()))
+                .toList();
+    }
+
+
+
+    @GetMapping("/{id}")
+public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Integer id) {
+
+    return empleadoRepository.findById(id)
             .map(e -> new EmployeeDTO(
                     e.getIdEmployee(),
                     e.getDni(),
@@ -42,6 +59,7 @@ public List<EmployeeDTO> getEmployees() {
                     e.getPhone(),
                     e.getActive()
             ))
-            .toList();
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
 }
 }
