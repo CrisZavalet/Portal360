@@ -250,73 +250,77 @@
 }
 
 @if (modalOpen) {
-  <dialog
-    open
-    class="modal backdrop-blur-xl bg-white/30 dark:bg-slate-900/30 border border-white/30 dark:border-white/10 rounded-2xl shadow-xl shadow-black/5"
-  >
+  <div class="fixed inset-0 flex items-center justify-center z-50">
+    <!-- Fondo -->
     <div
-      class="modal-box rounded-2xl bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-xl"
-    >
-      <h3 class="font-bold text-xl text-slate-800 dark:text-white">Solicitar ausencia</h3>
+      class="absolute inset-0 bg-white/40 backdrop-blur-sm"
+      (click)="closeModal()">
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="relative w-[600px] max-w-[95vw] p-6 rounded-3xl backdrop-blur-2xl bg-white/70 dark:bg-slate-900/70 border border-white/40 dark:border-white/10 shadow-2xl">
+
+      <h3 class="font-bold text-xl text-slate-800 dark:text-white">
+        Solicitar ausencia
+      </h3>
 
       <fieldset class="fieldset mt-5">
         <legend class="fieldset-legend mb-1">
           Tipo de ausencia <span class="text-red-500">*</span>
         </legend>
-        <select
-          class="select border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm"
-        >
-          @for (type of selectAbsenceType; track type) {
-            <option [value]="type" [selected]="selectAbsenceType">
-              {{ type }}
-            </option>
-          }
-        </select>
+
+       <select
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+>
+  @for (type of selectAbsenceType; track type) {
+    <option [value]="type">
+      {{ type }}
+    </option>
+  }
+</select>
       </fieldset>
 
       <fieldset class="fieldset mt-5">
         <legend class="fieldset-legend mb-1">Comentario</legend>
-        <textarea
-          class="textarea resize-none w-full rounded-md border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 block"
-          rows="4"
-          placeholder="Descripción"
-        ></textarea>
+
+       <textarea
+  rows="4"
+  placeholder="Descripción"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none resize-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+></textarea>
       </fieldset>
 
       <fieldset class="fieldset mt-5">
-        <legend class="fieldset-legend mb-1">Duración <span class="text-red-500">*</span></legend>
+        <legend class="fieldset-legend mb-1">
+          Duración <span class="text-red-500">*</span>
+        </legend>
 
         <div class="flex gap-2">
           <button
             type="button"
             (click)="setDuration('hours')"
-            class="px-4 py-2 rounded-lg transition border border-gray-300"
+            class="px-4 py-2 rounded-lg border border-gray-300"
             [class.bg-indigo-600]="durationType === 'hours'"
-            [class.text-white]="durationType === 'hours'"
-            [class.bg-white]="durationType !== 'hours'"
-          >
+            [class.text-white]="durationType === 'hours'">
             Horas
           </button>
 
           <button
             type="button"
             (click)="setDuration('day')"
-            class="px-4 py-2 rounded-lg transition border border-gray-300"
+            class="px-4 py-2 rounded-lg border border-gray-300"
             [class.bg-indigo-600]="durationType === 'day'"
-            [class.text-white]="durationType === 'day'"
-            [class.bg-white]="durationType !== 'day'"
-          >
+            [class.text-white]="durationType === 'day'">
             Un día
           </button>
 
           <button
             type="button"
             (click)="setDuration('days')"
-            class="px-4 py-2 rounded-lg transition border border-gray-300"
+            class="px-4 py-2 rounded-lg border border-gray-300"
             [class.bg-indigo-600]="durationType === 'days'"
-            [class.text-white]="durationType === 'days'"
-            [class.bg-white]="durationType !== 'days'"
-          >
+            [class.text-white]="durationType === 'days'">
             Varios días
           </button>
         </div>
@@ -325,12 +329,14 @@
           <div class="grid grid-cols-2 gap-4 mt-4">
             <div>
               <label class="label">Fecha</label>
-              <input type="date" class="input input-bordered w-full" />
-            </div>
+<input
+  type="date"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+/>            </div>
 
             <div>
               <label class="label">Horas</label>
-              <input type="number" class="input input-bordered w-full" placeholder="Ej: 2" />
+              <input type="number" class="input input-bordered w-full" placeholder="Ej: 2">
             </div>
           </div>
         }
@@ -338,20 +344,28 @@
         @if (durationType === 'day') {
           <div class="mt-4">
             <label class="label">Fecha</label>
-            <input type="date" class="input input-bordered w-full" />
-          </div>
+<input
+  type="date"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+/>          </div>
         }
 
         @if (durationType === 'days') {
           <div class="grid grid-cols-2 gap-4 mt-4">
             <div>
               <label class="label">Desde</label>
-              <input type="date" class="input input-bordered w-full" />
+              <input
+                type="date"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              >
             </div>
 
             <div>
               <label class="label">Hasta</label>
-              <input type="date" class="input input-bordered w-full" />
+              <input
+                type="date"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              >
             </div>
           </div>
         }
@@ -359,23 +373,28 @@
 
       <fieldset class="fieldset mt-5">
         <legend class="fieldset-legend mb-1">Adjuntar archivo</legend>
-        <input type="file" class="file-input file-input-sm" />
-        <label class="label">Max size 2MB</label>
+
+        <input type="file" class="file-input file-input-sm">
+
+        <label class="label">
+          Máximo 2 MB
+        </label>
       </fieldset>
 
-      <div class="modal-action">
+      <div class="flex justify-end gap-3 mt-6">
         <button
-          class="flex px-4 py-2 rounded-md bg-slate-400 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20"
-          (click)="modalOpen = false"
-        >
+          (click)="closeModal()"
+          class="px-4 py-2 rounded-lg bg-slate-400 text-white hover:bg-slate-500">
           Cancelar
         </button>
+
         <button
-          class="flex px-4 py-2 rounded-md bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20 mr-5"
-        >
+          class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
           Solicitar
         </button>
       </div>
+
     </div>
-  </dialog>
+  </div>
 }
+

@@ -20,13 +20,26 @@ name_user:any;
 suername_user:any;
 rol_user:any;
 open:any = false;
+idEmployee:any;
+user: any;
   constructor(private authService:AuthService, private router:Router){}
 
 ngOnInit(){
-  const user = this.authService.getUser();
-  this.name_user = user.name;
-  this.suername_user = user.surname;
-  this.rol_user = user.role;
+ 
+    this.idEmployee = localStorage.getItem('idEmployee');
+    this.user = localStorage.getItem('user');
+    
+    console.log('Usuario obtenido desde el servicio AuthService:', this.user);
+
+    if (this.user) {
+      this.authService.getEmployeeById(parseInt(this.idEmployee)).subscribe((employee: any) => {
+        this.name_user = employee.name;
+        this.suername_user = employee.lastName;
+        this.rol_user = employee.role;
+      });
+    } else {
+      console.log('No se encontró información del usuario en el localStorage.');
+    }
 }
 
 

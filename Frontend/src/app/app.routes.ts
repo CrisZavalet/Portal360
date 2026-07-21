@@ -54,7 +54,7 @@ export const routes: Routes = [
     ]
   },
   
-  {path:'admin', component:LayoutAdmin , children:[
+  {path:'admin', component:LayoutAdmin, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] }, children:[
     {path:'view-time', component:ViewAdmin, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
     {path:'list-employees', component:ListaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
     {path:'employee/:id', component:ViewTime, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },

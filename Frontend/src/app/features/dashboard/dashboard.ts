@@ -28,7 +28,9 @@ export class Dashboard {
   name_user:any;
   suername_user:any;
   rol_user:any;
-@ViewChildren('birthdayCard') birthdayCards!: QueryList<ElementRef>;
+  user: any;
+  idEmployee: any;
+  @ViewChildren('birthdayCard') birthdayCards!: QueryList<ElementRef>;
 
 
   allBirthdays = [
@@ -68,12 +70,20 @@ birthdays: any[] = [];
   constructor(private holidayService: Holiday,private authService: AuthService) { }
   ngOnInit() {
 
+    this.idEmployee = localStorage.getItem('idEmployee');
+    this.user = localStorage.getItem('user');
+    
+    console.log('Usuario obtenido desde el servicio AuthService:', this.user);
 
-    const user = this.authService.getUser();
-  this.name_user = user.name;
-  this.suername_user = user.surname;
-  this.rol_user = user.role;
-
+    if (this.user) {
+      this.authService.getEmployeeById(parseInt(this.idEmployee)).subscribe((employee: any) => {
+        this.name_user = employee.name;
+        this.suername_user = employee.lastName;
+        this.rol_user = employee.role;
+      });
+    } else {
+      console.log('No se encontró información del usuario en el localStorage.');
+    }
 
     this.currentYear = new Date().getFullYear();
 
@@ -176,6 +186,7 @@ ngAfterViewInit() {
     }, 300);
   }
 }
+
 
 
 launchConfetti(element: HTMLElement) {

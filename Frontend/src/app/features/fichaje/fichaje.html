@@ -194,7 +194,7 @@ overflow-hidden border-separate border-spacing-y-1">
     </thead>
 
     <tbody >
-            @if (fichajesFiltrados().length === 0) {
+            @if (employeedDataFiltered.length === 0) {
       <tr class="bg-white border-t border-white/10 hover:bg-base-200/20 transition">
       <td colspan="5" class="p-10 text-center text-slate-500">
   <div class="flex flex-col items-center gap-2">
@@ -203,39 +203,39 @@ overflow-hidden border-separate border-spacing-y-1">
 </td>
       </tr>
     }
-      @for (f of fichajesFiltrados(); track f.fecha) {
+      @for (f of employeedDataFiltered; track $index) {
        <tr class="bg-white border-t border-white/10 hover:bg-base-200/20 transition">
-        <td class="px-3 py-2">{{formatearFecha(f.fecha)}}</td>
+        <td class="px-3 py-2">{{formatearFecha(f.date)}}</td>
        <td class="px-3 py-2">
   <div class="flex gap-3 items-center">
 
     <span class="text-green-500 font-medium">
-      {{ f.entrada }}
+      {{ formatHour(f.startHour) || '--' }}
     </span>
 
     <span class="text-slate-400">→</span>
 
     <span class="text-red-500 font-medium">
-      {{ f.salida }}
+      {{ formatHour(f.endHour) || '--' }}
     </span>
 
   </div>
 </td>
-        <td class="px-3 py-2">
+         <td class="px-3 py-2">
   <span class="px-3 py-1 text-xs font-medium rounded-full
   bg-indigo-100 text-indigo-700
   dark:bg-indigo-500/20 dark:text-indigo-300">
     Presencial
   </span>
-</td>
-        <td class="px-3 py-2">{{ f.totalHoras }}h</td>
-       <td> <div class="flex gap-3 items-center">
+</td> 
+        <td class="px-3 py-2">{{ calcularTiempo(f.startHour, f.endHour) }}</td>
+     <!--  <td> <div class="flex gap-3 items-center">
        @if (f.aprobado) {
   <span class="flex justify-center px-3 py-1 text-xs rounded-full
   bg-green-100 text-green-700
   dark:bg-green-500/20 dark:text-green-300">
   ✔ Aprobado
-  </span>
+  </span> 
 }
 @else {
   <span class="flex justify-center px-3 py-1 text-xs rounded-full
@@ -244,7 +244,7 @@ overflow-hidden border-separate border-spacing-y-1">
   ⏳ Pendiente
   </span>
 }
-</div></td>
+</div></td>-->
       </tr>
     }
      
@@ -265,7 +265,7 @@ bg-white backdrop-blur-lg rounded-2xl border border-white/20">
 
 }
 
-@for (f of fichajesFiltrados(); track f.fecha) {
+@for (f of employeedDataFiltered; track $index) {
 
 <div class="p-4 rounded-2xl
 bg-white backdrop-blur-lg
@@ -274,10 +274,10 @@ border border-white/20 shadow-lg">
 <div class="flex justify-between mb-2">
 
 <span class="text-sm text-slate-500">
-{{formatearFecha(f.fecha)}}
+{{formatearFecha(f.date)}}
 </span>
 
-@if (f.aprobado) {
+<!-- @if (f.aprobado) {
 <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
 ✔ Aprobado
 </span>
@@ -286,7 +286,7 @@ border border-white/20 shadow-lg">
 <span class="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
 Pendiente
 </span>
-}
+} -->
 
 </div>
 
@@ -294,17 +294,17 @@ Pendiente
 
 <div>
 <p class="text-slate-400 text-xs">Entrada</p>
-<p class="text-green-500 font-medium">{{f.entrada}}</p>
+<p class="text-green-500 font-medium">{{formatHour(f.startHour) || '--'}}</p>
 </div>
 
 <div>
 <p class="text-slate-400 text-xs">Salida</p>
-<p class="text-red-500 font-medium">{{f.salida}}</p>
+<p class="text-red-500 font-medium">{{formatHour(f.endHour) || '--'}}</p>
 </div>
 
 <div>
 <p class="text-slate-400 text-xs">Total</p>
-<p class="font-medium">{{f.totalHoras}}h</p>
+<p class="font-medium">{{calcularTiempo(f.startHour, f.endHour)}}</p>
 </div>
 
 </div>

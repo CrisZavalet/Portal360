@@ -1,43 +1,56 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { LoginTablet } from '../interfaces/loginTablet.interface';
+import { identity, Observable } from 'rxjs';
+import { tap } from 'rxjs';
+import { Empleado } from '../interfaces/empleado.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-    private testUser = {
-    id: 1,
-    name: 'Florencia Macarena ',
-    surname: 'Sandoval Perez',
-    username:'fsandovalp',
-    email: 'florencia@portal360.com',
-    password: '123456',
-    role: 'RRHH',
-    fnac:'1994-10-15',
-    iban:'ES7620770024003102575766',
-    area: 'IT',
-    puesto: 'Diseñadora UX/UI',
-    telefono: '555-1234',
-    dia_incorporacion: '2024-02-03',
-    vacaciones: 22,
-    ubicacion: 'Madrid',
-    estado: 'Activo'
-    
-  }
+
+  private apiUrl = 'http://localhost:8080/api/kiosk/onlylogin';
+  private apiUrlFichaje = 'http://localhost:8080/api/kiosk/onlyfichaje';
+  private apiUrlEmpleados = 'http://localhost:8080/api/employees'; 
+private http=inject(HttpClient);
+
  
   
- login(username: string, password: string): boolean {
-    if (
-      username === this.testUser.username &&
-      password === this.testUser.password
-    ) {
-      const { password: _, ...userWithoutPassword } = this.testUser;
+login(email: string, password: string): Observable<LoginTablet> {
 
-      localStorage.setItem('user', JSON.stringify(userWithoutPassword));
-      return true;
-    }
+    const body = {
+      email,
+      password
+    };
 
-    return false;
+    return this.http.post<LoginTablet>(this.apiUrl, body).pipe(
+      tap((response) => {
+      
+        console.log('Login exitoso:', response);
+        localStorage.setItem('user', email);
+        localStorage.setItem('role', response.role);
+        localStorage.setItem('idEmployee', response.idEmployee.toString());
+      })
+    );
   }
+
+  fichaje(idEmployee: number): Observable<LoginTablet> {
+
+    const body = {
+      idEmployee,
+    };
+
+    return this.http.post<LoginTablet>(this.apiUrlFichaje, body).pipe(
+      tap((response) => {
+      
+        console.log('Fichaje exitoso:', response);
+        localStorage.setItem('role', response.role);
+        localStorage.setItem('idEmployee', response.idEmployee.toString());
+      })
+    );
+  }
+
 
   logout() {
     localStorage.removeItem('user');
@@ -45,7 +58,17 @@ export class AuthService {
       localStorage.removeItem('role');
   }
 
+  getAllEmployees(): Observable<Empleado[]> {
+    return this.http.get<Empleado[]>(`${this.apiUrlEmpleados}/all`);
+  }
+
+  getEmployeeById(idEmployee: number): Observable<Empleado> {
+    return this.http.get<Empleado>(`${this.apiUrlEmpleados}/${idEmployee}`);
+  }
+
+
   getUser() {
+    console.log('Obteniendo usuario desde localStorage:', localStorage.getItem('user'));
     return JSON.parse(localStorage.getItem('user') || 'null');
   }
 

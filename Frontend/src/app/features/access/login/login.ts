@@ -67,9 +67,8 @@ const { time } = this.getCurrentDateTime();
   this.TabletAuth.login(email, password).subscribe({
     next: (res) => {
       console.log('Respuesta:', res);
-       console.log(res.role); 
       localStorage.setItem('role', res.role);
-
+      localStorage.setItem('idEmployee', res.idEmployee.toString());
       if(localStorage.getItem('role')==='RRHH'){
 this.router.navigate(['/admin/view-time']);
 return; 

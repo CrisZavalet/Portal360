@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkTime } from '../../core/services/work-time';
+import { AuthService } from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-fichaje',
   imports: [CommonModule],
   templateUrl: './fichaje.html',
-  styleUrls: ['./fichaje.css'], // arreglé styleUrl → styleUrls
+  styleUrls: ['./fichaje.css'], 
 })
 export class Fichaje implements OnInit, OnDestroy {
 
@@ -17,37 +18,16 @@ export class Fichaje implements OnInit, OnDestroy {
   intervalId!: any;
   mediaDiaria = 8;
   horasSemanales = 40;
+  idEmployee: any;
 
   private startTime = 0; 
   private accumulatedTime = 0;
 
   horaFichaje: string | null = null; 
-  constructor(private workTimeService: WorkTime) {}
+  constructor(private workTimeService: WorkTime, private authService: AuthService) {}
 
   ngOnInit() {
    
-  // const working = localStorage.getItem('isWorking');
-
-  // if (working === 'true') {
-
-  //     const savedStart = Number(
-  //         localStorage.getItem('startTime')
-  //     );
-
-  //     this.startTime = savedStart;
-
-  //     this.isFichaje = true;
-
-  //     this.intervalId = setInterval(() => {
-
-  //         this.seconds = Math.floor(
-  //             (Date.now() - this.startTime) / 1000
-  //         );
-
-  //     },1000);
-
-  // }
-
   const start = localStorage.getItem('startTime');
 
 if (start) {
@@ -86,81 +66,114 @@ if (paused === 'true') {
 
   }
 
+
+  ficharEmpleado() {
+    this.idEmployee = localStorage.getItem('idEmployee');
+    if (this.idEmployee) {
+      this.authService.fichaje(parseInt(this.idEmployee)).subscribe(
+        (response: any) => {
+          console.log('Fichaje exitoso:', response);    
+        },
+        (error: any) => {
+          console.error('Error en el fichaje:', error);
+        }
+      );
+    } else {
+      console.error('No se encontró el idEmployee en el localStorage.');
+    }
+  }
+
   ngOnDestroy() {
     clearInterval(this.intervalId);
   }
 
-  start() {
-    if (this.isFichaje) return;
-
-    this.isFichaje = true;
-    this.startTime = Date.now() - this.accumulatedTime;
-
-    localStorage.setItem(
-  'startTime',
-  this.startTime.toString()
-);
-
-localStorage.setItem(
-  'isWorking',
-  'true'
-);
-
-    const startDate = new Date();
-    this.horaFichaje = startDate.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      localStorage.setItem('Hora_fichaje', JSON.stringify(this.horaFichaje));
-
-    this.intervalId = setInterval(() => {
-
-  this.seconds = Math.floor((Date.now() - this.startTime) / 1000);
-
-  this.workTimeService.updateCurrentSession(this.seconds);
-
-},1000);
-
-
-  }
-
-  pause() {
-   const paused = localStorage.getItem('isPaused');
-
-if (paused === 'true') {
-
-  this.accumulatedTime = Number(
-    localStorage.getItem('accumulatedTime') || '0'
-  );
-
-  this.seconds = Math.floor(this.accumulatedTime / 1000);
-
-  this.workTimeService.updateCurrentSession(this.seconds);
-
-  this.isFichaje = false;
-}
-  }
-
-  stop() {
-    if (!this.isFichaje && this.accumulatedTime === 0) {
+ start() {
+  if (this.isFichaje) {
     return;
   }
 
+  this.idEmployee = localStorage.getItem('idEmployee');
+
+  if (!this.idEmployee) {
+    return;
+  }
+
+  this.authService.fichaje(+this.idEmployee).subscribe({
+    next: () => {
+      // Solo aquí inicias el cronómetro
+      this.iniciarCronometro();
+    },
+    error: (err) => {
+      console.error('Error al fichar', err);
+    }
+  });
+}
+
+
+
+ stop() {
+
+  if (!this.isFichaje) {
+    return;
+  }
+
+  this.idEmployee = localStorage.getItem('idEmployee');
+
+  if (!this.idEmployee) {
+    return;
+  }
+
+  this.authService.fichaje(+this.idEmployee).subscribe({
+    next: (response) => {
+      console.log('Fichaje de salida correcto', response);
+
+      this.detenerCronometro();
+    },
+    error: (error) => {
+      console.error('Error al fichar', error);
+    }
+  });
+
+}
+
+
+private iniciarCronometro() {
+
+  this.isFichaje = true;
+
+  this.startTime = Date.now();
+
+  localStorage.setItem('startTime', this.startTime.toString());
+
+  this.intervalId = setInterval(() => {
+
+    this.seconds = Math.floor(
+      (Date.now() - this.startTime) / 1000
+    );
+
+    this.workTimeService.updateCurrentSession(this.seconds);
+
+  }, 1000);
+
+}
+
+private detenerCronometro() {
+
   clearInterval(this.intervalId);
 
-  this.intervalId = null;
-
-  const sessionSeconds = this.seconds;
-
-  this.workTimeService.addWorkSession(sessionSeconds);
+  this.workTimeService.addWorkSession(this.seconds);
 
   this.seconds = 0;
-  this.accumulatedTime = 0;
   this.startTime = 0;
   this.isFichaje = false;
   this.horaFichaje = null;
 
-  localStorage.removeItem('startTime');
-localStorage.removeItem('isWorking');
   this.workTimeService.updateCurrentSession(0);
-  }
+
+  localStorage.removeItem('startTime');
+}
+
+
 
   get formattedTime(): string {
     const hrs = Math.floor(this.seconds / 3600);

@@ -1,2 +1,56 @@
 <h1 class="text-2xl font-bold text-black dark:text-white">Bandeja de Entrada</h1>
 <p>Aquí puedes ver tus mensajes y notificaciones importantes.</p>
+
+
+<div class="p-6 w-full">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-semibold text-slate-400 dark:text-white">
+      Bandeja de entrada
+    </h1>
+
+    <div class="flex gap-3">
+      <input
+        type="text"
+        [(ngModel)]="busqueda"
+        placeholder="Buscar mensajes..."
+        class="px-3 py-2 rounded-lg border dark:bg-slate-800 dark:text-white"
+        (input)="filtrarMensajes()"
+      />
+    </div>
+  </div>
+
+  <!-- Lista mensajes -->
+  <div class="space-y-3">
+
+    <!-- <div
+      *ngFor="let m of mensajesFiltrados"
+      class="p-4 rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer"
+    >
+      <div class="flex justify-between items-center">
+        <h2 class="font-semibold text-slate-700 dark:text-white">
+          {{ m.asunto }}
+        </h2>
+
+        <span class="text-xs text-slate-400">
+          {{ m.fecha | date:'short' }}
+        </span>
+      </div>
+
+      <p class="text-sm text-slate-500 mt-1 line-clamp-2">
+        {{ m.mensaje }}
+      </p>
+
+      <div class="flex justify-end mt-2">
+        <span
+          class="text-xs px-2 py-1 rounded-full"
+          [ngClass]="m.leido ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'"
+        >
+          {{ m.leido ? 'Leído' : 'No leído' }}
+        </span>
+      </div>
+    </div> -->
+
+  </div>
+</div>

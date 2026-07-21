@@ -27,25 +27,39 @@ ngOnInit() {
 }
 
 Login() {
-      console.warn(this.loginForm.value);
-      if (this.loginForm.valid) {
-        const {username, password} = this.loginForm.value;  
-        const success = this.authService.login(username, password);
-     if (success) {
-        localStorage.setItem('token', '123456');
-        localStorage.setItem('role', this.authService.getUser().role);
-    this.router.navigate(['/']);
-  } else {
-    this.openModalError('El usuario o la contraseña son incorrectos. \nPor favor completa los datos correctamente.');
-  } 
-    } else {
-      console.log('Formulario inválido');
-       this.loginForm.markAllAsTouched();
-    this.openModalError('El usuario o la contraseña son incorrectos. \nPor favor completa los datos correctamente.');
-      return;
-    } 
-}
+  console.warn(this.loginForm.value);
 
+  if (!this.loginForm.valid) {
+    console.log('Formulario inválido');
+    this.loginForm.markAllAsTouched();
+    this.openModalError(
+      'El usuario o la contraseña son incorrectos.\nPor favor completa los datos correctamente.'
+    );
+    return;
+  }
+
+  const { username, password } = this.loginForm.value;
+
+  this.authService.login(username!, password!).subscribe({
+    next: (response) => {
+      console.log('Login exitoso:', response);
+
+      localStorage.setItem('user', username!);
+      localStorage.setItem('role', response.role);
+      localStorage.setItem('idEmployee', response.idEmployee.toString());
+
+
+      this.router.navigate(['/']);
+    },
+    error: (error) => {
+      console.error('Error en el login:', error);
+
+      this.openModalError(
+        'El usuario o la contraseña son incorrectos.\nPor favor completa los datos correctamente.'
+      );
+    }
+  });
+}
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
