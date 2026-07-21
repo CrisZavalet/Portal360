@@ -3,6 +3,11 @@ import { Fichajes } from '../../core/interfaces/fichaje.interface';
 import { FormsModule } from '@angular/forms';
 import { TabletAuth } from '../../core/services/tablet-auth';
 import { HistorialFichajeEmpleado } from '../../core/interfaces/historialFichajeEmpleado.interface';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+ import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-fichaje',
   imports: [FormsModule, ],
@@ -107,15 +112,142 @@ closeExportModal() {
 }
 
 exportData() {
-  console.log('Exportando:', {
-    tipo: this.exportType,
-    desde: this.startDate,
-    hasta: this.endDate
+
+  const datos = this.obtenerDatosExportar();
+
+  if (datos.length === 0) {
+    alert('No hay fichajes para exportar.');
+    return;
+  }
+
+  switch (this.exportType) {
+
+    case 'pdf':
+      this.exportarPDF(datos);
+      break;
+
+    case 'excel':
+      this.exportarExcel(datos);
+      break;
+
+    case 'csv':
+      this.exportarCSV(datos);
+      break;
+  }
+
+  this.closeExportModal();
+}
+
+obtenerDatosExportar(): HistorialFichajeEmpleado[] {
+
+  let datos = [...this.employeeData];
+
+  if (this.startDate) {
+    datos = datos.filter(f => f.date >= this.startDate);
+  }
+
+  if (this.endDate) {
+    datos = datos.filter(f => f.date <= this.endDate);
+  }
+
+  return datos;
+
+}
+
+exportarPDF(datos: HistorialFichajeEmpleado[]) {
+
+  const pdf = new jsPDF();
+
+  pdf.text('Historial de fichajes', 14, 15);
+
+  autoTable(pdf, {
+ startY: 30,
+    head: [[
+      'Fecha',
+      'Entrada',
+      'Salida',
+      'Tiempo',
+      'Estado'
+    ]],
+
+    body: datos.map(f => [
+
+      this.formatearFecha(f.date),
+
+      this.formatHour(f.startHour),
+
+      this.formatHour(f.endHour),
+
+      this.calcularTiempo(f.startHour, f.endHour),
+
+      f.status
+
+    ])
+
   });
 
-  // el service va aqui
-  this.exportModalOpen = false;
-}   
+  pdf.save('historial-fichajes.pdf');
+
+}
+
+exportarExcel(datos: HistorialFichajeEmpleado[]) {
+
+  const worksheet = XLSX.utils.json_to_sheet(
+
+    datos.map(f => ({
+
+      Fecha: this.formatearFecha(f.date),
+
+      Entrada: this.formatHour(f.startHour),
+
+      Salida: this.formatHour(f.endHour),
+
+      Tiempo: this.calcularTiempo(f.startHour, f.endHour),
+
+      Estado: f.status
+
+    }))
+
+  );
+
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Fichajes');
+
+  XLSX.writeFile(workbook, 'historial-fichajes.xlsx');
+
+}
+
+exportarCSV(datos: HistorialFichajeEmpleado[]) {
+
+  const worksheet = XLSX.utils.json_to_sheet(
+
+    datos.map(f => ({
+
+      Fecha: this.formatearFecha(f.date),
+
+      Entrada: this.formatHour(f.startHour),
+
+      Salida: this.formatHour(f.endHour),
+
+      Tiempo: this.calcularTiempo(f.startHour, f.endHour),
+
+      Estado: f.status
+
+    }))
+
+  );
+
+  const csv = XLSX.utils.sheet_to_csv(worksheet);
+
+  const blob = new Blob([csv], {
+    type: 'text/csv;charset=utf-8'
+  });
+
+  saveAs(blob, 'historial-fichajes.csv');
+
+}
+
 
 filtrarPorMes() {
   this.employeedDataFiltered = this.employeeData.filter(f => {
