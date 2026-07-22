@@ -16,6 +16,8 @@ public class Empleado {
     @Column(name = "id_empleado")
     private Integer idEmployee;
 
+ 
+
     @Column(unique = true, nullable = false)
     private String dni;
 
@@ -35,5 +37,9 @@ public class Empleado {
     private Boolean active = true;
 
     @Column(name = "id_usuario")
-    private Integer idUser; 
+    private Integer idUser;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
+    private Usuario usuario;
 }
