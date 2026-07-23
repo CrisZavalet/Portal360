@@ -69,6 +69,7 @@ public class EmpleadoController {
                 .stream()
                 .map(e -> {
     
+                    // Rol
                     String role = "SIN_ROL";
     
                     if (e.getUsuario() != null &&
@@ -79,6 +80,18 @@ public class EmpleadoController {
                                 .getRoles()
                                 .get(0)
                                 .getNombreRol();
+                    }
+    
+                    // Puesto actual
+                    String position = "SIN_PUESTO";
+    
+                    if (e.getEmployeePositions() != null) {
+                        position = e.getEmployeePositions()
+                                .stream()
+                                .filter(ep -> ep.getFechaFin() == null)
+                                .map(ep -> ep.getPuesto().getNombre())
+                                .findFirst()
+                                .orElse("SIN_PUESTO");
                     }
     
                     return new EmployeeRoleDTO(
@@ -95,6 +108,7 @@ public class EmpleadoController {
                             e.getIban(),
                             e.getDepartment(),
                             e.getStartDate(),
+                            position,
                             e.getActive(),
                             role
                     );

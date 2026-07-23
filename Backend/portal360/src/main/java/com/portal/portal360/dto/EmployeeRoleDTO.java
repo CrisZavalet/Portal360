@@ -24,6 +24,7 @@ public class EmployeeRoleDTO {
     private String iban;
     private String department;
     private LocalDate startDate;
+    private String position;
     private Boolean active;
     private String role;
 

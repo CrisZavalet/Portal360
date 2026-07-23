@@ -3,7 +3,7 @@ package com.portal.portal360.model;
 import java.time.LocalDate;
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.util.List;
 @Entity
 @Table(name = "empleado")
 @Data 
@@ -32,7 +32,7 @@ public class Empleado {
 
     @Column(name = "telefono")
     private String phone;
-    
+
     @Column(name = "direccion")
 private String address;
 
@@ -58,5 +58,6 @@ private LocalDate startDate;
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
     private Usuario usuario;
 
-    
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+private List<EmpleadoPuesto> employeePositions;
 }
