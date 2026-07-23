@@ -15,6 +15,10 @@ public class Usuario {
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "username", unique = true)
+private String username;
+
     @Column(name = "password_hash")
     private String password;
     @Column(name = "activo")

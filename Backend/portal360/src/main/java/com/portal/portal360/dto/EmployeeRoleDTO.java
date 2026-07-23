@@ -15,9 +15,15 @@ public class EmployeeRoleDTO {
     private String dni;
     private String name;
     private String lastName;
+    private String username;
     private String email;
     private LocalDate dateOfBirth;
     private String phone;
+    private String address;
+    private String location;
+    private String iban;
+    private String department;
+    private LocalDate startDate;
     private Boolean active;
     private String role;
 

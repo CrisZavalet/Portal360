@@ -32,6 +32,21 @@ public class Empleado {
 
     @Column(name = "telefono")
     private String phone;
+    
+    @Column(name = "direccion")
+private String address;
+
+@Column(name = "ubicacion")
+private String location;
+
+@Column(name = "iban")
+private String iban;
+
+@Column(name = "departamento")
+private String department;
+
+@Column(name = "fecha_inicio")
+private LocalDate startDate;
 
     @Column(name = "activo")
     private Boolean active = true;
@@ -42,4 +57,6 @@ public class Empleado {
     @ManyToOne
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
     private Usuario usuario;
+
+    
 }

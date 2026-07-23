@@ -62,39 +62,45 @@ public class EmpleadoController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-@GetMapping("/roles")
-public List<EmployeeRoleDTO> getEmployeesWithRoles() {
-
-    return empleadoRepository.findAll()
-            .stream()
-            .map(e -> {
-
-                String role = "SIN_ROL";
-
-                if (e.getUsuario() != null
-                        && e.getUsuario().getRoles() != null
-                        && !e.getUsuario().getRoles().isEmpty()) {
-
-                    role = e.getUsuario()
-                            .getRoles()
-                            .get(0)
-                            .getNombreRol();
-                }
-
-                return new EmployeeRoleDTO(
-                        e.getIdEmployee(),
-                        e.getDni(),
-                        e.getName(),
-                        e.getLastName(),
-                        e.getUsuario() != null ? e.getUsuario().getEmail() : null,
-                        e.getDateOfBirth(),
-                        e.getPhone(),
-                        e.getActive(),
-                        role
-                );
-
-            })
-            .toList();
-}
+    @GetMapping("/roles")
+    public List<EmployeeRoleDTO> getEmployeesWithRoles() {
+    
+        return empleadoRepository.findAll()
+                .stream()
+                .map(e -> {
+    
+                    String role = "SIN_ROL";
+    
+                    if (e.getUsuario() != null &&
+                            e.getUsuario().getRoles() != null &&
+                            !e.getUsuario().getRoles().isEmpty()) {
+    
+                        role = e.getUsuario()
+                                .getRoles()
+                                .get(0)
+                                .getNombreRol();
+                    }
+    
+                    return new EmployeeRoleDTO(
+                            e.getIdEmployee(),
+                            e.getDni(),
+                            e.getName(),
+                            e.getLastName(),
+                            e.getUsuario() != null ? e.getUsuario().getUsername() : null,
+                            e.getUsuario() != null ? e.getUsuario().getEmail() : null,
+                            e.getDateOfBirth(),
+                            e.getPhone(),
+                            e.getAddress(),
+                            e.getLocation(),
+                            e.getIban(),
+                            e.getDepartment(),
+                            e.getStartDate(),
+                            e.getActive(),
+                            role
+                    );
+    
+                })
+                .toList();
+    }
     
 }
