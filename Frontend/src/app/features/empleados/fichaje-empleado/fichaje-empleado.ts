@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
+import { HistorialFichajeEmpleado } from '../../../core/interfaces/historialFichajeEmpleado.interface';
 
 @Component({
   selector: 'app-fichaje-empleado',
@@ -13,45 +15,15 @@ export class FichajeEmpleado {
 id: any;
 empleadoselectado: any;
 jornada = 8;
- empleado = [
-  {
-    id: 1,
-    nombre: 'Florencia Macarena',
-    apellido: 'Sandoval Perez',
-     direccion: 'Calle Falsa 123',
-     nacimiento: '1994-10-15',
-     ubicacion: 'Madrid',
-     iban: 'ES7620770024003102575766',
-     departamento: 'IT',
-     puesto: 'Diseñadora UX/UI',
-     fechaInicio: '2024-02-03',
-    cargo: 'Desarrolladora',
-    email: 'florenciasandoval@quazzartech.com',
-    telefono: '555-1234',
-    estado: 'Activo',
-    usuario: 'fsanp',
-  },
+//  empleado :any;
+totalHoras: any;
+tipo: any;
+fichajes :HistorialFichajeEmpleado[] = [];
+fichajesFiltrados: HistorialFichajeEmpleado[] = [];
+  mesSeleccionado = signal(new Date().getMonth());
+anioSeleccionado = signal(new Date().getFullYear());
 
-{
-   id: 2,
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    cargo: 'Diseñador',
-    email: 'juan.perez@empresa.com',
-    telefono: '555-5678',
-    estado: 'Inactivo'
-
-  },
-
- ]
-
-fichajes = [
- { id: 1, fecha: new Date(2026, 1, 10), entrada: '08:00', salida: '16:00', totalHoras: 8, estado: 'pendiente', tipo: 'Presencial' },
-  { id: 2, fecha: new Date(2026, 1, 15), entrada: '09:00', salida: '17:30', totalHoras: 8.5, estado: 'pendiente', tipo: 'Presencial' },
-  { id: 3, fecha: new Date(2026, 0, 20), entrada: '08:15', salida: '16:15', totalHoras: 8, estado: 'pendiente', tipo: 'Presencial' }
-];
-
-constructor( private route: ActivatedRoute, private router: Router) {}
+constructor( private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
 ngOnInit() {
   
     this.id = this.route.snapshot.params['id'];
@@ -59,18 +31,44 @@ ngOnInit() {
   if (this.id) {
 
     this.datosEmpleado(this.id);
-
+    this.fichajeEmpleado(this.id);
   }
  }
 
 datosEmpleado (id: any) {
-  this.empleadoselectado = this.empleado.find((e) => e.id == id);
-  console.log(this.empleadoselectado);
+
+  this.authService.getEmployeeById(id).subscribe({
+    next: (data) => {
+      this.empleadoselectado = data;
+      
+      console.log('Datos del empleado:', this.empleadoselectado);
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+ 
 }
 
+fichajeEmpleado (id:any){
+  this.authService.getHistorialEmpleado(id).subscribe({
+    next: (data) => {
+      this.fichajes = data;
+                this.filtrarPorMes();
 
-horasTrabajadas(entrada: string, salida: string): number {
-  if (!entrada || !salida) return 0;
+      console.log('Historial del empleado:', this.fichajes);
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+
+
+}
+
+horasTrabajadas(entrada: string, salida: string): string {
+
+  if (!entrada || !salida) return '0 h 0 min';
 
   const [h1, m1] = entrada.split(':').map(Number);
   const [h2, m2] = salida.split(':').map(Number);
@@ -78,16 +76,25 @@ horasTrabajadas(entrada: string, salida: string): number {
   const inicio = h1 * 60 + m1;
   const fin = h2 * 60 + m2;
 
-  return (fin - inicio) / 60;
+  const diferencia = fin - inicio;
+
+  const horas = Math.floor(diferencia / 60);
+  const minutos = diferencia % 60;
+
+  return `${horas} h ${minutos} min`;
 }
 
 
-getEstadoFichaje(f: any): 'ok' | 'extra' | 'retraso' {
-  const horas = this.horasTrabajadas(f.entrada, f.salida);
+// getEstadoFichaje(f: any): 'ok' | 'extra' | 'retraso' {
+//   const horas = this.horasTrabajadas(f.entrada, f.salida);
 
-  if (horas > this.jornada) return 'extra';
-  if (horas < this.jornada) return 'retraso';
-  return 'ok';
+//   if (horas > this.jornada) return 'extra';
+//   if (horas < this.jornada) return 'retraso';
+//   return 'ok';
+// }
+
+  formatHour(hour: string): string {
+  return hour?.slice(0, 5) ?? '';
 }
 
 
@@ -103,10 +110,6 @@ rechazarFichaje(f: any) {
 }
 
 
-formatearFecha(fecha: Date): string {
-  return new Date(fecha).toLocaleDateString('es-ES');
-}
-
 
 volver() {
   this.router.navigate(['/employees']);
@@ -116,31 +119,72 @@ cambiarEstado(fichaje: any, estado: string) {
   fichaje.estado = estado;
 
   switch (estado) {
-    case 'aprobado':
+    case 'APROBADO':
       this.aprobarFichaje(fichaje);
       break;
 
-    case 'rechazado':
+    case 'RECHAZADO':
       this.rechazarFichaje(fichaje);
       break;
 
-    case 'pendiente':
+    case 'PENDIENTE':
       break;
   }
 }
 
-aprobarTodos() {
-  this.fichajes.forEach(fichaje => {
-    if (fichaje.estado === 'pendiente') {
-      fichaje.estado = 'aprobado';
-    }
+// aprobarTodos() {
+//   this.fichajes.forEach(fichaje => {
+//     if (fichaje.estado === 'pendiente') {
+//       fichaje.estado = 'aprobado';
+//     }
+//   });
+// }
+
+// tienePendientes(): boolean {
+//   return this.fichajes.some(
+//     fichaje => fichaje.estado === 'pendiente'
+//   );
+// }
+
+filtrarPorMes() {
+  this.fichajesFiltrados = this.fichajes.filter(f => {
+    const fecha = new Date(f.date);
+
+    return (
+      fecha.getMonth() === this.mesSeleccionado() &&
+      fecha.getFullYear() === this.anioSeleccionado()
+    );
   });
 }
 
-tienePendientes(): boolean {
-  return this.fichajes.some(
-    fichaje => fichaje.estado === 'pendiente'
-  );
+formatearFecha(fecha: string): string {
+  const [anio, mes, dia] = fecha.split('-').map(Number);
+
+  return new Date(anio, mes - 1, dia).toLocaleDateString('es-ES');
 }
+
+
+mesAnterior() {
+  if (this.mesSeleccionado() === 0) {
+    this.mesSeleccionado.set(11);
+    this.anioSeleccionado.update(a => a - 1);
+  } else {
+    this.mesSeleccionado.update(m => m - 1);
+  }
+
+  this.filtrarPorMes();
+}
+
+mesSiguiente() {
+  if (this.mesSeleccionado() === 11) {
+    this.mesSeleccionado.set(0);
+    this.anioSeleccionado.update(a => a + 1);
+  } else {
+    this.mesSeleccionado.update(m => m + 1);
+  }
+
+  this.filtrarPorMes();
+}
+
 
 }

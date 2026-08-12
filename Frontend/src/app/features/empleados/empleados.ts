@@ -30,27 +30,6 @@ openDropdownId:  'editar' | 'fichajes' | 'nomina' | 'documentos' | 'mensaje'| nu
 empleadoSeleccionado: any = null;
 empleados:any
 
-fichajes = [
-  {
-    dia: 'Hoy',
-    entrada: '08:00',
-    salida: '17:30',
-    estado: 'pendiente'
-  },
-   {
-    dia: 'Ayer',
-    entrada: '08:15',
-    salida: '16:45',
-    estado: 'aprobado'
-  },
-    {
-    dia: '20/01/2026',
-    entrada: '09:00',
-    salida: '18:00',
-    estado: 'rechazado'
-  }
-];
-
 
 
 ngOnInit() {
@@ -68,7 +47,7 @@ this.form = this.fb.group({
   departamento: [''],
   puesto: [''],
   fechaInicio: [''],
-  estado: ['Activo'],
+  estado: ['', Validators.required],
 
   usuario: [''],
   password: ['', Validators.required],
@@ -91,7 +70,7 @@ CargarEmpleados() {
 }
 
 empleadosFiltrados() {
-  return this.empleados.filter((emp: EmpleadoData) =>
+  return this.empleados.filter((emp: any) =>
     emp.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
     emp.position.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
     emp.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -134,8 +113,8 @@ prevStep() {
 }
 
 generarUsuario() {
-  const nombre = this.form.value.nombre || '';
-  const apellido = this.form.value.apellido || '';
+  const nombre = this.form.value.name || '';
+  const apellido = this.form.value.lastName || '';
 const apellidos = apellido.split(' ');
 const user = (nombre.charAt(0) + apellidos[0] + (apellidos[1]?.charAt(0) || '')).toLowerCase();
 
@@ -170,6 +149,7 @@ toggleDropdown(id: number, event: Event) {
 abrirModal(tipo: any, emp: any) {
   this.openDropdownId = tipo;
   this.empleadoSeleccionado = emp;
+  console.log('Empleado seleccionado:', this.empleadoSeleccionado);
 }
 
 cerrarModal() {
@@ -203,7 +183,7 @@ rechazarFichaje(f: any) {
 
 
 fichajeEmpleado (id:any){
-   this.router.navigate(['../clock-in', id], {
+   this.router.navigate(['../management-clock-in', id], {
     relativeTo: this.route
   });
 }

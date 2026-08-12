@@ -67,12 +67,12 @@
             @if (role === 'Administracion' || role === 'RRHH') {
               <td class="relative p-2 text-slate-600 dark:text-slate-300">
                 <button
-                  (click)="toggleDropdown(emp.id, $event)"
+                  (click)="toggleDropdown(emp.idEmployee, $event)"
                   class="flex justify-center p-2 bg-indigo-100 backdrop-blur-xl border border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-200/10 transition transition-all duration-300 dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white"
                 >
                   <img class="w-5 h-5" src="./assets/icons/three-dots.svg" alt="" />
                 </button>
-                @if (openId === emp.id) {
+                @if (openId === emp.idEmployee) {
                   <div
                     class="absolute right-0 w-52 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg py-1"
                   >
@@ -84,21 +84,21 @@
                     </button>
 
                     <button
-                      (click)="fichajeEmpleado(emp.id)"
+                      (click)="fichajeEmpleado(emp.idEmployee)"
                       class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
                     >
                       🕒 Ver fichajes
                     </button>
 
                     <button
-                      (click)="subirNomina(emp.id)"
+                      (click)="subirNomina(emp.idEmployee)"
                       class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
                     >
                       📄 Subir nómina
                     </button>
 
                     <button
-                      (click)="subirDocumentos(emp.id)"
+                      (click)="subirDocumentos(emp.idEmployee)"
                       class="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
                     >
                       📁 Subir documentos
@@ -486,9 +486,9 @@
                 <input
                   class="input input-bordered"
                   formControlName="nombre"
-                  [(ngModel)]="empleadoSeleccionado.nombre"
+                  [(ngModel)]="empleadoSeleccionado.name"
                 />
-                @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
+                @if (form.get('name')?.touched && form.get('name')?.invalid) {
                   <p class="text-red-500 text-xs mt-1">El nombre es obligatorio</p>
                 }
               </fieldset>
@@ -500,9 +500,9 @@
                 <input
                   class="input input-bordered"
                   formControlName="apellido"
-                  [(ngModel)]="empleadoSeleccionado.apellido"
+                  [(ngModel)]="empleadoSeleccionado.lastName"
                 />
-                @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
+                @if (form.get('lastName')?.touched && form.get('lastName')?.invalid) {
                   <p class="text-red-500 text-xs mt-1">El apellido es obligatorio</p>
                 }
               </fieldset>
@@ -512,7 +512,7 @@
                 <input
                   class="input input-bordered w-full"
                   formControlName="direccion"
-                  [(ngModel)]="empleadoSeleccionado.direccion"
+                  [(ngModel)]="empleadoSeleccionado.address"
                 />
               </fieldset>
 
@@ -542,7 +542,7 @@
                 <input
                   class="input input-bordered"
                   formControlName="telefono"
-                  [(ngModel)]="empleadoSeleccionado.telefono"
+                  [(ngModel)]="empleadoSeleccionado.phone"
                 />
               </fieldset>
 
@@ -552,7 +552,7 @@
                   type="date"
                   class="input input-bordered"
                   formControlName="nacimiento"
-                  [(ngModel)]="empleadoSeleccionado.nacimiento"
+                  [(ngModel)]="empleadoSeleccionado.dateOfBirth"
                 />
               </fieldset>
 
@@ -561,7 +561,7 @@
                 <input
                   class="input input-bordered"
                   formControlName="ubicacion"
-                  [(ngModel)]="empleadoSeleccionado.ubicacion"
+                  [(ngModel)]="empleadoSeleccionado.location"
                 />
               </fieldset>
 
@@ -585,7 +585,7 @@
                 <input
                   class="input input-bordered"
                   formControlName="departamento"
-                  [(ngModel)]="empleadoSeleccionado.departamento"
+                  [(ngModel)]="empleadoSeleccionado.department"
                 />
               </fieldset>
 
@@ -594,7 +594,7 @@
                 <input
                   class="input input-bordered"
                   formControlName="puesto"
-                  [(ngModel)]="empleadoSeleccionado.puesto"
+                  [(ngModel)]="empleadoSeleccionado.position"
                 />
               </fieldset>
 
@@ -604,7 +604,7 @@
                   type="date"
                   class="input input-bordered"
                   formControlName="fechaInicio"
-                  [(ngModel)]="empleadoSeleccionado.fechaInicio"
+                  [(ngModel)]="empleadoSeleccionado.startDate"
                 />
               </fieldset>
 
@@ -613,10 +613,10 @@
                 <select
                   class="select select-bordered"
                   formControlName="estado"
-                  [(ngModel)]="empleadoSeleccionado.estado"
+                  [(ngModel)]="empleadoSeleccionado.active"
                 >
-                  <option>Activo</option>
-                  <option>Inactivo</option>
+                  <option [ngValue]="true">Activo</option>
+                  <option [ngValue]="false">Inactivo</option>
                 </select>
               </fieldset>
             </div>
@@ -624,10 +624,10 @@
 
           @if (step === 3) {
             <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
-              <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
+              <p><b>Nombre:</b> {{ form.value.name }} {{ form.value.apellido }}</p>
               <p><b>Email:</b> {{ form.value.email }}</p>
-              <p><b>Departamento:</b> {{ form.value.departamento }}</p>
-              <p><b>Puesto:</b> {{ form.value.puesto }}</p>
+              <p><b>Departamento:</b> {{ form.value.department }}</p>
+              <p><b>Puesto:</b> {{ form.value.position }}</p>
             </div>
           }
 

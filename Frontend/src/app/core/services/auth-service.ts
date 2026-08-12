@@ -5,6 +5,7 @@ import { identity, Observable } from 'rxjs';
 import { tap } from 'rxjs';
 import { Empleado } from '../interfaces/empleado.interface';
 import { EmpleadoData } from '../interfaces/empleadoData.interface';
+import { HistorialFichajeEmpleado } from '../interfaces/historialFichajeEmpleado.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,10 @@ export class AuthService {
   private apiUrlFichaje = 'http://localhost:8080/api/kiosk/onlyfichaje';
   private apiUrlEmpleados = 'http://localhost:8080/api/employees'; 
   private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
-private http=inject(HttpClient);
+  private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
 
+private http=inject(HttpClient);
  
-  
 login(email: string, password: string): Observable<LoginTablet> {
 
     const body = {
@@ -71,6 +72,13 @@ login(email: string, password: string): Observable<LoginTablet> {
   getEmployeeRoles(): Observable<EmpleadoData[]> {
     return this.http.get<EmpleadoData[]>(this.apiUrlEmpleadoRoles);
   }
+
+ getHistorialEmpleado(idEmployee: any): Observable<HistorialFichajeEmpleado[]> {
+    return this.http.get<HistorialFichajeEmpleado[]>(
+      `${this.apiUrlEmpleadoFichajeHistorial}/employee/${idEmployee}/history`
+    );
+  }
+  
 
   getUser() {
     console.log('Obteniendo usuario desde localStorage:', localStorage.getItem('user'));
