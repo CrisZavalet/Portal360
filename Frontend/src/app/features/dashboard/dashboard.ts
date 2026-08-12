@@ -6,6 +6,7 @@ import { Time } from "../../shared/time/time";
 import { Calendar } from "../../shared/calendar/calendar";
 import confetti from 'canvas-confetti';
 import { AuthService } from '../../core/services/auth-service';
+import { EmpleadoData } from '../../core/interfaces/empleadoData.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,39 +32,8 @@ export class Dashboard {
   user: any;
   idEmployee: any;
   @ViewChildren('birthdayCard') birthdayCards!: QueryList<ElementRef>;
+  empleados:any;
 
-
-  allBirthdays = [
-  {
-    name: 'Laura Gómez',
-    position: 'Recursos Humanos',
-    day: 19,
-    month: 2,
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
-  },
-  {
-    name: 'Carlos Martínez',
-    position: 'Desarrollador',
-    day: 23,
-    month: 2,
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
-  },
-  {
-    name: 'Ana López',
-    position: 'Marketing',
-    day: 27,
-    month: 2,
-    avatar: 'https://randomuser.me/api/portraits/women/68.jpg'
-  },
-  {
-    name: 'Florencia Macarena Sandoval Pérez',
-    position: 'Diseñadora UX/UI',
-    day: 15,
-    month: 10,
-    avatar: '../../../assets/profile.png'
-  },
-  
-];
 
 birthdays: any[] = [];
 
@@ -86,6 +56,19 @@ birthdays: any[] = [];
     }
 
     this.currentYear = new Date().getFullYear();
+
+    this.authService.getEmployeeRoles().subscribe({
+  next: (data: EmpleadoData[]) => {
+    console.log('Empleados para cumpleaños:', data);
+
+    this.empleados = data;
+
+    this.calculateUpcomingBirthdays();
+  },
+  error: (error) => {
+    console.error('Error al obtener los empleados:', error);
+  }
+});
 
     this.holidayService.getHolidays(this.currentYear).subscribe((data: any) => {
       this.date_today = new Date();
@@ -124,7 +107,6 @@ birthdays: any[] = [];
     });
 
    
-this.calculateUpcomingBirthdays();
 
 setInterval(() => {
   this.calculateUpcomingBirthdays();
@@ -132,50 +114,92 @@ setInterval(() => {
 
   }
 
-   calculateUpcomingBirthdays() {
+  calculateUpcomingBirthdays() {
+
   const today = new Date();
 
-  // Eliminamos hora (clave para que no falle)
   const todayClean = new Date(
     today.getFullYear(),
     today.getMonth(),
     today.getDate()
   );
 
-  this.birthdays = this.allBirthdays
-    .map(person => {
+  this.birthdays = this.empleados
+
+    // Solo empleados activos y con fecha de nacimiento
+    .filter((employee:any) =>
+      employee.active &&
+      employee.dateOfBirth
+    )
+
+    .map((employee:any) => {
+
+      const birthDate = new Date(employee.dateOfBirth);
+
+      const day = birthDate.getDate();
+      const month = birthDate.getMonth();
 
       let nextBirthday = new Date(
         todayClean.getFullYear(),
-        person.month - 1,
-        person.day
+        month,
+        day
       );
 
+      // Si ya pasó este año, buscamos el del año siguiente
       if (nextBirthday < todayClean) {
+
         nextBirthday = new Date(
           todayClean.getFullYear() + 1,
-          person.month - 1,
-          person.day
+          month,
+          day
         );
+
       }
 
-      const diffTime = nextBirthday.getTime() - todayClean.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const diffTime =
+        nextBirthday.getTime() - todayClean.getTime();
+
+      const diffDays = Math.floor(
+        diffTime / (1000 * 60 * 60 * 24)
+      );
 
       return {
-        ...person,
-        daysLeft: diffDays,
+
+        // Datos de la API
+        idEmployee: employee.idEmployee,
+        name: `${employee.name} ${employee.lastName}`,
+        position: employee.position,
+
+        // Datos calculados
+        day: day,
         monthName: nextBirthday.toLocaleDateString('es-ES', {
           month: 'long'
-        })
-      };
-    })
-    .filter(person => person.daysLeft >= 0) 
-    .sort((a, b) => a.daysLeft - b.daysLeft) 
-    .slice(0, 5); 
+        }),
 
-      this.todayBirthdays = this.birthdays.filter(b => b.daysLeft === 0);
-  this.upcomingBirthdays = this.birthdays.filter(b => b.daysLeft > 0);
+        daysLeft: diffDays,
+
+        // Por ahora mantenemos tu imagen
+        avatar: '../../../assets/profile.png'
+
+      };
+
+    })
+
+    .filter((person:any) => person.daysLeft >= 0)
+
+    .sort((a:any, b:any) => a.daysLeft - b.daysLeft)
+
+    .slice(0, 5);
+
+
+  this.todayBirthdays =
+    this.birthdays.filter((b:any) => b.daysLeft === 0);
+
+
+  this.upcomingBirthdays =
+    this.birthdays.filter((b:any) => b.daysLeft > 0);
+
+
 }
 ngAfterViewInit() {
   if (this.birthdays.length > 0) {
