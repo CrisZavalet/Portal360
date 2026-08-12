@@ -1,9 +1,11 @@
 package com.portal.portal360.controller;
 
+import com.portal.portal360.dto.EmployeeAllDTO;
 import com.portal.portal360.dto.EmployeeDTO;
 import com.portal.portal360.model.Empleado;
 import com.portal.portal360.repository.EmpleadoRepository;
 import com.portal.portal360.dto.EmployeeRoleDTO;
+import com.portal.portal360.dto.EmployeeAllDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +22,26 @@ public class EmpleadoController {
 
     // Este es el GET que devuelve la lista de todos los empleados
     @GetMapping("/all")
-    public List<Empleado> getAllEmployees() {
-        return empleadoRepository.findAll();
-    }
+public List<EmployeeAllDTO> getAllEmployees() {
+
+    return empleadoRepository.findAll()
+            .stream()
+            .map(e -> new EmployeeAllDTO(
+                    e.getIdEmployee(),
+                    e.getDni(),
+                    e.getName(),
+                    e.getLastName(),
+                    e.getDateOfBirth(),
+                    e.getPhone(),
+                    e.getAddress(),
+                    e.getLocation(),
+                    e.getIban(),
+                    e.getDepartment(),
+                    e.getStartDate(),
+                    e.getActive()
+            ))
+            .toList();
+}
 
     @PostMapping
     public ResponseEntity<Empleado> createEmployee(@RequestBody Empleado empleado) {
