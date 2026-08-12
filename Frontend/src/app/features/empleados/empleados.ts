@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { AuthService } from '../../core/services/auth-service';
 import { Fichaje } from "../fichaje/fichaje";
 import { ActivatedRoute, Router } from '@angular/router';
+import { EmpleadoData } from '../../core/interfaces/empleadoData.interface';
 
 @Component({
   selector: 'app-empleados',
@@ -27,34 +28,7 @@ openId: number | null = null;
 estadoFichaje: 'pendiente' | 'aprobado' | 'rechazado'| null = null;
 openDropdownId:  'editar' | 'fichajes' | 'nomina' | 'documentos' | 'mensaje'| null = null;
 empleadoSeleccionado: any = null;
-empleados = [
-  {
-    id: 1,
-    nombre: 'Florencia Macarena',
-    apellido: 'Sandoval Perez',
-     direccion: 'Calle Falsa 123',
-     nacimiento: '1994-10-15',
-     ubicacion: 'Madrid',
-     iban: 'ES7620770024003102575766',
-     departamento: 'IT',
-     puesto: 'Diseñadora UX/UI',
-     fechaInicio: '2024-02-03',
-    cargo: 'Desarrolladora',
-    email: 'florencia.sandoval@empresa.com',
-    telefono: '555-1234',
-    estado: 'Activo',
-    usuario: 'fsanp',
-  },
-  {
-    id: 2,
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    cargo: 'Diseñador',
-    email: 'juan.perez@empresa.com',
-    telefono: '555-5678',
-    estado: 'Inactivo'
-  }
-];
+empleados:any
 
 fichajes = [
   {
@@ -100,20 +74,34 @@ this.form = this.fb.group({
   password: ['', Validators.required],
   confirmPassword: ['', Validators.required],
 });
+
+this.CargarEmpleados();
+}
+
+CargarEmpleados() {
+  this.auth.getEmployeeRoles().subscribe({
+    next: (data) => {
+      this.empleados = data;
+      console.log('Empleados cargados:', this.empleados);
+    },
+    error: (err) => {
+      console.error('Error al cargar empleados:', err);
+    }
+  });
 }
 
 empleadosFiltrados() {
-  return this.empleados.filter(emp =>
-    emp.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-    emp.cargo.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+  return this.empleados.filter((emp: EmpleadoData) =>
+    emp.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+    emp.position.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
     emp.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-    emp.telefono.includes(this.searchTerm)
+    emp.phone.includes(this.searchTerm)
   );
 }
 
 
-getEstadoClase(estado: string): string {
-  return estado === 'Activo'
+getEstadoClase(estado: boolean): string {
+  return estado === true
     ? 'bg-green-100 text-green-700'
     : 'bg-red-100 text-red-700';
 }

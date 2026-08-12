@@ -55,13 +55,13 @@
       <tbody>
         @for (emp of empleadosFiltrados(); track emp) {
           <tr class="bg-white border-t border-white/40 hover:bg-white/40 transition">
-            <td class="p-4">{{ emp.nombre }} {{ emp.apellido }}</td>
-            <td class="p-4">{{ emp.cargo }}</td>
+            <td class="p-4">{{ emp.name }} {{ emp.lastName }}</td>
+            <td class="p-4">{{ emp.position }}</td>
             <td class="p-4">{{ emp.email }}</td>
-            <td class="p-4">{{ emp.telefono }}</td>
+            <td class="p-4">{{ emp.phone }}</td>
             <td class="p-4">
-              <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.estado)">
-                {{ emp.estado }}
+              <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.active)">
+                {{ emp.active ? true : false   }}
               </span>
             </td>
             @if (role === 'Administracion' || role === 'RRHH') {
@@ -181,12 +181,12 @@
 
           <div class="flex justify-between">
             <span class="font-medium">Nombre</span>
-            <span>{{ emp.nombre }} {{ emp.apellido }}</span>
+            <span>{{ emp.name }} {{ emp.lastName }}</span>
           </div>
 
           <div class="flex justify-between">
             <span class="font-medium">Cargo</span>
-            <span>{{ emp.cargo }}</span>
+            <span>{{ emp.position }}</span>
           </div>
 
           <div class="flex justify-between">
@@ -196,13 +196,13 @@
 
           <div class="flex justify-between">
             <span class="font-medium">Teléfono</span>
-            <span>{{ emp.telefono }}</span>
+            <span>{{ emp.phone }}</span>
           </div>
 
           <div class="flex justify-between">
             <span class="font-medium">Estado</span>
-            <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.estado)">
-              {{ emp.estado }}
+            <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.active)">
+              {{ emp.active ? true : false }}
             </span>
           </div>
         </div>

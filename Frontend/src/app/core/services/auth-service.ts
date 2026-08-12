@@ -4,6 +4,7 @@ import { LoginTablet } from '../interfaces/loginTablet.interface';
 import { identity, Observable } from 'rxjs';
 import { tap } from 'rxjs';
 import { Empleado } from '../interfaces/empleado.interface';
+import { EmpleadoData } from '../interfaces/empleadoData.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ export class AuthService {
   private apiUrl = 'http://localhost:8080/api/kiosk/onlylogin';
   private apiUrlFichaje = 'http://localhost:8080/api/kiosk/onlyfichaje';
   private apiUrlEmpleados = 'http://localhost:8080/api/employees'; 
+  private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
 private http=inject(HttpClient);
 
  
@@ -66,6 +68,9 @@ login(email: string, password: string): Observable<LoginTablet> {
     return this.http.get<Empleado>(`${this.apiUrlEmpleados}/${idEmployee}`);
   }
 
+  getEmployeeRoles(): Observable<EmpleadoData[]> {
+    return this.http.get<EmpleadoData[]>(this.apiUrlEmpleadoRoles);
+  }
 
   getUser() {
     console.log('Obteniendo usuario desde localStorage:', localStorage.getItem('user'));
