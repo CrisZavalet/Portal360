@@ -17,7 +17,6 @@ export class AuthService {
   private apiUrlEmpleados = 'http://localhost:8080/api/employees'; 
   private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
   private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
-
 private http=inject(HttpClient);
  
 login(email: string, password: string): Observable<LoginTablet> {
@@ -106,6 +105,12 @@ login(email: string, password: string): Observable<LoginTablet> {
     const userRole = this.getRole();
     return roles.includes(userRole || '');
   }
+
+  updateAprobadoStatus(idClocking: string, aprobado: string): Observable<any> {
+    const body = { aprobado };
+    return this.http.put(`${this.apiUrlEmpleadoFichajeHistorial}/${idClocking}/approval`, body);
+  }
+
 }
 
 

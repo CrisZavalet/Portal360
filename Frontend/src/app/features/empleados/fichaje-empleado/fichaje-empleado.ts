@@ -51,8 +51,8 @@ datosEmpleado (id: any) {
       console.log('Datos del empleado:', this.empleadoselectado);
     },
     error: (err) => {
-      console.error(err);
-    }
+console.error('STATUS:', err.status);
+  console.error('ERROR BACKEND:', err.error);    }
   });
  
 }
@@ -91,13 +91,6 @@ horasTrabajadas(entrada: string, salida: string): string {
 }
 
 
-// getEstadoFichaje(f: any): 'ok' | 'extra' | 'retraso' {
-//   const horas = this.horasTrabajadas(f.entrada, f.salida);
-
-//   if (horas > this.jornada) return 'extra';
-//   if (horas < this.jornada) return 'retraso';
-//   return 'ok';
-// }
 
   formatHour(hour: string): string {
   return hour?.slice(0, 5) ?? '';
@@ -121,36 +114,49 @@ volver() {
   this.router.navigate(['/employees']);
 }
 
-cambiarEstado(fichaje: any, estado: string) {
-  fichaje.estado = estado;
 
-  switch (estado) {
-    case 'APROBADO':
-      this.aprobarFichaje(fichaje);
-      break;
 
-    case 'RECHAZADO':
-      this.rechazarFichaje(fichaje);
-      break;
+cambiarEstado(
+  fichaje: HistorialFichajeEmpleado,
+  nuevoEstado: string
+): void {
 
-    case 'PENDIENTE':
-      break;
-  }
+   const estado = nuevoEstado === 'NULL'
+    ? null
+    : nuevoEstado;
+
+
+  console.log('ID fichaje:', fichaje.idClocking);
+  console.log('Nuevo estado:', estado);
+
+  this.authService
+    .updateAprobadoStatus(fichaje.idClocking, estado as string)
+    .subscribe({
+      next: (respuesta) => {
+
+        console.log('Estado actualizado:', respuesta);
+
+        // Actualizamos el objeto local
+        fichaje.aprobado = estado;
+      },
+
+      error: (error) => {
+        console.error('Error al actualizar el estado:', error);
+      }
+    });
 }
 
-// aprobarTodos() {
-//   this.fichajes.forEach(fichaje => {
-//     if (fichaje.estado === 'pendiente') {
-//       fichaje.estado = 'aprobado';
-//     }
-//   });
-// }
+mostrarEstadoAprobacion(aprobado: string | null): string {
+  if (aprobado === 'APROBADO') {
+    return 'Aprobado';
+  }
 
-// tienePendientes(): boolean {
-//   return this.fichajes.some(
-//     fichaje => fichaje.estado === 'pendiente'
-//   );
-// }
+  if (aprobado === 'NO_APROBADO') {
+    return 'No aprobado';
+  }
+
+  return 'Pendiente';
+}
 
 filtrarPorMes() {
   this.fichajesFiltrados = this.fichajes.filter(f => {
@@ -258,7 +264,8 @@ exportarPDF(datos: HistorialFichajeEmpleado[]) {
       'Entrada',
       'Salida',
       'Tiempo',
-      'Estado'
+      'Estado',
+      'Aprobado'
     ]],
 
     body: datos.map(f => [
@@ -269,9 +276,11 @@ exportarPDF(datos: HistorialFichajeEmpleado[]) {
 
       this.formatHour(f.endHour),
 
-      this.calcularTiempo(f.startHour, f.endHour),
+      this.horasTrabajadas(f.startHour, f.endHour),
 
-      f.status
+      f.status,
+
+      this.getEstadoTexto(f.aprobado)
 
     ])
 
@@ -293,9 +302,11 @@ exportarExcel(datos: HistorialFichajeEmpleado[]) {
 
       Salida: this.formatHour(f.endHour),
 
-      Tiempo: this.calcularTiempo(f.startHour, f.endHour),
+      Tiempo: this.horasTrabajadas(f.startHour, f.endHour),
 
-      Estado: f.status
+      Estado: f.status,
+
+      Aprobado: this.getEstadoTexto(f.aprobado)
 
     }))
 
@@ -321,9 +332,11 @@ exportarCSV(datos: HistorialFichajeEmpleado[]) {
 
       Salida: this.formatHour(f.endHour),
 
-      Tiempo: this.calcularTiempo(f.startHour, f.endHour),
+      Tiempo: this.horasTrabajadas(f.startHour, f.endHour),
 
-      Estado: f.status
+      Estado: f.status,
+      
+      Aprobado: this.getEstadoTexto(f.aprobado)
 
     }))
 
@@ -355,4 +368,13 @@ calcularTiempo(startHour: string, endHour: string): string {
   return `${horas}h ${minutos}min`;
 }
 
+getEstadoTexto(aprobado: string | null): string {
+  if (aprobado === 'APROBADO') {
+    return 'Aprobado';
+  } else if (aprobado === 'NO_APROBADO') {
+    return 'No aprobado';
+  } else {
+    return 'Pendiente';
+  }
+}
 }

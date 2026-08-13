@@ -4,4 +4,5 @@ export interface HistorialFichajeEmpleado {
         "startHour": string,
         "endHour": string ,
         "status":  string,
+        "aprobado":string|null,
     }

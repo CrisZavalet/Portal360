@@ -135,20 +135,21 @@ hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-500 tra
 
           <td class="px-4 py-3">
             <div class="flex gap-2">
-              <!-- <select
-  [value]="fichaje.estado"
+            
+        <select
+  [value]="fichaje.aprobado ?? 'NULL'"
   (change)="cambiarEstado(fichaje, $any($event.target).value)"
-  class="rounded-full px-3 py-1 text-xs font-medium border-0 cursor-pointer"
+  class="rounded-full px-3 py-1 text-xs font-medium border-0"
   [ngClass]="{
-    'bg-yellow-100 text-yellow-700': fichaje.estado === 'pendiente',
-    'bg-green-100 text-green-700': fichaje.estado === 'aprobado',
-    'bg-red-100 text-red-700': fichaje.estado === 'rechazado'
+    'bg-yellow-100 text-yellow-700': fichaje.aprobado === null,
+    'bg-green-100 text-green-700': fichaje.aprobado === 'APROBADO',
+    'bg-red-100 text-red-700': fichaje.aprobado === 'NO_APROBADO'
   }"
 >
-  <option value="pendiente">Pendiente</option>
-  <option value="aprobado">Aprobado</option>
-  <option value="rechazado">Rechazado</option>
-</select> -->
+  <option value="NULL">Pendiente</option>
+  <option value="APROBADO">Aprobado</option>
+  <option value="NO_APROBADO">No aprobado</option>
+</select>
             </div>
           </td>
         </tr>
@@ -165,20 +166,20 @@ hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-500 tra
           {{ formatearFecha(fichaje.date) }}
         </span>
 
-        <!-- <select
-          [value]="fichaje.estado"
-          (change)="cambiarEstado(fichaje, $any($event.target).value)"
-          class="rounded-full px-3 py-1 text-xs font-medium border-0"
-          [ngClass]="{
-            'bg-yellow-100 text-yellow-700': fichaje.estado === 'pendiente',
-            'bg-green-100 text-green-700': fichaje.estado === 'aprobado',
-            'bg-red-100 text-red-700': fichaje.estado === 'rechazado'
-          }"
-        >
-          <option value="pendiente">Pendiente</option>
-          <option value="aprobado">Aprobado</option>
-          <option value="rechazado">Rechazado</option>
-        </select> -->
+        <select
+  [value]="fichaje.aprobado ?? 'NULL'"
+  (change)="cambiarEstado(fichaje, $any($event.target).value)"
+  class="rounded-full px-3 py-1 text-xs font-medium border-0"
+  [ngClass]="{
+    'bg-yellow-100 text-yellow-700': fichaje.aprobado === null,
+    'bg-green-100 text-green-700': fichaje.aprobado === 'APROBADO',
+    'bg-red-100 text-red-700': fichaje.aprobado === 'NO_APROBADO'
+  }"
+>
+  <option value="NULL">Pendiente</option>
+  <option value="APROBADO">Aprobado</option>
+  <option value="NO_APROBADO">No aprobado</option>
+</select>
       </div>
 
       <div class="space-y-1 text-sm">

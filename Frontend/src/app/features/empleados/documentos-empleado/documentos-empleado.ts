@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth-service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-documentos-empleado',
-  imports: [],
+  imports: [FormsModule,CommonModule],
   templateUrl: './documentos-empleado.html',
   styleUrl: './documentos-empleado.css',
 })
@@ -14,40 +17,12 @@ mesDocumentacion = '';
 searchTerm = '';
 archivoSeleccionado: File | null = null;
 id:any;
-  empleadoselectado: any;
+  empleadoselecionado: any;
   documentosFiltrados: any[] = [];
 documentos: any[] = [];
-   empleado = [
-  {
-    id: 1,
-    nombre: 'Florencia Macarena',
-    apellido: 'Sandoval Perez',
-     direccion: 'Calle Falsa 123',
-     nacimiento: '1994-10-15',
-     ubicacion: 'Madrid',
-     iban: 'ES7620770024003102575766',
-     departamento: 'IT',
-     puesto: 'Diseñadora UX/UI',
-     fechaInicio: '2024-02-03',
-    cargo: 'Desarrolladora',
-    email: 'florencia.sandoval@example.com',
-    telefono: '555-1234',
-    estado: 'Activo',
-    usuario: 'fsandovalp',
-  },
-{   id: 2,
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    cargo: 'Diseñador',
-    email: 'juan.perez@example.com',
-    telefono: '555-5678',
-    estado: 'Inactivo',
-    usuario: 'jperez'
-  } 
+   empleado :any
 
-]
-
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private route: ActivatedRoute, private router: Router,private authService: AuthService) {}
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     console.log('ID del empleado:', this.id);
@@ -57,8 +32,16 @@ documentos: any[] = [];
   }
 
   datosEmpleado(id: any) {
-      this.empleadoselectado = this.empleado.find((e) => e.id == id);
-  console.log(this.empleadoselectado);
+    this.authService.getEmployeeById(id).subscribe({
+    next: (data) => {
+      this.empleadoselecionado = data;
+      
+      console.log('Datos del empleado:', this.empleadoselecionado);
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
   }
 
    volver() {
@@ -75,4 +58,12 @@ filtrarNominas() {
   );
 }
 
+
+subirNomina(): void {
+  this.modalVisible = true;
+}
+
+cerrarNomina(): void {
+  this.modalVisible = false;      
+}
 }
