@@ -148,37 +148,37 @@ public List<ClockingHistoryDTO> getClockingHistory(@PathVariable Integer idEmplo
     }
 
 
-  @PutMapping("/{idFichaje}/approval")
-public ResponseEntity<?> updateApproval(
-        @PathVariable Integer idFichaje,
-        @RequestBody ClockingApprovalDTO request) {
-
-    // Comprobar que el valor sea válido
-    if (request.getAprobado() == null ||
-            (!request.getAprobado().equals("APROBADO")
-            && !request.getAprobado().equals("NO_APROBADO"))) {
-
-        return ResponseEntity.badRequest().body(
-                "El campo aprobado debe ser APROBADO o NO_APROBADO"
-        );
+    @PutMapping("/{idFichaje}/approval")
+    public ResponseEntity<?> updateApproval(
+            @PathVariable Integer idFichaje,
+            @RequestBody ClockingApprovalDTO request) {
+    
+        // Validar que, si viene informado, sea un estado válido
+        if (request.getAprobado() != null &&
+                !request.getAprobado().equals("APROBADO") &&
+                !request.getAprobado().equals("NO_APROBADO")) {
+    
+            return ResponseEntity.badRequest().body(
+                    "El campo aprobado debe ser APROBADO, NO_APROBADO o null"
+            );
+        }
+    
+        return fichajeRepository.findById(idFichaje)
+                .map(fichaje -> {
+    
+                    fichaje.setAprobado(request.getAprobado());
+    
+                    Fichaje actualizado = fichajeRepository.save(fichaje);
+    
+                    ClockingApprovalResponseDTO response =
+                            new ClockingApprovalResponseDTO(
+                                    actualizado.getIdFichaje(),
+                                    actualizado.getAprobado()
+                            );
+    
+                    return ResponseEntity.ok(response);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
-
-    return fichajeRepository.findById(idFichaje)
-            .map(fichaje -> {
-
-                fichaje.setAprobado(request.getAprobado());
-
-                Fichaje actualizado = fichajeRepository.save(fichaje);
-
-                ClockingApprovalResponseDTO response =
-                        new ClockingApprovalResponseDTO(
-                                actualizado.getIdFichaje(),
-                                actualizado.getAprobado()
-                        );
-
-                return ResponseEntity.ok(response);
-            })
-            .orElse(ResponseEntity.notFound().build());
-}
 
 }
