@@ -35,6 +35,16 @@ public class Fichaje {
     @Column(name = "hora_fin")
     private LocalTime endHour;
 
+@Column(name = "aprobado")
+private String aprobado;
+
+public String getAprobado() {
+    return aprobado;
+}
+
+public void setAprobado(String aprobado) {
+    this.aprobado = aprobado;
+}
     @Column(name = "fecha")
     private LocalDate date;
 
@@ -42,6 +52,5 @@ public class Fichaje {
     public enum TipoFichaje {
         ENTRADA, SALIDA
     }
-    @Column(name = "aprobado")
-private String aprobado;
+    
 }

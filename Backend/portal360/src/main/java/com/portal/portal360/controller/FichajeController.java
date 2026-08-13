@@ -11,7 +11,8 @@ import com.portal.portal360.dto.ClockingHistoryDTO;
 import com.portal.portal360.dto.ClockingResponseDTO;
 import com.portal.portal360.dto.ClockingTodayDTO;
 import com.portal.portal360.dto.ClockingAllHistoryDTO;
-
+import com.portal.portal360.dto.ClockingApprovalDTO;
+import com.portal.portal360.dto.ClockingApprovalResponseDTO;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -130,21 +131,54 @@ public List<ClockingHistoryDTO> getClockingHistory(@PathVariable Integer idEmplo
             .toList();
 }
     @GetMapping("/today")
-public List<ClockingTodayDTO> getTodayClockings() {
+    public List<ClockingTodayDTO> getTodayClockings() {
 
-    return fichajeRepository.findTodayClockings(LocalDate.now())
-            .stream()
-            .map(f -> new ClockingTodayDTO(
-                    f.getEmployee().getIdEmployee(),
-                    f.getEmployee().getName(),
-                    f.getEmployee().getLastName(),
-                    f.getStartHour(),
-                    f.getEndHour(),
-                    f.getEndHour() == null,
-                    f.getAprobado()        
-            ))
-            .toList();
+        return fichajeRepository.findTodayClockings(LocalDate.now())
+                .stream()
+                .map(f -> new ClockingTodayDTO(
+                        f.getEmployee().getIdEmployee(),
+                        f.getEmployee().getName(),
+                        f.getEmployee().getLastName(),
+                        f.getStartHour(),
+                        f.getEndHour(),
+                        f.getEndHour() == null,
+                        f.getAprobado()))
+                .toList();
 
+    }
+
+
+  @PutMapping("/{idFichaje}/approval")
+public ResponseEntity<?> updateApproval(
+        @PathVariable Integer idFichaje,
+        @RequestBody ClockingApprovalDTO request) {
+
+    // Comprobar que el valor sea válido
+    if (request.getAprobado() == null ||
+            (!request.getAprobado().equals("APROBADO")
+            && !request.getAprobado().equals("NO_APROBADO"))) {
+
+        return ResponseEntity.badRequest().body(
+                "El campo aprobado debe ser APROBADO o NO_APROBADO"
+        );
+    }
+
+    return fichajeRepository.findById(idFichaje)
+            .map(fichaje -> {
+
+                fichaje.setAprobado(request.getAprobado());
+
+                Fichaje actualizado = fichajeRepository.save(fichaje);
+
+                ClockingApprovalResponseDTO response =
+                        new ClockingApprovalResponseDTO(
+                                actualizado.getIdFichaje(),
+                                actualizado.getAprobado()
+                        );
+
+                return ResponseEntity.ok(response);
+            })
+            .orElse(ResponseEntity.notFound().build());
 }
 
 }
