@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.portal.portal360.dto.ClockingHistoryDTO;
+import com.portal.portal360.dto.ClockingResponseDTO;
 import com.portal.portal360.dto.ClockingTodayDTO;
 import com.portal.portal360.dto.ClockingAllHistoryDTO;
 
@@ -55,21 +56,40 @@ public List<ClockingAllHistoryDTO> getAllHistory() {
 }
 
     @PostMapping("/check-in/{idEmployee}")
-    public ResponseEntity<?> checkIn(@PathVariable Integer idEmployee) {
-    
-        return empleadoRepository.findById(idEmployee)
-                .map(empleado -> {
-    
-                    Fichaje fichaje = new Fichaje();
-                    fichaje.setEmployee(empleado);
-                    fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
-                    fichaje.setDate(LocalDate.now());
-                    fichaje.setStartHour(LocalTime.now());
-    
-                    return ResponseEntity.ok(fichajeRepository.save(fichaje));
-    
-                }).orElse(ResponseEntity.notFound().build());
-    }
+public ResponseEntity<?> checkIn(@PathVariable Integer idEmployee) {
+
+    return empleadoRepository.findById(idEmployee)
+            .map(empleado -> {
+
+                Fichaje fichaje = new Fichaje();
+
+                fichaje.setEmployee(empleado);
+                fichaje.setType(Fichaje.TipoFichaje.ENTRADA);
+                fichaje.setDate(LocalDate.now());
+                fichaje.setStartHour(LocalTime.now());
+
+                // Nuevo fichaje = todavía no aprobado
+                fichaje.setAprobado(null);
+
+                Fichaje fichajeGuardado = fichajeRepository.save(fichaje);
+
+                ClockingResponseDTO response = new ClockingResponseDTO(
+                        fichajeGuardado.getIdFichaje(),
+                        empleado.getIdEmployee(),
+                        empleado.getName(),
+                        empleado.getLastName(),
+                        fichajeGuardado.getDate(),
+                        fichajeGuardado.getStartHour(),
+                        fichajeGuardado.getEndHour(),
+                        fichajeGuardado.getAprobado(),
+                        "EN_CURSO"
+                );
+
+                return ResponseEntity.ok(response);
+
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
 
     @PostMapping("/check-out/{idEmployee}")
     public ResponseEntity<?> checkOut(@PathVariable Integer idEmployee) {
@@ -119,7 +139,8 @@ public List<ClockingTodayDTO> getTodayClockings() {
                     f.getEmployee().getLastName(),
                     f.getStartHour(),
                     f.getEndHour(),
-                    f.getEndHour() == null
+                    f.getEndHour() == null,
+                    f.getAprobado()        
             ))
             .toList();
 

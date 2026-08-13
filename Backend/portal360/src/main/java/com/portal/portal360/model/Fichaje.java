@@ -42,4 +42,6 @@ public class Fichaje {
     public enum TipoFichaje {
         ENTRADA, SALIDA
     }
+    @Column(name = "aprobado")
+private String aprobado;
 }
