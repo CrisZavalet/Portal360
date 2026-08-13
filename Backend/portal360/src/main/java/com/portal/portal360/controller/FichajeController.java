@@ -124,7 +124,8 @@ public List<ClockingHistoryDTO> getClockingHistory(@PathVariable Integer idEmplo
                     f.getDate(),
                     f.getStartHour(),
                     f.getEndHour(),
-                    f.getEndHour() == null ? "EN_CURSO" : "FINALIZADO"
+                    f.getEndHour() == null ? "EN_CURSO" : "FINALIZADO",
+                    f.getAprobado()
             ))
             .toList();
 }

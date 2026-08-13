@@ -19,4 +19,5 @@ public class ClockingHistoryDTO {
     private LocalTime endHour;
 
     private String status;
+    private String aprobado;
 }
