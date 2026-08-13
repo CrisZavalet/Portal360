@@ -28,7 +28,7 @@ openId: number | null = null;
 estadoFichaje: 'pendiente' | 'aprobado' | 'rechazado'| null = null;
 openDropdownId:  'editar' | 'fichajes' | 'nomina' | 'documentos' | 'mensaje'| null = null;
 empleadoSeleccionado: any = null;
-empleados:any
+empleados:EmpleadoData[] = [];
 
 
 
@@ -189,13 +189,13 @@ fichajeEmpleado (id:any){
 }
 
 subirNomina (id:any){
-   this.router.navigate(['../paysheet', id], {
+   this.router.navigate(['../management-paysheet', id], {
     relativeTo: this.route
   });
 }
 
 subirDocumentos (id:any){
-   this.router.navigate(['../clock-in', id], {
+   this.router.navigate(['../management-documents', id], {
     relativeTo: this.route
   });
 }

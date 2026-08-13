@@ -1,154 +1,115 @@
 <div class="p-0 md:p-2">
   <!-- HEADER -->
-   <button
-  (click)="volver()"
-  class="bg-white flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 mb-4">
+  <button (click)="volver()"
+    class="bg-white flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+      class="size-5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+    </svg>
 
-  <svg xmlns="http://www.w3.org/2000/svg"
-       fill="none"
-       viewBox="0 0 24 24"
-       stroke-width="1.5"
-       stroke="currentColor"
-       class="size-5">
-    <path stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-  </svg>
-
-  Volver
-</button>
+    Volver
+  </button>
   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
     @if (empleadoselectado) {
-      <div>
-        <h2 class="text-2xl font-bold text-slate-800 dark:text-white">Fichajes de  {{ empleadoselectado.name }} {{ empleadoselectado.lastName }}</h2>
-      </div>
+    <div>
+      <h2 class="text-2xl font-bold text-slate-800 dark:text-white">
+        Fichajes de {{ empleadoselectado.name }} {{ empleadoselectado.lastName }}
+      </h2>
+    </div>
     }
-   
-    <div class="flex items-center gap-2">
+
+    <div class=" items-center justify-end mt-4  flex ">
+        <div class="relative">
+
+        <button 
+(click)="openExportModal()" 
+class="flex items-center gap-2 p-3 bg-indigo-600 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.25)] text-white 
+hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-lg hover:bg-indigo-500 transition-all duration-300 dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
+
+  <img class="w-5 h-5" src="./assets/icons/material-symbols--download.svg" alt="">
+  <span>Exportar</span>
+
+</button>
+ 
+</div>
   
-       <!-- <button (click)="aprobarTodos()"
+    </div>
+    <div class="flex items-center gap-2">
+      <!-- <button (click)="aprobarTodos()"
         class="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
         [disabled]="!tienePendientes()">
         ✔ Aprobar todos
       </button> -->
-
     </div>
   </div>
 
   <div class="flex items-center justify-between mb-4">
-<button 
-  (click)="mesAnterior()" 
-  class="group
-         relative p-4 mt-8 rounded-full
-      bg-indigo-100  backdrop-blur-xl
-       border border-white/20
-       shadow-[0_8px_32px_rgba(0,0,0,0.25)]
-       hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]
-       transition-all duration-300  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
+    <button (click)="mesAnterior()"
+      class="group relative p-4 mt-8 rounded-full bg-indigo-100 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.25)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+        class="stroke-slate-400 group-hover:stroke-slate-800/80 transition">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path stroke-dasharray="20" d="M21 12h-17.5">
+            <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0" />
+          </path>
 
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="22"
-       height="22"
-       viewBox="0 0 24 24"
-       class="stroke-slate-400 group-hover:stroke-slate-800/80 transition">
-
-    <g fill="none"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       stroke-width="2">
-
-      <path stroke-dasharray="20"
-            d="M21 12h-17.5">
-        <animate fill="freeze"
-                 attributeName="stroke-dashoffset"
-                 dur="0.3s"
-                 values="20;0"/>
-      </path>
-
-      <path stroke-dasharray="12"
-            stroke-dashoffset="12"
-            d="M3 12l7 7M3 12l7 -7">
-        <animate fill="freeze"
-                 attributeName="stroke-dashoffset"
-                 begin="0.3s"
-                 dur="0.2s"
-                 to="0"/>
-      </path>
-    </g>
-  </svg>
-
-</button>
-  <h2 class=" mt-8 text-2xl font-semibold text-gray-700 dark:text-gray-300">
-    {{ mesSeleccionado() + 1 }} / {{ anioSeleccionado() }}
-  </h2>
-
-  <button (click)="mesSiguiente()" class="group
-         relative p-4 mt-8 rounded-full
-      bg-indigo-100  backdrop-blur-xl
-       border border-white/20
-       shadow-[0_8px_32px_rgba(0,0,0,0.25)]
-       hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]
-       transition-all duration-300  dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
-
-  <svg xmlns="http://www.w3.org/2000/svg"
-       width="22"
-       height="22"
-       viewBox="0 0 24 24"
-       class="stroke-slate-400 group-hover:stroke-slate-800/80 transition">
-
-    <g fill="none"
-       stroke-linecap="round"
-       stroke-linejoin="round"
-       stroke-width="2">
-
-      <path stroke-dasharray="20"
-            d="M3 12h17.5">
-        <animate fill="freeze"
-                 attributeName="stroke-dashoffset"
-                 dur="0.3s"
-                 values="20;0"/>
-      </path>
-
-      <path stroke-dasharray="12"
-            stroke-dashoffset="12"
-            d="M21 12l-7 7M21 12l-7 -7">
-        <animate fill="freeze"
-                 attributeName="stroke-dashoffset"
-                 begin="0.3s"
-                 dur="0.2s"
-                 to="0"/>
-      </path>
-    </g>
-  </svg>
-
+          <path stroke-dasharray="12" stroke-dashoffset="12" d="M3 12l7 7M3 12l7 -7">
+            <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to="0" />
+          </path>
+        </g>
+      </svg>
     </button>
-</div>
+    <h2 class="mt-8 text-2xl font-semibold text-gray-700 dark:text-gray-300">
+      {{ mesSeleccionado() + 1 }} / {{ anioSeleccionado() }}
+    </h2>
+
+    <button (click)="mesSiguiente()"
+      class="group relative p-4 mt-8 rounded-full bg-indigo-100 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.25)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300 dark:bg-gradient-to-br dark:from-slate-700 dark:via-indigo-700 dark:to-indigo-900 dark:text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+        class="stroke-slate-400 group-hover:stroke-slate-800/80 transition">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path stroke-dasharray="20" d="M3 12h17.5">
+            <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="20;0" />
+          </path>
+
+          <path stroke-dasharray="12" stroke-dashoffset="12" d="M21 12l-7 7M21 12l-7 -7">
+            <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.3s" dur="0.2s" to="0" />
+          </path>
+        </g>
+      </svg>
+    </button>
+  </div>
 
   <div class="hidden md:block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xl">
+    <table
+      class="w-full table-fixed text-sm bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-visible">
+      <thead class="text-xs uppercase tracking-wider text-slate-500">
+        <tr>
+          <th class="px-4 py-3 text-left font-semibold">Fecha</th>
+          <th class="px-4 py-3 text-left font-semibold">Entrada</th>
+          <th class="px-4 py-3 text-left font-semibold">Salida</th>
+          <th class="px-4 py-3 text-left font-semibold">Horas</th>
+          <th class="px-4 py-3 text-left font-semibold">Tipo</th>
+          <th class="px-4 py-3 text-left font-semibold">Acciones</th>
+        </tr>
+      </thead>
 
-  <table class="w-full table-fixed text-sm bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-visible">
-
-    <thead class="text-xs uppercase tracking-wider text-slate-500 ">
-      <tr>
-        <th class="px-4 py-3 text-left font-semibold">Fecha</th>
-        <th class="px-4 py-3 text-left font-semibold">Entrada</th>
-        <th class="px-4 py-3 text-left font-semibold">Salida</th>
-        <th class="px-4 py-3 text-left font-semibold">Horas</th>
-        <th class="px-4 py-3 text-left font-semibold">Tipo</th>
-        <th class="px-4 py-3 text-left font-semibold">Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @for(fichaje of fichajesFiltrados; track $index){
-
+      <tbody>
+        @if (fichajesFiltrados.length === 0) {
+          <tr>
+            <td colspan="6" class="p-6 text-center text-slate-500 bg-white backdrop-blur-lg rounded-2xl border border-white/20">
+              No hay fichajes este mes
+            </td>
+          </tr>
+        }
+   
+        @for (fichaje of fichajesFiltrados; track $index) {
         <tr
-          class="border-t border-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
-
+          class="border-t border-slate-200 bg-white dark:bg-slate-500  dark:text-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
           <td class="px-4 py-3">
             {{ formatearFecha(fichaje.date) }}
           </td>
-          
+
           <td class="px-4 py-3">
             <span class="text-green-600 font-medium">
               {{ formatHour(fichaje.startHour) }}
@@ -161,24 +122,20 @@
             </span>
           </td>
 
-          
           <td class="px-3 py-3">
             <!-- {{ fichaje.totalHoras }} -->
             {{ horasTrabajadas(fichaje.startHour, fichaje.endHour) }}
           </td>
-          <td class="px-4 py-3 ">
-            <span class="px-3 py-1 text-xs font-medium rounded-full
-  bg-indigo-100 text-indigo-700
-  dark:bg-indigo-500/20 dark:text-indigo-300">
-     Presencial
-  </span>
-           
+          <td class="px-4 py-3">
+            <span
+              class="px-3 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
+              Presencial
+            </span>
           </td>
 
           <td class="px-4 py-3">
             <div class="flex gap-2">
-
-            <!-- <select
+              <!-- <select
   [value]="fichaje.estado"
   (change)="cambiarEstado(fichaje, $any($event.target).value)"
   class="rounded-full px-3 py-1 text-xs font-medium border-0 cursor-pointer"
@@ -192,25 +149,17 @@
   <option value="aprobado">Aprobado</option>
   <option value="rechazado">Rechazado</option>
 </select> -->
-
             </div>
           </td>
-
         </tr>
-
-      }
-    </tbody>
-
-  </table>
-
-</div>
+        }
+      </tbody>
+    </table>
+  </div>
 
   <div class="md:hidden space-y-3">
-
-  @for (fichaje of fichajes; track $index) {
-
+    @for (fichaje of fichajes; track $index) {
     <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow">
-
       <div class="flex justify-between items-center mb-3">
         <span class="font-semibold">
           {{ formatearFecha(fichaje.date) }}
@@ -233,23 +182,83 @@
       </div>
 
       <div class="space-y-1 text-sm">
-        <p>
-          <strong>Entrada:</strong> {{ fichaje.startHour }}
-        </p>
+        <p><strong>Entrada:</strong> {{ fichaje.startHour }}</p>
 
-        <p>
-          <strong>Salida:</strong> {{ fichaje.endHour }}
-        </p>
+        <p><strong>Salida:</strong> {{ fichaje.endHour }}</p>
 
-        <p>
-          <strong>Horas:</strong> {{ horasTrabajadas(fichaje.startHour, fichaje.endHour) }}
-        </p>
+        <p><strong>Horas:</strong> {{ horasTrabajadas(fichaje.startHour, fichaje.endHour) }}</p>
+      </div>
+    </div>
+    }
+
+    
+
+  </div>
+</div>
+
+@if (exportModalOpen) {
+  <div class="fixed inset-0 flex items-center justify-center z-50">
+
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"
+         (click)="closeExportModal()"></div>
+
+    <div class="relative w-[420px] p-6 r
+                backdrop-blur-2xl
+                bg-white rounded-xl shadow-xl dark:bg-slate-900/70
+                border border-white/40
+                ">
+
+      <h2 class="text-xl font-semibold mb-4 text-slate-800">
+        Exportar Datos
+      </h2>
+
+      <div class="mb-4">
+        <label class="block mb-1 text-sm font-bold ">Tipo de archivo</label>
+        <select [(ngModel)]="exportType"
+                class="w-full px-3 py-2 rounded-xl
+                       border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+          <option value="pdf">PDF</option>
+          <option value="excel">Excel</option>
+          <option value="csv">CSV</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block mb-1 text-sm font-bold ">Desde</label>
+        <input type="date"
+               [(ngModel)]="startDate"
+               class="w-full px-3 py-2 rounded-xl
+                      bg-white/40 backdrop-blur-md
+                      border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-1 text-sm font-bold ">Hasta</label>
+        <input type="date"
+               [(ngModel)]="endDate"
+               class="w-full px-3 py-2 rounded-xl
+                      bg-white/40 backdrop-blur-md
+                      border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm">
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <button
+          (click)="closeExportModal()"
+          class="px-4 py-2 rounded-xl
+                 bg-slate-400 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/2">
+          Cancelar
+        </button>
+
+        <button
+          (click)="exportData()"
+          class="px-4 py-2 rounded-xl
+                 bg-indigo-600/80 text-white
+                 hover:bg-indigo-700
+                 shadow-lg transition">
+          Exportar
+        </button>
       </div>
 
     </div>
-
-  }
-
-</div>
-
-</div>
+  </div>
+}

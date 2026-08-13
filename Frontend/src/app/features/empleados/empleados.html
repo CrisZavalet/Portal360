@@ -53,7 +53,7 @@
       </thead>
 
       <tbody>
-        @for (emp of empleadosFiltrados(); track emp) {
+        @for (emp of empleadosFiltrados(); track $index) {
           <tr class="bg-white border-t border-white/40 hover:bg-white/40 transition">
             <td class="p-4">{{ emp.name }} {{ emp.lastName }}</td>
             <td class="p-4">{{ emp.position }}</td>
@@ -122,7 +122,7 @@
 
   <!-- ////////////////////////////////////////VISTA MOVIL/////////////////////////////////////////////////////////////////////////////// -->
   <div class="md:hidden mt-5 space-y-4">
-    @for (emp of empleadosFiltrados(); track emp) {
+    @for (emp of empleadosFiltrados(); track $index) {
       <div
         class="relative p-4 rounded-2xl bg-white backdrop-blur-lg border border-white/20 shadow-xl"
       >

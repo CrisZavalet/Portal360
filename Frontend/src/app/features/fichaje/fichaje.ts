@@ -38,6 +38,7 @@ cargarHistorial(idEmployee: any) {
       .subscribe({
         next: (data) => {
           this.employeeData = data;
+          console.log('Historial del empleado:', this.employeeData);
           this.filtrarPorMes();
           console.log('Historial del empleado:', this.employeedDataFiltered);
         },
@@ -159,7 +160,6 @@ exportarPDF(datos: HistorialFichajeEmpleado[]) {
   const pdf = new jsPDF();
 
   pdf.text('Historial de fichajes', 14, 15);
-
   autoTable(pdf, {
  startY: 30,
     head: [[

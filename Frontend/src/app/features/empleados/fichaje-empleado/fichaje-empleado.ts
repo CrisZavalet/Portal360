@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 import { HistorialFichajeEmpleado } from '../../../core/interfaces/historialFichajeEmpleado.interface';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+ import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-fichaje-empleado',
   imports: [CommonModule,FormsModule],
@@ -22,7 +25,11 @@ fichajes :HistorialFichajeEmpleado[] = [];
 fichajesFiltrados: HistorialFichajeEmpleado[] = [];
   mesSeleccionado = signal(new Date().getMonth());
 anioSeleccionado = signal(new Date().getFullYear());
-
+  menuOpen = false;
+exportModalOpen = false;
+exportType: string = 'pdf';
+startDate!: string;
+endDate!: string;
 constructor( private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
 ngOnInit() {
   
@@ -50,13 +57,12 @@ datosEmpleado (id: any) {
  
 }
 
+
 fichajeEmpleado (id:any){
   this.authService.getHistorialEmpleado(id).subscribe({
     next: (data) => {
       this.fichajes = data;
-                this.filtrarPorMes();
-
-      console.log('Historial del empleado:', this.fichajes);
+      this.filtrarPorMes();
     },
     error: (err) => {
       console.error(err);
@@ -186,5 +192,167 @@ mesSiguiente() {
   this.filtrarPorMes();
 }
 
+openExportModal() {
+  this.menuOpen = false;
+  this.exportModalOpen = true;
+}
+
+closeExportModal() {
+  this.exportModalOpen = false;
+}
+
+exportData() {
+
+  const datos = this.obtenerDatosExportar();
+
+  if (datos.length === 0) {
+    alert('No hay fichajes para exportar.');
+    return;
+  }
+
+  switch (this.exportType) {
+
+    case 'pdf':
+      this.exportarPDF(datos);
+      break;
+
+    case 'excel':
+      this.exportarExcel(datos);
+      break;
+
+    case 'csv':
+      this.exportarCSV(datos);
+      break;
+  }
+
+  this.closeExportModal();
+}
+
+obtenerDatosExportar(): HistorialFichajeEmpleado[] {
+
+  let datos = [...this.fichajes];
+
+  if (this.startDate) {
+    datos = datos.filter(f => f.date >= this.startDate);
+  }
+
+  if (this.endDate) {
+    datos = datos.filter(f => f.date <= this.endDate);
+  }
+
+  return datos;
+
+}
+
+exportarPDF(datos: HistorialFichajeEmpleado[]) {
+
+  const pdf = new jsPDF();
+
+  pdf.text('Historial de fichajes', 14, 15);
+  pdf.setFontSize(10);
+  pdf.text('Empleado: ' + this.empleadoselectado?.name + ' ' + this.empleadoselectado?.lastName, 14, 22);
+  autoTable(pdf, {
+ startY: 30,
+    head: [[
+      'Fecha',
+      'Entrada',
+      'Salida',
+      'Tiempo',
+      'Estado'
+    ]],
+
+    body: datos.map(f => [
+
+      this.formatearFecha(f.date),
+
+      this.formatHour(f.startHour),
+
+      this.formatHour(f.endHour),
+
+      this.calcularTiempo(f.startHour, f.endHour),
+
+      f.status
+
+    ])
+
+  });
+
+  pdf.save('historial-fichajes.pdf');
+
+}
+
+exportarExcel(datos: HistorialFichajeEmpleado[]) {
+
+  const worksheet = XLSX.utils.json_to_sheet(
+
+    datos.map(f => ({
+
+      Fecha: this.formatearFecha(f.date),
+
+      Entrada: this.formatHour(f.startHour),
+
+      Salida: this.formatHour(f.endHour),
+
+      Tiempo: this.calcularTiempo(f.startHour, f.endHour),
+
+      Estado: f.status
+
+    }))
+
+  );
+
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Fichajes');
+
+  XLSX.writeFile(workbook, 'historial-fichajes.xlsx');
+
+}
+
+exportarCSV(datos: HistorialFichajeEmpleado[]) {
+
+  const worksheet = XLSX.utils.json_to_sheet(
+
+    datos.map(f => ({
+
+      Fecha: this.formatearFecha(f.date),
+
+      Entrada: this.formatHour(f.startHour),
+
+      Salida: this.formatHour(f.endHour),
+
+      Tiempo: this.calcularTiempo(f.startHour, f.endHour),
+
+      Estado: f.status
+
+    }))
+
+  );
+
+  const csv = XLSX.utils.sheet_to_csv(worksheet);
+
+  const blob = new Blob([csv], {
+    type: 'text/csv;charset=utf-8'
+  });
+
+  saveAs(blob, 'historial-fichajes.csv');
+
+}
+
+calcularTiempo(startHour: string, endHour: string): string {
+  if (!startHour || !endHour) {
+    return '--';
+  }
+
+  const inicio = new Date(`1970-01-01T${startHour}`);
+  const fin = new Date(`1970-01-01T${endHour}`);
+
+  const diferenciaMs = fin.getTime() - inicio.getTime();
+
+  const horas = Math.floor(diferenciaMs / 1000 / 60 / 60);
+  const minutos = Math.floor((diferenciaMs / 1000 / 60) % 60);
+
+  return `${horas}h ${minutos}min`;
+}
 
 }
