@@ -7,6 +7,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AuthService } from '../../../core/services/auth-service';
 
 @Component({
   selector: 'app-nomina-empleado',
@@ -47,39 +48,40 @@ nominas = [
   {periodo: 'Mayo 2024', tipo: 'Ordinaria', fechaEmision: '2024-05-31', estado: 'Disponible', empleado: 'Florencia Macarena Sandoval Perez'},
 
 ];
-   empleado = [
-  {
-    id: 1,
-    nombre: 'Florencia Macarena',
-    apellido: 'Sandoval Perez',
-     direccion: 'Calle Falsa 123',
-     nacimiento: '1994-10-15',
-     ubicacion: 'Madrid',
-     iban: 'ES7620770024003102575766',
-     departamento: 'IT',
-     puesto: 'Diseñadora UX/UI',
-     fechaInicio: '2024-02-03',
-    cargo: 'Desarrolladora',
-    email: 'florenciasandoval@quazzartech.com',
-    telefono: '555-1234',
-    estado: 'Activo',
-    usuario: 'fsandovalp',
-  },
+//    empleado = [
+//   {
+//     id: 1,
+//     nombre: 'Florencia Macarena',
+//     apellido: 'Sandoval Perez',
+//      direccion: 'Calle Falsa 123',
+//      nacimiento: '1994-10-15',
+//      ubicacion: 'Madrid',
+//      iban: 'ES7620770024003102575766',
+//      departamento: 'IT',
+//      puesto: 'Diseñadora UX/UI',
+//      fechaInicio: '2024-02-03',
+//     cargo: 'Desarrolladora',
+//     email: 'florenciasandoval@quazzartech.com',
+//     telefono: '555-1234',
+//     estado: 'Activo',
+//     usuario: 'fsandovalp',
+//   },
 
-{
-   id: 2,
-    nombre: 'Juan',
-    apellido: 'Pérez',
-    cargo: 'Diseñador',
-    email: 'juan.perez@empresa.com',
-    telefono: '555-5678',
-    estado: 'Inactivo'
+// {
+//    id: 2,
+//     nombre: 'Juan',
+//     apellido: 'Pérez',
+//     cargo: 'Diseñador',
+//     email: 'juan.perez@empresa.com',
+//     telefono: '555-5678',
+//     estado: 'Inactivo'
 
-  },
+//   },
 
- ]
+//  ]
 
-  constructor( private route: ActivatedRoute, private router: Router) {}
+  constructor( private route: ActivatedRoute, private router: Router,private authService: AuthService,
+  ) {}
 ngOnInit() {
   
     this.id = this.route.snapshot.params['id'];
@@ -90,10 +92,19 @@ ngOnInit() {
   }
  }
 
-datosEmpleado (id: any) {
-  this.empleadoselectado = this.empleado.find((e) => e.id == id);
-  console.log(this.empleadoselectado);
-}
+  datosEmpleado(id: any) {
+    this.authService.getEmployeeById(id).subscribe({
+      next: (data) => {
+        this.empleadoselectado = data;
+
+        console.log('Datos del empleado:', this.empleadoselectado);
+      },
+      error: (err) => {
+        console.error('STATUS:', err.status);
+        console.error('ERROR BACKEND:', err.error);
+      },
+    });
+  }
 
  volver() {
   this.router.navigate(['/employees']);
