@@ -1,0 +1,25 @@
+package com.portal.portal360.dto;
+
+import lombok.Data;
+import java.time.LocalDate;
+
+@Data
+public class EmpleadoDTO {
+
+    private Integer idEmployee;
+    private String dni;
+    private String name;
+    private String lastName;
+    private String username;
+    private String email;
+    private LocalDate dateOfBirth;
+    private String phone;
+    private String address;
+    private String location;
+    private String iban;
+    private String department;
+    private LocalDate startDate;
+    private String position;
+    private Boolean active;
+    private String role;
+}
