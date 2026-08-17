@@ -21,7 +21,7 @@ export class Ausencia {
   }
 exportModalOpen = false;
 modalOpen = false;
-selectAbsenceType=['Hora Libre Disposición','Cita Médica', 'Baja Boda', 'Baja Larga', 'Baja Paternidad','Incapacidad Temporal','Permiso de operacion','Vacaciones' ];
+selectAbsenceType=['Hora Libre Disposición','Cita Médica', 'Baja Boda', 'Baja Larga', 'Baja Paternidad','Incapacidad Temporal','Permiso de operacion','Vacaciones','Otros' ];
 durationType: 'hours' | 'day' | 'days' | null = null;
 
 
