@@ -146,8 +146,18 @@
           <img src="./assets/icons/notificaciones.png" alt="" class="w-5 h-5" />
         </div>
 
-        @if (!collapsed) {
+      
+            
+          @if(role=='RRHH') {
+              @if (!collapsed) {
+            <span>Pendientes</span>
+          }
+          }
+          @if(role=='EMPLEADO') { 
+              @if (!collapsed) {
           <span>Notificaciones</span>
+          }
+
         }
       </a>
 

@@ -22,13 +22,14 @@ rol_user:any;
 open:any = false;
 idEmployee:any;
 user: any;
+role: any;
   constructor(private authService:AuthService, private router:Router){}
 
 ngOnInit(){
  
     this.idEmployee = localStorage.getItem('idEmployee');
     this.user = localStorage.getItem('user');
-    
+    this.role = localStorage.getItem('role');
     console.log('Usuario obtenido desde el servicio AuthService:', this.user);
 
     if (this.user) {

@@ -28,7 +28,7 @@ export class Perfil {
   modalOpenPhoto = false;
   photoPreview: string | ArrayBuffer | null = null;
 photoName: string | null = null;
-
+empleadoSelectado: any;
   constructor(private authService: AuthService) {
   }
   ngOnInit() {
@@ -64,7 +64,23 @@ photoName: string | null = null;
     this.antiguedad_user = antiguedad + ' años';
   }
   }
+
+  // this.datosEmpleado(id: any)
 }
+
+  datosEmpleado(id: any) {
+    this.authService.getEmployeeById(id).subscribe({
+      next: (data) => {
+        this.empleadoSelectado = data;
+
+        console.log('Datos del empleado:', this.empleadoSelectado);
+      },
+      error: (err) => {
+        console.error('STATUS:', err.status);
+        console.error('ERROR BACKEND:', err.error);
+      },
+    });
+  }
 
 openModal() {
   this.modalOpen = true;  

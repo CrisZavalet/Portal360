@@ -229,22 +229,31 @@ overflow-hidden border-separate border-spacing-y-1">
   </span>
 </td> 
         <td class="px-3 py-2">{{ calcularTiempo(f.startHour, f.endHour) }}</td>
-     <!--  <td> <div class="flex gap-3 items-center">
-       @if (f.aprobado) {
+      <td> <div class="flex gap-3 items-center">
+       @if (f.aprobado=='APROBADO') {
   <span class="flex justify-center px-3 py-1 text-xs rounded-full
   bg-green-100 text-green-700
   dark:bg-green-500/20 dark:text-green-300">
   ✔ Aprobado
   </span> 
 }
-@else {
+@if(f.aprobado==null) {
   <span class="flex justify-center px-3 py-1 text-xs rounded-full
   bg-yellow-100 text-yellow-700
   dark:bg-yellow-500/20 dark:text-yellow-300">
   ⏳ Pendiente
   </span>
 }
-</div></td>-->
+
+@if(f.aprobado=='NO_APROBADO') {
+  <span class="flex justify-center px-3 py-1 text-xs rounded-full
+  bg-red-100 text-red-700
+  dark:bg-red-500/20 dark:text-red-300">
+  ❌ No aprobado
+  </span>
+}
+
+</div></td>
       </tr>
     }
      
@@ -256,7 +265,7 @@ overflow-hidden border-separate border-spacing-y-1">
 
 <div class="mt-8 md:hidden space-y-4">
 
-@if (fichajesFiltrados().length === 0) {
+@if (employeedDataFiltered.length === 0) {
 
 <div class="p-6 text-center text-slate-500
 bg-white backdrop-blur-lg rounded-2xl border border-white/20">
@@ -276,6 +285,24 @@ border border-white/20 shadow-lg">
 <span class="text-sm text-slate-500">
 {{formatearFecha(f.date)}}
 </span>
+
+
+ @if (f.aprobado=='APROBADO') {
+  <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
+  ✔ Aprobado
+  </span> 
+}
+@if(f.aprobado==null) {
+  <span class="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
+  ⏳ Pendiente
+  </span>
+}
+
+@if(f.aprobado=='NO_APROBADO') {
+  <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700">
+  ❌ No aprobado
+  </span>
+}
 
 <!-- @if (f.aprobado) {
 <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">
