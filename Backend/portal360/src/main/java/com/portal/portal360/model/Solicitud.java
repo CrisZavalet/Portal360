@@ -1,5 +1,7 @@
 package com.portal.portal360.model;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Solicitud {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_solicitud")
@@ -39,10 +43,16 @@ public class Solicitud {
     private String description;
 
     @Column(name = "fecha_inicio")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "fecha_fin")
-    private Date endDate;
+    private LocalDate endDate;
+
+    @Column(name = "hora_inicio")
+    private LocalTime startTime;
+
+    @Column(name = "hora_fin")
+    private LocalTime endTime;
 
     @Column(name = "fecha_resolucion")
     private Date endDateResolution;

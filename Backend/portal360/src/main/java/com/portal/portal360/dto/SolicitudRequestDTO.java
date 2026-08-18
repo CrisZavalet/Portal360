@@ -1,15 +1,28 @@
 package com.portal.portal360.dto;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.Date;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SolicitudRequestDTO {
-    private String idType;      // El valor del Select
-    private String comments;  // Del Textarea
-    private String typeDuration; // "hours", "day", "days"
-    private Date date;         // Para "horas" o "un día"
-    private Integer hours;      // Solo para "horas"
-    private Date startDate;   // Para "varios días"
-    private Date endDate;      // Para "varios días"
+
+    private Integer idType;
+
+    private String comments;
+
+    private String durationType;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    private LocalTime startTime;
+
+    private LocalTime endTime;
 }
