@@ -319,7 +319,13 @@
             Varios días
           </button>
         </div>
-
+@if (errorFormulario) {
+  <div
+    class="mt-4 p-3 rounded-lg bg-red-100 border border-red-300 text-red-700 text-sm"
+  >
+    {{ errorFormulario }}
+  </div>
+}
         @if (durationType === 'hours') {
 
   <div class="grid grid-cols-3 gap-4 mt-4">
@@ -353,6 +359,7 @@
         type="time"
         [(ngModel)]="endTime"
         name="endTime"
+        [min]="startTime"
         class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
       >
     </div>
@@ -371,6 +378,7 @@
       type="date"
       [(ngModel)]="startDate"
       name="startDateDay"
+      [min]="today"
       class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
     >
 
@@ -389,6 +397,7 @@
         type="date"
         [(ngModel)]="startDate"
         name="startDateDays"
+        [min]="today"
         class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
       >
     </div>
@@ -400,6 +409,8 @@
         type="date"
         [(ngModel)]="endDate"
         name="endDate"
+         [min]="startDate"
+         
         class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
       >
     </div>

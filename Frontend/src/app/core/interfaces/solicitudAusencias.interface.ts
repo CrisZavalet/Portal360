@@ -1,5 +1,6 @@
 export interface SolicitudAusencias {
  idType: number;
+ idEmployee: any;
   comments: string | null;
   durationType: 'HORAS' | 'UN_DIA' | 'VARIOS_DIAS';
   startDate: string;

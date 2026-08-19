@@ -25,18 +25,14 @@ export class Ausencia {
 exportModalOpen = false;
 modalOpen = false;
 idType: number = 1;
-
-// Comentario
+errorFormulario: string = '';
 comments: string = '';
 
-// Duración
 durationType: 'hours' | 'day' | 'days' = 'hours';
-
-// Fechas
+today: string = new Date().toISOString().split('T')[0];
 startDate: string = '';
 endDate: string = '';
 
-// Horas
 startTime: string = '';
 
 endTime: string = '';
@@ -51,6 +47,8 @@ selectAbsenceType = [
   { id: 8, name: 'Vacaciones' },
   { id: 9, name: 'Otros' }
 ];
+
+idEmployee: any;
 
 holidays:any[] = [];
   year = new Date().getFullYear();
@@ -254,8 +252,81 @@ closeModal() {
   this.modalOpen = false;
 }
 
+validarFormulario(): boolean {
+
+  this.errorFormulario = '';
+
+  // Comprobar tipo de ausencia
+  if (!this.idType) {
+    this.errorFormulario = 'Debes seleccionar un tipo de ausencia.';
+    return false;
+  }
+
+  if (this.durationType === 'hours') {
+
+    if (!this.startDate) {
+      this.errorFormulario = 'Debes seleccionar una fecha.';
+      return false;
+    }
+
+    if (!this.startTime || !this.endTime) {
+      this.errorFormulario = 'Debes indicar la hora de inicio y la hora de fin.';
+      return false;
+    }
+
+    if (this.startTime >= this.endTime) {
+      this.errorFormulario =
+        'La hora de fin debe ser posterior a la hora de inicio.';
+      return false;
+    }
+  }
+
+ 
+  if (this.durationType === 'day') {
+
+    if (!this.startDate) {
+      this.errorFormulario = 'Debes seleccionar una fecha.';
+      return false;
+    }
+
+    if (this.startDate < this.today) {
+      this.errorFormulario = 'La fecha no puede ser anterior a hoy.';
+      return false;
+    }
+
+  }
+
+  
+  if (this.durationType === 'days') {
+
+    if(this.startDate < this.today) {
+      this.errorFormulario = 'La fecha de inicio no puede ser anterior a hoy.';
+      return false;
+    }
+
+    if (!this.startDate || !this.endDate) {
+      this.errorFormulario =
+        'Debes indicar la fecha de inicio y la fecha de fin.';
+      return false;
+    }
+
+    if (this.endDate < this.startDate) {
+      this.errorFormulario =
+        'La fecha de fin no puede ser anterior a la fecha de inicio.';
+      return false;
+    }
+  }
+
+  return true;
+}
 
 crearSolicitud(): void {
+ if (!this.validarFormulario()) {
+    return;
+  }
+
+  this.idEmployee = localStorage.getItem('idEmployee');
+
 
   let solicitud: SolicitudAusencias;
 
@@ -263,6 +334,7 @@ crearSolicitud(): void {
 
     solicitud = {
       idType: this.idType,
+      idEmployee: this.idEmployee,
       comments: this.comments || null,
       durationType: 'HORAS',
       startDate: this.startDate,
@@ -275,6 +347,7 @@ crearSolicitud(): void {
 
     solicitud = {
       idType: this.idType,
+      idEmployee: this.idEmployee,
       comments: this.comments || null,
       durationType: 'UN_DIA',
       startDate: this.startDate,
@@ -287,6 +360,7 @@ crearSolicitud(): void {
 
     solicitud = {
       idType: this.idType,
+      idEmployee: this.idEmployee,
       comments: this.comments || null,
       durationType: 'VARIOS_DIAS',
       startDate: this.startDate,
