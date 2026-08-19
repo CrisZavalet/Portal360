@@ -102,7 +102,7 @@ public class SolicitudController {
             // Temporalmente usamos el empleado 2.
             // Posteriormente lo obtendremos del usuario autenticado.
 
-            solicitud.setIdEmployee(2);
+            solicitud.setIdEmployee(dto.getIdEmployee());
 
 
             // =================================================

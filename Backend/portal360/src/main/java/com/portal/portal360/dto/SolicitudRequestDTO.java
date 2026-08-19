@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SolicitudRequestDTO {
 
+    private Integer idEmployee;
+
     private Integer idType;
 
     private String comments;
