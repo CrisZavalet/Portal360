@@ -45,6 +45,21 @@ public class SolicitudController {
 
 
     // =====================================================
+// GET - Solicitudes de un empleado
+// =====================================================
+
+@GetMapping("/employee/{idEmployee}")
+public ResponseEntity<List<Solicitud>> getRequestsByEmployee(
+        @PathVariable Integer idEmployee) {
+
+    List<Solicitud> solicitudes =
+            solicitudRepository.findByIdEmployee(idEmployee);
+
+    return ResponseEntity.ok(solicitudes);
+}
+
+
+    // =====================================================
     // POST - Crear solicitud
     // =====================================================
 
