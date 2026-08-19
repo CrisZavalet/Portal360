@@ -23,6 +23,7 @@ export class Perfil {
   ubicacion_user: any;
   antiguedad_user: any;
   meses_antiguedad_user: any;
+
   modalOpen = false;
   estado_user: any;
   modalOpenPhoto = false;
@@ -32,40 +33,9 @@ empleadoSelectado: any;
   constructor(private authService: AuthService) {
   }
   ngOnInit() {
-    const user = this.authService.getUser();
-    this.name_user = user?.name;
-    this.suername_user = user?.surname;
-    this.rol_user = user?.role;
-    this.tel_user = user?.telefono;
-    this.email_user = user?.email;
-    this.area_user = user?.area;
-    this.puesto_user = user?.puesto;
-    this.fnac_user = user?.fnac;
-    this.iban_user = user?.iban;
-    this.dia_incorporacion_user = user?.dia_incorporacion;
-    this.vacaciones_user = user?.vacaciones;
-    this.ubicacion_user = user?.ubicacion;
-    this.estado_user = user?.estado;
-
-    const today = new Date();
-    const diaIncorporacion = new Date(this.dia_incorporacion_user);
-    const antiguedad = today.getFullYear() - diaIncorporacion.getFullYear();
- if(antiguedad <= 0) {
-    const mesesAntiguedad = (today.getMonth() - diaIncorporacion.getMonth() + 12) % 12;
-    if(mesesAntiguedad === 1) {
-    this.antiguedad_user = mesesAntiguedad + ' mes';
-  } else {
-    this.antiguedad_user = mesesAntiguedad + ' meses';
-  }
-  }else{
-    if(antiguedad === 1) {
-    this.antiguedad_user = antiguedad + ' año';
-  } else {
-    this.antiguedad_user = antiguedad + ' años';
-  }
-  }
-
-  // this.datosEmpleado(id: any)
+ const id = localStorage.getItem('idEmployee');
+console.log('ID del empleado:', id);
+ this.datosEmpleado(id);
 }
 
   datosEmpleado(id: any) {
@@ -83,21 +53,38 @@ empleadoSelectado: any;
   }
 
 openModal() {
-  this.modalOpen = true;  
-}
+ if (!this.empleadoSelectado) return;
+
+  this.name_user = this.empleadoSelectado.name;
+  this.suername_user = this.empleadoSelectado.lastName;
+  this.email_user = this.empleadoSelectado.email;
+  this.tel_user = this.empleadoSelectado.phone;
+  this.ubicacion_user = this.empleadoSelectado.location;
+  this.iban_user = this.empleadoSelectado.iban;
+
+  this.modalOpen = true;}
 
 closeModal() {
   this.modalOpen = false;
 }
 
-getEstadoClase(estado: string): string {
-  return estado === 'Activo'
+getEstadoClase(estado: boolean): string {
+  return estado === true
     ? 'bg-green-100 text-green-700'
     : 'bg-red-100 text-red-700';
 }
 
 guardarCambios() {
-  console.log('Datos actualizados:', this.name_user);
+  const datosActualizados = {
+    name: this.name_user,
+    lastName: this.suername_user,
+    email: this.email_user,
+    phone: this.tel_user,
+    location: this.ubicacion_user,
+    iban: this.iban_user
+  };
+
+  console.log('Enviando:', datosActualizados);
   this.modalOpen = false;
 }
 

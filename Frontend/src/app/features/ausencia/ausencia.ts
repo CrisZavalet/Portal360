@@ -8,22 +8,49 @@ import listPlugin from '@fullcalendar/list';
 import { Holiday } from '../../core/services/holiday';
 import { CalendarEvent } from '../../core/interfaces/calendario.interface';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth-service';
+import { SolicitudAusencias } from '../../core/interfaces/solicitudAusencias.interface';
 
 @Component({
   selector: 'app-ausencia',
-  imports: [FullCalendarModule, CommonModule],
+  imports: [FullCalendarModule, CommonModule, FormsModule],
   templateUrl: './ausencia.html',
   styleUrl: './ausencia.css',
 })
 export class Ausencia {
 
-  constructor(private holidayService: Holiday) {
-  }
+  constructor(private holidayService: Holiday, private authService: AuthService) {} 
+  
 exportModalOpen = false;
 modalOpen = false;
-selectAbsenceType=['Hora Libre Disposición','Cita Médica', 'Baja Boda', 'Baja Larga', 'Baja Paternidad','Incapacidad Temporal','Permiso de operacion','Vacaciones','Otros' ];
-durationType: 'hours' | 'day' | 'days' | null = null;
+idType: number = 1;
 
+// Comentario
+comments: string = '';
+
+// Duración
+durationType: 'hours' | 'day' | 'days' = 'hours';
+
+// Fechas
+startDate: string = '';
+endDate: string = '';
+
+// Horas
+startTime: string = '';
+
+endTime: string = '';
+selectAbsenceType = [
+  { id: 1, name: 'Hora Libre Disposición' },
+  { id: 2, name: 'Cita Médica' },
+  { id: 3, name: 'Baja Boda' },
+  { id: 4, name: 'Baja Larga' },
+  { id: 5, name: 'Baja Paternidad' },
+  { id: 6, name: 'Incapacidad Temporal' },
+  { id: 7, name: 'Permiso de operación' },
+  { id: 8, name: 'Vacaciones' },
+  { id: 9, name: 'Otros' }
+];
 
 holidays:any[] = [];
   year = new Date().getFullYear();
@@ -227,4 +254,67 @@ closeModal() {
   this.modalOpen = false;
 }
 
+
+crearSolicitud(): void {
+
+  let solicitud: SolicitudAusencias;
+
+  if (this.durationType === 'hours') {
+
+    solicitud = {
+      idType: this.idType,
+      comments: this.comments || null,
+      durationType: 'HORAS',
+      startDate: this.startDate,
+      endDate: null,
+      startTime: this.startTime + ':00',
+      endTime: this.endTime + ':00'
+    };
+
+  } else if (this.durationType === 'day') {
+
+    solicitud = {
+      idType: this.idType,
+      comments: this.comments || null,
+      durationType: 'UN_DIA',
+      startDate: this.startDate,
+      endDate: null,
+      startTime: null,
+      endTime: null
+    };
+
+  } else {
+
+    solicitud = {
+      idType: this.idType,
+      comments: this.comments || null,
+      durationType: 'VARIOS_DIAS',
+      startDate: this.startDate,
+      endDate: this.endDate,
+      startTime: null,
+      endTime: null
+    };
+
+  }
+
+  console.log('Solicitud a enviar:', solicitud);
+
+  this.authService.createSolicitudAusencias(solicitud).subscribe({
+
+    next: (respuesta) => {
+
+      console.log('Solicitud creada correctamente:', respuesta);
+
+      this.closeModal();
+
+    },
+
+    error: (error) => {
+
+      console.error('Error al crear la solicitud:', error);
+
+    }
+
+  });
+}
 }

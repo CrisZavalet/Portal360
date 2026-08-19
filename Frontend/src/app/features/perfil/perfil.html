@@ -19,14 +19,15 @@
             ✏️
           </button>
         </div>
+         @if (empleadoSelectado) {
 
         <h2 class="text-xl font-bold text-gray-800 dark:text-white">
-          {{name_user}} {{suername_user}}
+          {{empleadoSelectado.name}} {{empleadoSelectado.lastName}}
         </h2>
-        <p class="text-gray-500">{{puesto_user}}</p>
+        <p class="text-gray-500">{{empleadoSelectado.position}}</p>
 
-        <span class="px-2 py-1 text-xs rounded-full mt-2" [ngClass]="getEstadoClase(estado_user)">
-          {{estado_user}}
+        <span class="px-2 py-1 text-xs rounded-full mt-2" [ngClass]="getEstadoClase(empleadoSelectado.active)">
+          {{empleadoSelectado.active ? 'Activo' : 'Inactivo'}}
         </span>
 
         <button 
@@ -35,7 +36,7 @@
         >
           Editar perfil
         </button>
-
+      }
       </div>
 
     </div>
@@ -46,60 +47,70 @@
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
           Información personal
         </h3>
-
+         @if (empleadoSelectado)  {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 dark:text-gray-200">
+
+           <div>
+            <p class="text-sm text-gray-500">Teléfono</p>
+            <p>{{empleadoSelectado.dni}}</p>
+          </div>
 
           <div>
             <p class="text-sm text-gray-500">Email</p>
-            <p>{{email_user}}</p>
+            <p>{{empleadoSelectado.email}}</p>
           </div>
 
           <div>
             <p class="text-sm text-gray-500">Teléfono</p>
-            <p>{{tel_user}}</p>
+            <p>{{empleadoSelectado.phone}}</p>
           </div>
+          
 
           <div>
             <p class="text-sm text-gray-500">Ubicación</p>
-            <p>{{ubicacion_user}}</p>
+            <p>{{empleadoSelectado.location}}</p>
           </div>
 
           <div>
             <p class="text-sm text-gray-500">Fecha de nacimiento</p>
-            <p>{{fnac_user}}</p>
+            <p>{{empleadoSelectado.dateOfBirth}}</p>
           </div>
 
           <div class="md:col-span-2">
             <p class="text-sm text-gray-500">IBAN</p>
-            <p>{{iban_user}}</p>
+            <p>{{empleadoSelectado.iban}}</p>
           </div>
 
         </div>
+      }
       </div>
 
       <div class="backdrop-blur-xl bg-white border border-white/20 rounded-3xl shadow-xl p-6">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
           Información laboral
         </h3>
+                 @if (empleadoSelectado) {
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-700 dark:text-gray-200">
 
           <div>
             <p class="text-sm text-gray-500">Departamento</p>
-            <p>{{area_user}}</p>
+            <p>{{empleadoSelectado.department}}</p>
           </div>
 
           <div>
             <p class="text-sm text-gray-500">Puesto</p>
-            <p>{{puesto_user}}</p>
+            <p>{{empleadoSelectado.position}}</p>
           </div>
 
           <div>
             <p class="text-sm text-gray-500">Antigüedad</p>
-            <p>{{antiguedad_user}}</p>
+            <p>{{empleadoSelectado.seniority}} años
           </div>
 
         </div>
+
+      }
       </div>
 
     </div>

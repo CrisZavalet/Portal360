@@ -1,4 +1,4 @@
-<!-- <div class="p-0 md:p-2">
+<div class="p-0 md:p-2">
        <button
   (click)="volver()"
   class="bg-white flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 mb-4">
@@ -34,10 +34,10 @@
     </div>
 
     <button
-      (click)="subirNomina()"
+      (click)="subirDocumento()"
       class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
       <span>+</span>
-      Subir nómina
+      Subir documento
     </button>
  }
   </div>
@@ -46,8 +46,8 @@
     <input
       type="text"
       [(ngModel)]="busqueda"
-      (input)="filtrarNominas()"
-      placeholder="Buscar nómina..."
+      (input)="filtrarDocumentos()"
+      placeholder="Buscar documento..."
       class="w-full md:w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
   </div>
 
@@ -76,20 +76,20 @@
       </thead>
 
       <tbody>
-   @for(nomina of nominasFiltradas; track $index){
+   @for(d of documentosFiltrados; track $index){
         <tr
           class="border-b hover:bg-gray-50">
 
           <td class="px-4 py-3">
-            {{ nomina.periodo }}
+            {{ d.periodo }}
           </td>
 
           <td class="px-4 py-3">
-            {{ nomina.tipo }}
+            {{ d.tipo }}
           </td>
 
           <td class="px-4 py-3">
-            {{ nomina.fechaEmision }}
+            {{ d.fechaEmision }}
           </td>
 
           <td class="px-4 py-3">
@@ -97,10 +97,10 @@
             <span
               class="px-2 py-1 rounded-full text-xs font-medium"
               [ngClass]="{
-                'bg-green-100 text-green-700': nomina.estado === 'Disponible',
-                'bg-yellow-100 text-yellow-700': nomina.estado === 'Pendiente'
+                'bg-green-100 text-green-700': d.estado === 'Disponible',
+                'bg-yellow-100 text-yellow-700': d.estado === 'Pendiente'
               }">
-              {{ nomina.estado }}
+              {{ d.estado }}
             </span>
 
           </td>
@@ -109,7 +109,7 @@
             <div class="flex justify-center gap-2">
             
 
-              <button
+                 <button
                 class="px-3 py-1 text-blue-600 hover:text-blue-800 shrink-0">
                 <img src="assets/icons/eye-outline.svg" alt="Ver" class="w-5 h-5 ">
               </button>
@@ -119,15 +119,21 @@
                 <img src="assets/icons/download.svg" alt="Descargar" class="w-5 h-5">
               </button>
 
+              <button
+                class="px-3 py-1 text-red-600 hover:text-red-800 shrink-0">
+                <img src="assets/icons/trash.svg" alt="Eliminar" class="w-5 h-5">
+              </button>
+
+
             </div>
           </td>
         </tr>
         }
       
         <tr>
-            @if(nominasFiltradas.length===0) {
+            @if(documentosFiltrados.length===0) {
             <td colspan="5" class="py-6 text-center text-gray-500">
-              No se encontraron nóminas.
+              No se encontraron documentos.
             </td>
             }
         </tr>
@@ -153,7 +159,7 @@
       </h3>
 
       <button
-        (click)="cerrarNomina()"
+        (click)="cerrarDocumento()"
         class="text-gray-500 hover:text-gray-700">
         ✕
       </button>
@@ -184,12 +190,12 @@
         </label>
 
         <select
-    [(ngModel)]="tipoNomina"
+    [(ngModel)]="tiposDocumentos"
     class="w-full border rounded-lg px-3 py-2">
 
     <option value="">Seleccione un tipo</option>
 
-    @for (tipo of tiposNomina; track tipo) {
+    @for (tipo of tiposDocumentos; track tipo) {
       <option [value]="tipo">
         {{ tipo }}
       </option>
@@ -235,13 +241,13 @@
     <div class="flex justify-end gap-2 p-4 border-t">
 
       <button
-        (click)="cerrarNomina()"
+        (click)="cerrarDocumento()"
         class="px-4 py-2 border rounded-lg hover:bg-gray-100">
         Cancelar
       </button>
 
       <button
-        (click)="guardarNomina()"
+        (click)="guardarDocumento()"
         class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-700">
         Subir
       </button>
@@ -251,4 +257,4 @@
   </div>
 
 </div>
-} -->
+}

@@ -3,10 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-documentos-empleado',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule],
   templateUrl: './documentos-empleado.html',
   styleUrl: './documentos-empleado.css',
 })
@@ -21,6 +25,17 @@ export class DocumentosEmpleado {
   documentosFiltrados: any[] = [];
   documentos: any[] = [];
   empleado: any;
+  fecha = new Date();
+tiposDocumentos = [
+  'Contrato',
+  'Documento',
+  'Cursos'
+  ];
+estado = '';
+estados = [
+  { id: 'DISPONIBLE', nombre: 'Disponible' },
+  { id: 'NO_DISPONIBLE', nombre: 'No disponible' }
+];
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +67,7 @@ export class DocumentosEmpleado {
     this.router.navigate(['/employees']);
   }
 
-  filtrarNominas() {
+  filtrarDocumentos() {
     const search = this.searchTerm.toLowerCase();
 
     this.documentosFiltrados = this.documentos.filter(
@@ -63,11 +78,28 @@ export class DocumentosEmpleado {
     );
   }
 
-  subirNomina(): void {
+  subirDocumento(): void {
     this.modalVisible = true;
   }
 
-  cerrarNomina(): void {
+  cerrarDocumento(): void {
     this.modalVisible = false;
   }
+
+  setMonthAndYear(date: Date, datepicker: any) {
+  this.fecha = date;
+  datepicker.close();
+}
+
+onFileSelected(event: any) {
+  this.archivoSeleccionado = event.target.files[0];
+}
+guardarDocumento(): void {
+   if (!this.archivoSeleccionado) {
+    alert('Selecciona un PDF');
+    return;
+  }
+}
+
+
 }

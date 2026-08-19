@@ -6,6 +6,7 @@ import { tap } from 'rxjs';
 import { Empleado } from '../interfaces/empleado.interface';
 import { EmpleadoData } from '../interfaces/empleadoData.interface';
 import { HistorialFichajeEmpleado } from '../interfaces/historialFichajeEmpleado.interface';
+import { SolicitudAusencias } from '../interfaces/solicitudAusencias.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class AuthService {
   private apiUrlEmpleados = 'http://localhost:8080/api/employees'; 
   private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
   private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
+  private apiUrlSolicitudAusencias = 'http://localhost:8080/api/requests';
 private http=inject(HttpClient);
  
 login(email: string, password: string): Observable<LoginTablet> {
@@ -110,6 +112,20 @@ login(email: string, password: string): Observable<LoginTablet> {
     const body = { aprobado };
     return this.http.put(`${this.apiUrlEmpleadoFichajeHistorial}/${idClocking}/approval`, body);
   }
+
+  createSolicitudAusencias(solicitud: SolicitudAusencias): Observable<any> {
+    return this.http.post(
+      `${this.apiUrlSolicitudAusencias}/create`,
+      solicitud
+    );
+  }
+
+getSolicitudes(): Observable<SolicitudAusencias[]> {
+    return this.http.get<SolicitudAusencias[]>(
+      `${this.apiUrlSolicitudAusencias}/all`
+    );
+  }
+
 
 }
 
