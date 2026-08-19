@@ -42,6 +42,17 @@
     <div
       class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
     >
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Ausencias Pendientes</h2>
+      </div>
+
+     
+
+    </div>
+
+    <div
+      class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
+    >
       <div>
         <div>
           <h2
@@ -319,105 +330,90 @@
             Varios días
           </button>
         </div>
-@if (errorFormulario) {
-  <div
-    class="mt-4 p-3 rounded-lg bg-red-100 border border-red-300 text-red-700 text-sm"
-  >
-    {{ errorFormulario }}
-  </div>
-}
+        @if (errorFormulario) {
+          <div class="mt-4 p-3 rounded-lg bg-red-100 border border-red-300 text-red-700 text-sm">
+            {{ errorFormulario }}
+          </div>
+        }
         @if (durationType === 'hours') {
+          <div class="grid grid-cols-3 gap-4 mt-4">
+            <div>
+              <label class="label">Fecha</label>
 
-  <div class="grid grid-cols-3 gap-4 mt-4">
+              <input
+                type="date"
+                [(ngModel)]="startDate"
+                name="startDateHours"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
 
-    <div>
-      <label class="label">Fecha</label>
+            <div>
+              <label class="label">Hora inicio</label>
 
-      <input
-        type="date"
-        [(ngModel)]="startDate"
-        name="startDateHours"
-        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-      >
-    </div>
+              <input
+                type="time"
+                [(ngModel)]="startTime"
+                name="startTime"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
 
-    <div>
-      <label class="label">Hora inicio</label>
+            <div>
+              <label class="label">Hora fin</label>
 
-      <input
-        type="time"
-        [(ngModel)]="startTime"
-        name="startTime"
-        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-      >
-    </div>
+              <input
+                type="time"
+                [(ngModel)]="endTime"
+                name="endTime"
+                [min]="startTime"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+        }
 
-    <div>
-      <label class="label">Hora fin</label>
+        @if (durationType === 'day') {
+          <div class="mt-4">
+            <label class="label">Fecha</label>
 
-      <input
-        type="time"
-        [(ngModel)]="endTime"
-        name="endTime"
-        [min]="startTime"
-        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-      >
-    </div>
+            <input
+              type="date"
+              [(ngModel)]="startDate"
+              name="startDateDay"
+              [min]="today"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+        }
 
-  </div>
+        @if (durationType === 'days') {
+          <div class="grid grid-cols-2 gap-4 mt-4">
+            <div>
+              <label class="label">Desde</label>
 
-}
+              <input
+                type="date"
+                [(ngModel)]="startDate"
+                name="startDateDays"
+                [min]="today"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
 
-  @if (durationType === 'day') {
+            <div>
+              <label class="label">Hasta</label>
 
-  <div class="mt-4">
-
-    <label class="label">Fecha</label>
-
-    <input
-      type="date"
-      [(ngModel)]="startDate"
-      name="startDateDay"
-      [min]="today"
-      class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-    >
-
-  </div>
-
-}
-
-       @if (durationType === 'days') {
-
-  <div class="grid grid-cols-2 gap-4 mt-4">
-
-    <div>
-      <label class="label">Desde</label>
-
-      <input
-        type="date"
-        [(ngModel)]="startDate"
-        name="startDateDays"
-        [min]="today"
-        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-      >
-    </div>
-
-    <div>
-      <label class="label">Hasta</label>
-
-      <input
-        type="date"
-        [(ngModel)]="endDate"
-        name="endDate"
-         [min]="startDate"
-         
-        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-      >
-    </div>
-
-  </div>
-
-}
+              <input
+                type="date"
+                [(ngModel)]="endDate"
+                name="endDate"
+                [min]="startDate"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+        }
       </fieldset>
 
       <!-- <fieldset class="fieldset mt-5">
@@ -437,11 +433,12 @@
         </button>
 
         <button
-  type="button"
-  (click)="crearSolicitud()"
-  class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
-  Solicitar
-</button>
+          type="button"
+          (click)="crearSolicitud()"
+          class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+        >
+          Solicitar
+        </button>
       </div>
     </div>
   </div>
