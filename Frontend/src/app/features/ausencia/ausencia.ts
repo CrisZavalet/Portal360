@@ -11,10 +11,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
 import { SolicitudAusencias } from '../../core/interfaces/solicitudAusencias.interface';
+import { A11yModule } from "@angular/cdk/a11y";
 
 @Component({
   selector: 'app-ausencia',
-  imports: [FullCalendarModule, CommonModule, FormsModule],
+  imports: [FullCalendarModule, CommonModule, FormsModule, A11yModule],
   templateUrl: './ausencia.html',
   styleUrl: './ausencia.css',
 })
@@ -27,7 +28,7 @@ modalOpen = false;
 idType: number = 1;
 errorFormulario: string = '';
 comments: string = '';
-
+request: SolicitudAusencias[] = [];
 durationType: 'hours' | 'day' | 'days' = 'hours';
 today: string = new Date().toISOString().split('T')[0];
 startDate: string = '';
@@ -65,6 +66,8 @@ events: CalendarEvent[] = [];
   weekDays = ['L','M','X','J','V','S','D'];
 
  ngOnInit() {
+    this.idEmployee = localStorage.getItem('idEmployee');
+    this.obtenerListadoSolicitudes();
     this.generateCalendar();
     this.loadHolidays();
 
@@ -325,7 +328,6 @@ crearSolicitud(): void {
     return;
   }
 
-  this.idEmployee = localStorage.getItem('idEmployee');
 
 
   let solicitud: SolicitudAusencias;
@@ -390,5 +392,53 @@ crearSolicitud(): void {
     }
 
   });
+}
+
+obtenerListadoSolicitudes(): void {
+  this.authService.getSolicitudById(this.idEmployee).subscribe({
+
+    next: (solicitudes) => {
+      this.request = solicitudes;
+      console.log('Listado de solicitudes:', this.request);
+    },
+
+    error: (error) => {
+      console.error('Error al obtener el listado de solicitudes:', error);
+    }
+
+  });
+}
+
+getTipoAusencia(idType: number): string {
+  const tipo = this.selectAbsenceType.find(type => type.id === idType);
+  return tipo ? tipo.name : 'Ausencia';
+}
+
+getDuracion(solicitud: SolicitudAusencias): string {
+
+  switch (solicitud.durationType) {
+
+    case 'HORAS':
+      return `${solicitud.startTime?.substring(0, 5)} - ${solicitud.endTime?.substring(0, 5)}`;
+
+    case 'UN_DIA':
+      return '1 día';
+
+    case 'VARIOS_DIAS':
+      return `${this.formatearFecha(solicitud.startDate)} - ${this.formatearFecha(solicitud.endDate)}`;
+
+    default:
+      return '';
+  }
+}
+
+
+formatearFecha(fecha: string | null): string {
+
+  if (!fecha) return '';
+
+  const [year, month, day] = fecha.split('-');
+
+  return `${day}/${month}/${year}`;
 }
 }

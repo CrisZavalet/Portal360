@@ -126,6 +126,11 @@ getSolicitudes(): Observable<SolicitudAusencias[]> {
     );
   }
 
+getSolicitudById(id: any): Observable<SolicitudAusencias[]> {
+    return this.http.get<SolicitudAusencias[]>(
+      `${this.apiUrlSolicitudAusencias}/employee/${id}`
+    );
+  }
 
 }
 
