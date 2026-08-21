@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.portal.portal360.dto.ActualizarEstadoSolicitudDTO;
 import com.portal.portal360.dto.SolicitudRequestDTO;
 import com.portal.portal360.model.Solicitud;
 import com.portal.portal360.repository.SolicitudRepository;
@@ -271,4 +272,43 @@ public ResponseEntity<List<Solicitud>> getRequestsByEmployee(
                     );
         }
     }
+
+    // =====================================================
+// PATCH - Actualizar estado de una solicitud
+// =====================================================
+
+@PatchMapping("/{idRequest}/status")
+public ResponseEntity<?> actualizarEstadoSolicitud(
+        @PathVariable Integer idRequest,
+        @RequestBody ActualizarEstadoSolicitudDTO dto) {
+
+    // Validar estado
+    if (dto.getIdState() == null) {
+        return ResponseEntity.badRequest()
+                .body("El estado es obligatorio");
+    }
+
+    // Solo permitimos:
+    // 2 = Aprobada
+    // 3 = Rechazada
+    if (dto.getIdState() != 2 && dto.getIdState() != 3) {
+        return ResponseEntity.badRequest()
+                .body("El estado debe ser 2 (Aprobada) o 3 (Rechazada)");
+    }
+
+    return solicitudRepository.findById(idRequest)
+            .map(solicitud -> {
+
+                solicitud.setIdState(dto.getIdState());
+
+                Solicitud solicitudActualizada =
+                        solicitudRepository.save(solicitud);
+
+                return ResponseEntity.ok(solicitudActualizada);
+
+            })
+            .orElse(
+                    ResponseEntity.notFound().build()
+            );
+}
 }
