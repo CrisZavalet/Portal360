@@ -7,6 +7,7 @@ import { Empleado } from '../interfaces/empleado.interface';
 import { EmpleadoData } from '../interfaces/empleadoData.interface';
 import { HistorialFichajeEmpleado } from '../interfaces/historialFichajeEmpleado.interface';
 import { SolicitudAusencias } from '../interfaces/solicitudAusencias.interface';
+import { ObtenerAusencias } from '../interfaces/obtenerAusencias.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -126,8 +127,8 @@ getSolicitudes(): Observable<SolicitudAusencias[]> {
     );
   }
 
-getSolicitudById(id: any): Observable<SolicitudAusencias[]> {
-    return this.http.get<SolicitudAusencias[]>(
+getSolicitudById(id: any): Observable<ObtenerAusencias[]> {
+    return this.http.get<ObtenerAusencias[]>(
       `${this.apiUrlSolicitudAusencias}/employee/${id}`
     );
   }

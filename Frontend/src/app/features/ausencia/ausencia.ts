@@ -33,7 +33,7 @@ durationType: 'hours' | 'day' | 'days' = 'hours';
 today: string = new Date().toISOString().split('T')[0];
 startDate: string = '';
 endDate: string = '';
-
+mostrarTodas = false;
 startTime: string = '';
 
 endTime: string = '';
@@ -342,7 +342,9 @@ crearSolicitud(): void {
       startDate: this.startDate,
       endDate: null,
       startTime: this.startTime + ':00',
-      endTime: this.endTime + ':00'
+      endTime: this.endTime + ':00',
+      
+
     };
 
   } else if (this.durationType === 'day') {
@@ -398,12 +400,24 @@ obtenerListadoSolicitudes(): void {
   this.authService.getSolicitudById(this.idEmployee).subscribe({
 
     next: (solicitudes) => {
-      this.request = solicitudes;
-      console.log('Listado de solicitudes:', this.request);
+
+      this.request = solicitudes
+        .filter(solicitud => solicitud.idState === 1)
+        .sort((a, b) => {
+          return new Date(a.startDate).getTime() -
+                 new Date(b.startDate).getTime();
+        });
+
+      console.log('Solicitudes pendientes:', this.request);
     },
 
     error: (error) => {
-      console.error('Error al obtener el listado de solicitudes:', error);
+      console.error(
+        'Error al obtener el listado de solicitudes:',
+        error
+      );
+
+      this.request = [];
     }
 
   });
@@ -416,22 +430,21 @@ getTipoAusencia(idType: number): string {
 
 getDuracion(solicitud: SolicitudAusencias): string {
 
-  switch (solicitud.durationType) {
 
-    case 'HORAS':
-      return `${solicitud.startTime?.substring(0, 5)} - ${solicitud.endTime?.substring(0, 5)}`;
-
-    case 'UN_DIA':
-      return '1 día';
-
-    case 'VARIOS_DIAS':
-      return `${this.formatearFecha(solicitud.startDate)} - ${this.formatearFecha(solicitud.endDate)}`;
-
-    default:
-      return '';
+  if (solicitud.startTime && solicitud.endTime) {
+    return `${solicitud.startTime.substring(0, 5)} - ${solicitud.endTime.substring(0, 5)}`;
   }
-}
 
+  if (solicitud.startDate && solicitud.endDate) {
+    return `${this.formatearFecha(solicitud.startDate)} - ${this.formatearFecha(solicitud.endDate)}`;
+  }
+
+  if (solicitud.startDate && !solicitud.endDate) {
+    return '1 día';
+  }
+
+  return '';
+}
 
 formatearFecha(fecha: string | null): string {
 
@@ -440,5 +453,18 @@ formatearFecha(fecha: string | null): string {
   const [year, month, day] = fecha.split('-');
 
   return `${day}/${month}/${year}`;
+}
+
+getSolicitudesVisibles(): SolicitudAusencias[] {
+
+  if (this.mostrarTodas) {
+    return this.request;
+  }
+
+  return this.request.slice(0, 2);
+}
+
+mostrarMas(): void {
+  this.mostrarTodas = !this.mostrarTodas;
 }
 }
