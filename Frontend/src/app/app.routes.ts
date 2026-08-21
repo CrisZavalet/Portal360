@@ -27,8 +27,9 @@ import { ViewAdmin } from './features/view/view-admin/view-admin';
 import { LayoutAdmin } from './features/view/layout-admin/layout-admin';
 import { ListaEmpleado } from './features/view/view-admin/lista-empleado/lista-empleado';
 import { ViewTime } from './features/view/view-admin/view-time/view-time';
+import { Peticiones } from './features/peticiones/peticiones';
 export const routes: Routes = [
-   { path: 'access', component: Login },
+  { path: 'access', component: Login },
   { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
   { path: 'signup', component: Signup },
   { path: 'forgot-password', component: ForgotPassword },
@@ -36,29 +37,130 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      { path: 'dashboard', component: Dashboard, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] }  },
-      { path: 'my-time', component: Fichaje, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'paysheet', component: Nomina, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'documents', component: Documento, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'absences', component: Ausencia, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'benefits', component: Beneficio, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'employees', component: Empleados, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] }},
-      { path: 'notifications', component: Notificaciones, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'profile', component: Perfil, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      { path: 'config', component: Configurations, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      {path:'inbox', component:BandejaEntrada, canActivate: [RoleGuard],data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } },
-      {path:'management-clock-in/:id', component:FichajeEmpleado, canActivate: [RoleGuard],data: { roles: [ Role.ADMIN, Role.RRHH] } },
-      {path:'management-paysheet/:id', component:NominaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
-      {path:'management-documents/:id', component:DocumentosEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
+      {
+        path: 'dashboard',
+        component: Dashboard,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'my-time',
+        component: Fichaje,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'paysheet',
+        component: Nomina,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'documents',
+        component: Documento,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'absences',
+        component: Ausencia,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'benefits',
+        component: Beneficio,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'employees',
+        component: Empleados,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'notifications',
+        component: Notificaciones,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'requests',
+        component: Peticiones,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'profile',
+        component: Perfil,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'config',
+        component: Configurations,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'inbox',
+        component: BandejaEntrada,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'management-clock-in/:id',
+        component: FichajeEmpleado,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'management-paysheet/:id',
+        component: NominaEmpleado,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'management-documents/:id',
+        component: DocumentosEmpleado,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
   },
-  
-  {path:'admin', component:LayoutAdmin, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] }, children:[
-    {path:'view-time', component:ViewAdmin, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
-    {path:'list-employees', component:ListaEmpleado, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
-    {path:'employee/:id', component:ViewTime, canActivate: [RoleGuard],data: { roles: [Role.ADMIN, Role.RRHH] } },
 
-  ] },
-  { path: '**', component: NotFound, canActivate: [RoleGuard] ,data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] } }
+  {
+    path: 'admin',
+    component: LayoutAdmin,
+    canActivate: [RoleGuard],
+    data: { roles: [Role.ADMIN, Role.RRHH] },
+    children: [
+      {
+        path: 'view-time',
+        component: ViewAdmin,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'list-employees',
+        component: ListaEmpleado,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'employee/:id',
+        component: ViewTime,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+    ],
+  },
+  {
+    path: '**',
+    component: NotFound,
+    canActivate: [RoleGuard],
+    data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
+  },
 ];
