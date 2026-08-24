@@ -13,7 +13,7 @@ import com.portal.portal360.repository.SolicitudRepository;
 
 @RestController
 @RequestMapping("/api/requests")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SolicitudController {
 
     @Autowired
