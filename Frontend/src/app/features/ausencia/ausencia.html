@@ -19,22 +19,28 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Generadas</span>
-          <span class="font-semibold text-lg text-slate-800 dark:text-white">0</span>
-        </div>
+<span class="font-semibold text-lg text-slate-800 dark:text-white">
+  {{ vacacionesGeneradas }}
+</span>        </div>
 
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Utilizadas</span>
-          <span class="font-semibold text-lg text-slate-800 dark:text-white">0</span>
+          <span class="font-semibold text-lg text-slate-800 dark:text-white">
+            {{ vacacionesUtilizadas }}
+          </span>
         </div>
 
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Disponibles</span>
-          <span class="font-semibold text-lg text-emerald-600 dark:text-emerald-400">0</span>
-        </div>
+<span class="font-semibold text-lg text-emerald-600 dark:text-emerald-400">
+  {{ vacacionesDisponibles }}
+</span>        </div>
 
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Planificadas</span>
-          <span class="font-semibold text-lg text-indigo-600 dark:text-indigo-400">0</span>
+          <span class="font-semibold text-lg text-indigo-600 dark:text-indigo-400">
+            {{ vacacionesPlanificadas }}
+          </span>
         </div>
       </div>
     </div>

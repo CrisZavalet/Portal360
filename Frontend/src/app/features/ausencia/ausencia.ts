@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth-service';
 import { SolicitudAusencias } from '../../core/interfaces/solicitudAusencias.interface';
 import { A11yModule } from "@angular/cdk/a11y";
+import { ObtenerAusencias } from '../../core/interfaces/obtenerAusencias.interface';
 
 @Component({
   selector: 'app-ausencia',
@@ -35,8 +36,13 @@ startDate: string = '';
 endDate: string = '';
 mostrarTodas = false;
 startTime: string = '';
-
+vacacionesGeneradas = 22;
+vacacionesUtilizadas = 0;
+vacacionesDisponibles = 22;
+vacacionesPlanificadas = 0;
 endTime: string = '';
+todasLasSolicitudes: ObtenerAusencias[] = [];
+
 selectAbsenceType = [
   { id: 1, name: 'Hora Libre Disposición' },
   { id: 2, name: 'Cita Médica' },
@@ -395,23 +401,39 @@ obtenerListadoSolicitudes(): void {
 
     next: (solicitudes) => {
 
+      console.log('Todas las solicitudes:', solicitudes);
+
+      // Guardamos todas las solicitudes
+      this.todasLasSolicitudes = solicitudes;
+
+      // Solo pendientes para la sección "Ausencias Pendientes"
       this.request = solicitudes
-        .filter(solicitud =>
-          solicitud.idState === 1 ||
-          solicitud.idState === 2
-        )
+        .filter(solicitud => solicitud.idState === 1)
         .sort((a, b) => {
           return new Date(a.startDate).getTime() -
                  new Date(b.startDate).getTime();
         });
 
-      console.log('Solicitudes:', this.request);
+      // Calculamos las vacaciones
+      this.calcularVacaciones();
 
       // Añadimos las solicitudes al calendario
-      this.request.forEach(solicitud => {
-        this.agregarSolicitudAlCalendario(solicitud);
+      this.todasLasSolicitudes.forEach(solicitud => {
+
+        // Solo queremos mostrar aprobadas
+        if (solicitud.idState === 2) {
+          this.agregarSolicitudAlCalendario(solicitud);
+        }
+
       });
 
+      console.log('Solicitudes pendientes:', this.request);
+      console.log('Vacaciones:', {
+        generadas: this.vacacionesGeneradas,
+        utilizadas: this.vacacionesUtilizadas,
+        disponibles: this.vacacionesDisponibles,
+        planificadas: this.vacacionesPlanificadas
+      });
     },
 
     error: (error) => {
@@ -422,9 +444,82 @@ obtenerListadoSolicitudes(): void {
       );
 
       this.request = [];
+      this.todasLasSolicitudes = [];
+
+      this.calcularVacaciones();
     }
 
   });
+}
+
+calcularVacaciones(): void {
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  // Solo vacaciones aprobadas
+  const vacaciones = this.todasLasSolicitudes.filter(
+    solicitud =>
+      solicitud.idType === 8 &&
+      solicitud.idState === 2
+  );
+
+  let utilizadas = 0;
+  let planificadas = 0;
+
+  vacaciones.forEach(solicitud => {
+
+    const inicio = this.crearFechaLocal(solicitud.startDate);
+
+    // Solicitud de un solo día
+    if (!solicitud.endDate) {
+
+      if (inicio < hoy) {
+        utilizadas += 1;
+      } else {
+        planificadas += 1;
+      }
+
+      return;
+    }
+
+    // Solicitud de varios días
+    const fin = this.crearFechaLocal(solicitud.endDate);
+
+    let fecha = new Date(inicio);
+
+    while (fecha <= fin) {
+
+      if (fecha < hoy) {
+        utilizadas++;
+      } else {
+        planificadas++;
+      }
+
+      fecha.setDate(fecha.getDate() + 1);
+    }
+
+  });
+
+  this.vacacionesUtilizadas = utilizadas;
+  this.vacacionesPlanificadas = planificadas;
+
+  this.vacacionesDisponibles =
+    this.vacacionesGeneradas -
+    this.vacacionesUtilizadas -
+    this.vacacionesPlanificadas;
+
+  // Evitamos números negativos
+  if (this.vacacionesDisponibles < 0) {
+    this.vacacionesDisponibles = 0;
+  }
+}
+
+crearFechaLocal(fecha: string): Date {
+
+  const [year, month, day] = fecha.split('-').map(Number);
+
+  return new Date(year, month - 1, day);
 }
 
 getTipoAusencia(idType: number): string {
