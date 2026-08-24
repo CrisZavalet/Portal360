@@ -25,44 +25,74 @@ AbsenceType = [
   { id: 8, name: 'Vacaciones' },
   { id: 9, name: 'Otros' }
 ];
-  constructor(private authService: AuthService) {}
+
+empleados: { [id: number]: string } = {};
+
+constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
     this.cargarSolicitudes();
   }
 
+ cargarEmpleado(id: number): void {
 
-  cargarSolicitudes(): void {
+  this.authService.getEmployeeById(id)
+    .subscribe({
 
-    this.cargando = true;
-    this.error = '';
+      next: (data) => {
 
-    this.authService.getSolicitudes()
-      .subscribe({
+        this.empleados[id] = `${data.name} ${data.lastName}`;
 
-        next: (data) => {
+      },
 
-          console.log('Solicitudes recibidas:', data);
+      error: (error) => {
 
-          this.solicitudes = data;
+        console.error(
+          'Error al obtener el empleado:',
+          error
+        );
 
-          this.cargando = false;
-        },
+      }
 
-        error: (error) => {
+    });
+}
 
-          console.error(
-            'Error al obtener las solicitudes:',
-            error
-          );
+ cargarSolicitudes(): void {
 
-          this.error = 'No se han podido cargar las solicitudes.';
+  this.cargando = true;
+  this.error = '';
 
-          this.cargando = false;
-        }
+  this.authService.getSolicitudes()
+    .subscribe({
 
-      });
-  }
+      next: (data) => {
+
+        console.log('Solicitudes recibidas:', data);
+
+        this.solicitudes = data;
+
+        data.forEach(solicitud => {
+          this.cargarEmpleado(solicitud.idEmployee);
+        });
+
+        this.cargando = false;
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Error al obtener las solicitudes:',
+          error
+        );
+
+        this.error =
+          'No se han podido cargar las solicitudes.';
+
+        this.cargando = false;
+      }
+
+    });
+}
 
 tipoAusencias(idType: number): string {
 
