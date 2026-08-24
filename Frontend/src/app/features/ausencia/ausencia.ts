@@ -259,7 +259,6 @@ validarFormulario(): boolean {
 
   this.errorFormulario = '';
 
-  // Comprobar tipo de ausencia
   if (!this.idType) {
     this.errorFormulario = 'Debes seleccionar un tipo de ausencia.';
     return false;

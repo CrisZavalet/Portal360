@@ -20,6 +20,7 @@ export class AuthService {
   private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
   private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
   private apiUrlSolicitudAusencias = 'http://localhost:8080/api/requests';
+
 private http=inject(HttpClient);
  
 login(email: string, password: string): Observable<LoginTablet> {
@@ -121,8 +122,8 @@ login(email: string, password: string): Observable<LoginTablet> {
     );
   }
 
-getSolicitudes(): Observable<SolicitudAusencias[]> {
-    return this.http.get<SolicitudAusencias[]>(
+getSolicitudes(): Observable<ObtenerAusencias[]> {
+    return this.http.get<ObtenerAusencias[]>(
       `${this.apiUrlSolicitudAusencias}/all`
     );
   }
@@ -132,6 +133,18 @@ getSolicitudById(id: any): Observable<ObtenerAusencias[]> {
       `${this.apiUrlSolicitudAusencias}/employee/${id}`
     );
   }
+
+  updateSolicitudStatus(idRequest: number,idState: number): Observable<any> 
+  {
+    return this.http.patch(
+      `${this.apiUrlSolicitudAusencias}/${idRequest}/status`,
+      {
+        idState: idState
+      }
+    );
+
+  }
+
 
 }
 

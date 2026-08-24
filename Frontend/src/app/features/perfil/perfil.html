@@ -9,17 +9,16 @@
     <div class="lg:col-span-1 backdrop-blur-xl bg-white border border-white/20 rounded-3xl shadow-xl p-6">
 
       <div class="flex flex-col items-center text-center">
-        
+
         <div class="relative mb-4">
-          <img 
-            src="./assets/profile.png" 
-            class="w-32 h-32 rounded-full border-4 border-white/30 shadow-lg"
-          />
-          <button class="absolute bottom-0 right-0 bg-white text-black p-2 rounded-full shadow hover:scale-105 transition" (click)="openModalPhoto()">
+          <img src="./assets/profile.png" class="w-32 h-32 rounded-full border-4 border-white/30 shadow-lg" />
+          <button
+            class="absolute bottom-0 right-0 bg-white text-black p-2 rounded-full shadow hover:scale-105 transition"
+            (click)="openModalPhoto()">
             ✏️
           </button>
         </div>
-         @if (empleadoSelectado) {
+        @if (empleadoSelectado) {
 
         <h2 class="text-xl font-bold text-gray-800 dark:text-white">
           {{empleadoSelectado.name}} {{empleadoSelectado.lastName}}
@@ -30,13 +29,11 @@
           {{empleadoSelectado.active ? 'Activo' : 'Inactivo'}}
         </span>
 
-        <button 
-          (click)="openModal()" 
-          class="mt-6 w-full py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition"
-        >
+        <button (click)="openModal()"
+          class="mt-6 w-full py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition">
           Editar perfil
         </button>
-      }
+        }
       </div>
 
     </div>
@@ -47,10 +44,10 @@
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
           Información personal
         </h3>
-         @if (empleadoSelectado)  {
+        @if (empleadoSelectado) {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 dark:text-gray-200">
 
-           <div>
+          <div>
             <p class="text-sm text-gray-500">Número de identificación</p>
             <p>{{empleadoSelectado.dni}}</p>
           </div>
@@ -64,7 +61,7 @@
             <p class="text-sm text-gray-500">Teléfono</p>
             <p>{{empleadoSelectado.phone}}</p>
           </div>
-          
+
 
           <div>
             <p class="text-sm text-gray-500">Ubicación</p>
@@ -82,14 +79,14 @@
           </div>
 
         </div>
-      }
+        }
       </div>
 
       <div class="backdrop-blur-xl bg-white border border-white/20 rounded-3xl shadow-xl p-6">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
           Información laboral
         </h3>
-                 @if (empleadoSelectado) {
+        @if (empleadoSelectado) {
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-700 dark:text-gray-200">
 
@@ -110,7 +107,7 @@
 
         </div>
 
-      }
+        }
       </div>
 
     </div>
@@ -119,160 +116,124 @@
 
 </div>
 
-   @if (modalOpen) {
-  <dialog
-    open
-    class="modal backdrop-blur-xl bg-black/30"
-  >
-    <div
-      class="modal-box max-w-2xl rounded-3xl bg-white-500/50 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 shadow-2xl"
-    >
-      <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-6">
-        Editar perfil
-      </h3>
+@if (modalOpen) {
+<dialog open class="modal backdrop-blur-xl bg-black/30">
+  <div
+    class="modal-box max-w-2xl rounded-3xl bg-white-500/50 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 shadow-2xl">
+    <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-6">
+      Editar perfil
+    </h3>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Nombre</span>
-          </label>
-          <input 
-            type="text" 
-            [(ngModel)]="name_user"
-            class="input w-full 
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Nombre</span>
+        </label>
+        <input type="text" [(ngModel)]="name_user" class="input w-full 
        bg-white/60 
        border-2 border-slate-300/50 
        p-2 rounded-l
        focus:border-indigo-500 
        focus:bg-white/80
-       transition duration-300"
-          />
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Apellidos</span>
-          </label>
-          <input 
-            type="text" 
-            [(ngModel)]="suername_user"
-            class="input w-full 
-       bg-white/60 
-       border-2 border-slate-300/50 
-       p-2 rounded-l
-       focus:border-indigo-500 
-       focus:bg-white/80
-       transition duration-300"
-          />
-        </div>
-
-        <div class="form-control md:col-span-2">
-          <label class="label">
-            <span class="label-text">Email</span>
-          </label>
-          <input 
-            type="email" 
-            [(ngModel)]="email_user"
-            class="input w-full 
-       bg-white/60 
-       border-2 border-slate-300/50 
-       p-2 rounded-l
-       focus:border-indigo-500 
-       focus:bg-white/80
-       transition duration-300"
-          />
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Teléfono</span>
-          </label>
-          <input 
-            type="text" 
-            [(ngModel)]="tel_user"
-            class="input w-full 
-       bg-white/60 
-       border-2 border-slate-300/50 
-       p-2 rounded-l
-       focus:border-indigo-500 
-       focus:bg-white/80
-       transition duration-300"
-          />
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Ubicación</span>
-          </label>
-          <input 
-            type="text" 
-            [(ngModel)]="ubicacion_user"
-            class="input w-full 
-       bg-white/60 
-       border-2 border-slate-300/50 
-       p-2 rounded-l
-       focus:border-indigo-500 
-       focus:bg-white/80
-       transition duration-300"
-          />
-        </div>
-
-        <div class="form-control md:col-span-2">
-          <label class="label">
-            <span class="label-text">IBAN</span>
-          </label>
-          <input 
-            type="text" 
-            [(ngModel)]="iban_user"
-            class="input w-full 
-       bg-white/60 
-       border-2 border-slate-300/50 
-       p-2 rounded-l
-       focus:border-indigo-500 
-       focus:bg-white/80
-       transition duration-300"
-          />
-        </div>
-
+       transition duration-300" />
       </div>
 
-      <div class="modal-action mt-6">
-        <button
-          (click)="guardarCambios()"
-          class="px-5 py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition shadow-lg"
-        >
-          Guardar cambios
-        </button>
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Apellidos</span>
+        </label>
+        <input type="text" [(ngModel)]="suername_user" class="input w-full 
+       bg-white/60 
+       border-2 border-slate-300/50 
+       p-2 rounded-l
+       focus:border-indigo-500 
+       focus:bg-white/80
+       transition duration-300" />
+      </div>
 
-        <button
-          class="px-5 py-2 rounded-xl bg-gray-400 text-white hover:bg-gray-500 transition"
-          (click)="modalOpen = false"
-        >
-          Cancelar
-        </button>
+      <div class="form-control md:col-span-2">
+        <label class="label">
+          <span class="label-text">Email</span>
+        </label>
+        <input type="email" [(ngModel)]="email_user" class="input w-full 
+       bg-white/60 
+       border-2 border-slate-300/50 
+       p-2 rounded-l
+       focus:border-indigo-500 
+       focus:bg-white/80
+       transition duration-300" />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Teléfono</span>
+        </label>
+        <input type="text" [(ngModel)]="tel_user" class="input w-full 
+       bg-white/60 
+       border-2 border-slate-300/50 
+       p-2 rounded-l
+       focus:border-indigo-500 
+       focus:bg-white/80
+       transition duration-300" />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Ubicación</span>
+        </label>
+        <input type="text" [(ngModel)]="ubicacion_user" class="input w-full 
+       bg-white/60 
+       border-2 border-slate-300/50 
+       p-2 rounded-l
+       focus:border-indigo-500 
+       focus:bg-white/80
+       transition duration-300" />
+      </div>
+
+      <div class="form-control md:col-span-2">
+        <label class="label">
+          <span class="label-text">IBAN</span>
+        </label>
+        <input type="text" [(ngModel)]="iban_user" class="input w-full 
+       bg-white/60 
+       border-2 border-slate-300/50 
+       p-2 rounded-l
+       focus:border-indigo-500 
+       focus:bg-white/80
+       transition duration-300" />
       </div>
 
     </div>
-  </dialog>
+
+    <div class="modal-action mt-6">
+      <button (click)="guardarCambios()"
+        class="px-5 py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition shadow-lg">
+        Guardar cambios
+      </button>
+
+      <button class="px-5 py-2 rounded-xl bg-gray-400 text-white hover:bg-gray-500 transition"
+        (click)="modalOpen = false">
+        Cancelar
+      </button>
+    </div>
+
+  </div>
+</dialog>
 }
 @if(modalOpenPhoto){
-  <dialog
-    open
-    class="modal backdrop-blur-xl bg-black/30"
-  >
-    <div
-      class="modal-box max-w-md rounded-3xl bg-white-500/50 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 shadow-2xl"
-    >
-      <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-6">
-        Cambiar foto de perfil
-      </h3>
+<dialog open class="modal backdrop-blur-xl bg-black/30">
+  <div
+    class="modal-box max-w-md rounded-3xl bg-white-500/50 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 shadow-2xl">
+    <h3 class="font-bold text-xl text-slate-800 dark:text-white mb-6">
+      Cambiar foto de perfil
+    </h3>
 
-      <div class="form-control">
-        <!-- <label class="label">
+    <div class="form-control">
+      <!-- <label class="label">
           <span class="label-text">URL de la nueva foto</span>
         </label> -->
-        <!-- <input 
+      <!-- <input 
           type="text" 
           [(ngModel)]="newPhotoUrl"
           class="input w-full 
@@ -285,64 +246,47 @@
           /> -->
 
 
-    <div class="flex flex-col items-center">
+      <div class="flex flex-col items-center">
 
-  <input 
-    type="file" 
-    #fileInput 
-    class="hidden"
-    (change)="onFileSelected($event)"
-  />
+        <input type="file" #fileInput class="hidden" (change)="onFileSelected($event)" />
 
-  <label class="text-sm font-semibold text-gray-700 dark:text-white mb-3">
-    Previsualización de foto
-  </label>
+        <label class="text-sm font-semibold text-gray-700 dark:text-white mb-3">
+          Previsualización de foto
+        </label>
 
-  @if (!photoPreview) {
-    <div class="mt-2">
-      <img 
-        src="./assets/profile.png"
-        class="w-32 h-32 rounded-full shadow-lg object-cover"
-      />
-    </div>
-  }
+        @if (!photoPreview) {
+        <div class="mt-2">
+          <img src="./assets/profile.png" class="w-32 h-32 rounded-full shadow-lg object-cover" />
+        </div>
+        }
 
-  @if (photoPreview) {
-    <div class="mt-2">
-      <div
-        class="w-32 h-32 rounded-full shadow-lg bg-cover bg-center"
-        [style.backgroundImage]="'url(' + photoPreview + ')'"
-      ></div>
-    </div>
-  }
+        @if (photoPreview) {
+        <div class="mt-2">
+          <div class="w-32 h-32 rounded-full shadow-lg bg-cover bg-center"
+            [style.backgroundImage]="'url(' + photoPreview + ')'"></div>
+        </div>
+        }
 
-  <button 
-    type="button"
-    (click)="fileInput.click()"
-    class="mt-4 px-4 py-2 rounded-xl bg-white/70 border border-gray-300 text-sm hover:bg-white transition"
-  >
-    Seleccionar nueva foto
-  </button>
+        <button type="button" (click)="fileInput.click()"
+          class="mt-4 px-4 py-2 rounded-xl bg-white/70 border border-gray-300 text-sm hover:bg-white transition">
+          Seleccionar nueva foto
+        </button>
 
-</div>
+      </div>
 
-<div class="modal-action mt-6">
-        <button
-          (click)="guardarCambios()"
-          class="px-5 py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition shadow-lg"
-        >
+      <div class="modal-action mt-6">
+        <button (click)="guardarCambios()"
+          class="px-5 py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition shadow-lg">
           Guardar cambios
         </button>
 
-        <button
-          class="px-5 py-2 rounded-xl bg-gray-400 text-white hover:bg-gray-500 transition"
-          (click)="modalOpenPhoto = false"
-        >
+        <button class="px-5 py-2 rounded-xl bg-gray-400 text-white hover:bg-gray-500 transition"
+          (click)="modalOpenPhoto = false">
           Cancelar
         </button>
       </div>
 
-      </div>
     </div>
-         </dialog>
+  </div>
+</dialog>
 }

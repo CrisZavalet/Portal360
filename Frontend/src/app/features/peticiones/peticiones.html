@@ -1,1 +1,167 @@
-<p>peticiones works!</p>
+<div class="min-h-screen">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
+        Solicitudes de ausencia
+      </h1>
+
+      <p class="text-gray-500 dark:text-gray-400 mt-1">
+        Gestiona las solicitudes de ausencia de los empleados.
+      </p>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap gap-3 mb-8">
+    <button
+      (click)="cambiarFiltro('PENDIENTES')"
+      class="px-5 py-2.5 rounded-xl font-medium transition"
+      [ngClass]="
+        filtroActual === 'PENDIENTES'
+          ? 'bg-indigo-600 text-white'
+          : 'bg-white/10 text-gray-600 dark:text-gray-300 border border-white/20'
+      "
+    >
+      Pendientes
+    </button>
+
+    <button
+      (click)="cambiarFiltro('APROBADAS')"
+      class="px-5 py-2.5 rounded-xl font-medium transition"
+      [ngClass]="
+        filtroActual === 'APROBADAS'
+          ? 'bg-green-600 text-white'
+          : 'bg-white/10 text-gray-600 dark:text-gray-300 border border-white/20'
+      "
+    >
+      Historial aprobados
+    </button>
+
+    <button
+      (click)="cambiarFiltro('RECHAZADAS')"
+      class="px-5 py-2.5 rounded-xl font-medium transition"
+      [ngClass]="
+        filtroActual === 'RECHAZADAS'
+          ? 'bg-red-600 text-white'
+          : 'bg-white/10 text-gray-600 dark:text-gray-300 border border-white/20'
+      "
+    >
+      Historial rechazados
+    </button>
+  </div>
+
+  @if (cargando) {
+    <div class="flex justify-center py-16">
+      <span class="loading loading-spinner loading-lg"></span>
+    </div>
+  }
+
+  @if (error) {
+    <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500">
+      {{ error }}
+    </div>
+  }
+
+  @if (!cargando && !error) {
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      @for (solicitud of solicitudesFiltradas; track solicitud.idRequest) {
+        <div
+          class="bg-white dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg"
+        >
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-11 h-11 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-500 font-bold"
+              >
+                {{ solicitud.idEmployee }}
+              </div>
+
+              <div>
+                <h2 class="font-semibold text-gray-800 dark:text-white">
+                  Empleado #{{ solicitud.idEmployee }}
+                </h2>
+
+                <p class="text-sm text-gray-500 dark:text-gray-400">Solicitud #{{ $index + 1 }}</p>
+              </div>
+            </div>
+
+            @if (solicitud.idState === 1) {
+              <span
+                class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/15 text-yellow-500"
+              >
+                PENDIENTE
+              </span>
+            }
+            @if (solicitud.idState === 2) {
+              <span
+                class="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-500"
+              >
+                APROBADA
+              </span>
+            }
+            @if (solicitud.idState === 3) {
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/15 text-red-500">
+                RECHAZADA
+              </span>
+            }
+          </div>
+
+          <div class="mb-5">
+            <p class="text-xs uppercase tracking-wide text-gray-400 mb-1">Tipo de ausencia</p>
+
+            <p class="font-semibold text-gray-800 dark:text-white">{{ tipoAusencias(solicitud.idType) }}</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+            <div>
+              <p class="text-xs text-gray-400 mb-1">Fecha</p>
+
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                {{ formatearFecha(solicitud.startDate) }}
+
+                @if (solicitud.endDate) {
+                  → {{ formatearFecha(solicitud.endDate) }}
+                }
+              </p>
+            </div>
+
+            <div>
+              <p class="text-xs text-gray-400 mb-1">Duración</p>
+
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-200">
+                {{ getDuracion(solicitud) }}
+              </p>
+            </div>
+          </div>
+
+          @if (solicitud.comments) {
+            <div class="mb-5">
+              <p class="text-xs uppercase tracking-wide text-gray-400 mb-1">Comentarios</p>
+
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                {{ solicitud.comments }}
+              </p>
+            </div>
+          }
+
+          @if (solicitud.idState === 1) {
+            <div class="flex gap-3 pt-4 border-t border-white/10">
+              <button
+                (click)="rechazarSolicitud(solicitud)"
+                class="flex-1 px-4 py-2.5 rounded-xl border border-red-500/30 text-red-500 hover:bg-red-500/10 transition font-medium"
+              >
+                Rechazar
+              </button>
+
+              <button
+                (click)="aceptarSolicitud(solicitud)"
+                class="flex-1 px-4 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white transition font-medium"
+              >
+                ✓ Aceptar
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
