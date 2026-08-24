@@ -71,23 +71,6 @@ events: CalendarEvent[] = [];
     this.generateCalendar();
     this.loadHolidays();
 
-    this.events.push(
-  {
-    date: `${this.year}-07-10`,
-    name: 'Vacaciones',
-    type: 'vacation'
-  },
-  {
-    date: `${this.year}-03-18`,
-    name: 'Baja médica',
-    type: 'sick'
-  },
-  {
-    date: `${this.year}-04-22`,
-    name: 'Ausencia',
-    type: 'absence'
-  }
-);
   }
 
 setDuration(type: 'hours' | 'day' | 'days') {
@@ -118,18 +101,20 @@ setDuration(type: 'hours' | 'day' | 'days') {
 
   }
 
-changeYear(step:number){
+changeYear(step: number) {
 
   this.year += step;
 
   this.months = [];
   this.events = [];
+  this.holidays = [];
 
   this.generateCalendar();
+
   this.loadHolidays();
 
+  this.obtenerListadoSolicitudes();
 }
-
 
   loadHolidays(){
 
@@ -199,15 +184,24 @@ openHoliday(day:number | null, month:number){
 
 }
 
-getEvent(day:number | null, month:number){
+getEvent(day: number | null, month: number) {
 
-  if(!day) return null;
+  if (!day) return null;
 
   const date =
-  `${this.year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    `${this.year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-  return this.events.find(e => e.date === date);
+  const solicitud = this.events.find(
+    e => e.date === date && e.type !== 'holiday'
+  );
 
+  if (solicitud) {
+    return solicitud;
+  }
+
+  return this.events.find(
+    e => e.date === date && e.type === 'holiday'
+  );
 }
 
 selectedEvent: CalendarEvent | null = null;
@@ -396,21 +390,32 @@ crearSolicitud(): void {
 }
 
 obtenerListadoSolicitudes(): void {
+
   this.authService.getSolicitudById(this.idEmployee).subscribe({
 
     next: (solicitudes) => {
 
       this.request = solicitudes
-        .filter(solicitud => solicitud.idState === 1)
+        .filter(solicitud =>
+          solicitud.idState === 1 ||
+          solicitud.idState === 2
+        )
         .sort((a, b) => {
           return new Date(a.startDate).getTime() -
                  new Date(b.startDate).getTime();
         });
 
-      console.log('Solicitudes pendientes:', this.request);
+      console.log('Solicitudes:', this.request);
+
+      // Añadimos las solicitudes al calendario
+      this.request.forEach(solicitud => {
+        this.agregarSolicitudAlCalendario(solicitud);
+      });
+
     },
 
     error: (error) => {
+
       console.error(
         'Error al obtener el listado de solicitudes:',
         error
@@ -466,4 +471,65 @@ getSolicitudesVisibles(): SolicitudAusencias[] {
 mostrarMas(): void {
   this.mostrarTodas = !this.mostrarTodas;
 }
+
+agregarSolicitudAlCalendario(solicitud: SolicitudAusencias): void {
+
+  // Varios días
+  if (solicitud.startDate && solicitud.endDate) {
+
+    const inicio = new Date(solicitud.startDate + 'T00:00:00');
+    const fin = new Date(solicitud.endDate + 'T00:00:00');
+
+    const fechaActual = new Date(inicio);
+
+    while (fechaActual <= fin) {
+
+      const fecha = this.formatearFechaCalendario(fechaActual);
+
+      this.events.push({
+        date: fecha,
+        name: this.getTipoAusencia(solicitud.idType),
+        type: this.getTipoEvento(solicitud.idType)
+      });
+
+      fechaActual.setDate(fechaActual.getDate() + 1);
+    }
+
+    return;
+  }
+
+  // Un día o solicitud por horas
+  if (solicitud.startDate) {
+
+    this.events.push({
+      date: solicitud.startDate,
+      name: this.getTipoAusencia(solicitud.idType),
+      type: this.getTipoEvento(solicitud.idType)
+    });
+  }
+}
+
+formatearFechaCalendario(fecha: Date): string {
+
+  const year = fecha.getFullYear();
+  const month = String(fecha.getMonth() + 1).padStart(2, '0');
+  const day = String(fecha.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+getTipoEvento(idType: number): 'vacation' | 'absence' | 'sick' {
+
+  if (idType === 8) {
+    return 'vacation';
+  }
+
+  if (idType === 6) {
+    return 'sick';
+  }
+
+  return 'absence';
+}
+
+
 }
