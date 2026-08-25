@@ -28,6 +28,7 @@ import { LayoutAdmin } from './features/view/layout-admin/layout-admin';
 import { ListaEmpleado } from './features/view/view-admin/lista-empleado/lista-empleado';
 import { ViewTime } from './features/view/view-admin/view-time/view-time';
 import { Peticiones } from './features/peticiones/peticiones';
+import { PerfilEmpleado } from './features/empleados/perfil-empleado/perfil-empleado';
 export const routes: Routes = [
   { path: 'access', component: Login },
   { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
@@ -109,6 +110,13 @@ export const routes: Routes = [
         canActivate: [RoleGuard],
         data: { roles: [Role.EMPLEADO, Role.ADMIN, Role.RRHH] },
       },
+      {
+        path:'employee-profile/:id',
+        component:PerfilEmpleado,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+
       {
         path: 'management-clock-in/:id',
         component: FichajeEmpleado,

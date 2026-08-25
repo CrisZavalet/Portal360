@@ -5,10 +5,11 @@ import { AuthService } from '../../core/services/auth-service';
 import { Fichaje } from "../fichaje/fichaje";
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmpleadoData } from '../../core/interfaces/empleadoData.interface';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-empleados',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,RouterLink],
   templateUrl: './empleados.html',
   styleUrl: './empleados.css',
 })
@@ -43,12 +44,11 @@ this.form = this.fb.group({
   nacimiento: [''],
   ubicacion: [''],
   iban: [''],
-
+  dni: [''],
   departamento: [''],
   puesto: [''],
   fechaInicio: [''],
   estado: ['', Validators.required],
-
   usuario: [''],
   password: ['', Validators.required],
   confirmPassword: ['', Validators.required],
@@ -201,8 +201,5 @@ subirDocumentos (id:any){
 }
 
 
-enviarMensaje (){
-   
-     
-}
+
 }
