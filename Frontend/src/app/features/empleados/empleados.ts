@@ -200,6 +200,10 @@ subirDocumentos (id:any){
   });
 }
 
-
+solicitudesEmpleado (id:any){
+   this.router.navigate(['../management-requests', id], {
+    relativeTo: this.route
+  });
+}
 
 }

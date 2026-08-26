@@ -29,6 +29,7 @@ import { ListaEmpleado } from './features/view/view-admin/lista-empleado/lista-e
 import { ViewTime } from './features/view/view-admin/view-time/view-time';
 import { Peticiones } from './features/peticiones/peticiones';
 import { PerfilEmpleado } from './features/empleados/perfil-empleado/perfil-empleado';
+import { AusenciaEmpleado } from './features/empleados/ausencia-empleado/ausencia-empleado';
 export const routes: Routes = [
   { path: 'access', component: Login },
   { path: 'login', component: LoginWeb, canActivate: [loginGuard] },
@@ -132,6 +133,12 @@ export const routes: Routes = [
       {
         path: 'management-documents/:id',
         component: DocumentosEmpleado,
+        canActivate: [RoleGuard],
+        data: { roles: [Role.ADMIN, Role.RRHH] },
+      },
+      {
+        path: 'management-requests/:id',
+        component: AusenciaEmpleado,
         canActivate: [RoleGuard],
         data: { roles: [Role.ADMIN, Role.RRHH] },
       },
