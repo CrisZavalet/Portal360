@@ -12,6 +12,8 @@ export class AusenciaEmpleado {
 id: any;
 empleadoSelectado: any;
 solicitud:any;
+filtroEstado: number | null = null;
+solicitudesFiltradas: any[] = [];
   constructor(private route: ActivatedRoute, private authService: AuthService) {}
     ngOnInit() {
 
@@ -39,6 +41,8 @@ solicitud:any;
         next: (data) => {
           this.solicitud = data;
           console.log('Solicitudes de ausencias:', this.solicitud);
+                this.solicitudesFiltradas = [...this.solicitud];
+
         },
         error: (err) => {
           console.error('STATUS:', err.status);
@@ -46,5 +50,91 @@ solicitud:any;
         },
       });
     }
+
+    volver() {
+      window.history.back();
+    }
+
+ getEstadoTexto(idState: number): string {
+    switch (idState) {
+      case 1:
+        return 'Pendiente';
+
+      case 2:
+        return 'Aceptada';
+
+      case 3:
+        return 'Rechazada';
+
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  getEstadoClase(idState: number): string {
+    switch (idState) {
+      case 1:
+        return 'bg-yellow-100 text-yellow-700';
+
+      case 2:
+        return 'bg-green-100 text-green-700';
+
+      case 3:
+        return 'bg-red-100 text-red-700';
+
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  }
+
+  getDuracion(solicitud: any): string {
+
+    if (solicitud.startTime && solicitud.endTime) {
+      return `${solicitud.startTime.substring(0, 5)} - ${solicitud.endTime.substring(0, 5)}`;
+    }
+
+    if (
+      solicitud.startDate &&
+      solicitud.endDate &&
+      solicitud.startDate !== solicitud.endDate
+    ) {
+      return `${this.formatearFecha(solicitud.startDate)} - ${this.formatearFecha(solicitud.endDate)}`;
+    }
+
+    return '1 día';
+  }
+
+  formatearFecha(fecha: string): string {
+    if (!fecha) return '';
+
+    const date = new Date(fecha + 'T00:00:00');
+
+    return date.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  }
+
+  getTipoAusencia(solicitud: any): string {
+    return solicitud.title || 'Ausencia';
+  }
+
+  filtrarEstado(idState: number | null) {
+
+  this.filtroEstado = idState;
+
+  // Mostrar todas
+  if (idState === null) {
+    this.solicitudesFiltradas = [...this.solicitud];
+    return;
+  }
+
+  // Filtrar por estado
+  this.solicitudesFiltradas = this.solicitud.filter(
+    (solicitud: any) => solicitud.idState === idState
+  );
+}
+
 
 }
