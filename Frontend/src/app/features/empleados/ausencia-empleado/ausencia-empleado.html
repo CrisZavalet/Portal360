@@ -28,9 +28,45 @@
   </h1>
 
 
- <div class="flex flex-wrap gap-3 mb-6">
+<div class="flex flex-wrap gap-4 mb-6">
 
-  <button
+  <!-- FILTRO AÑO -->
+  <div>
+    <label class="block text-sm font-medium text-gray-600 mb-1">
+      Año
+    </label>
+
+    <select
+      [(ngModel)]="anioSeleccionado"
+      (change)="aplicarFiltros()"
+      class="px-4 py-2 rounded-lg border border-slate-200 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    >
+
+      <option [ngValue]="null">
+        Todos los años
+      </option>
+
+      @for (anio of aniosDisponibles; track anio) {
+        <option [ngValue]="anio">
+          {{ anio }}
+        </option>
+      }
+
+    </select>
+
+  </div>
+
+
+  <!-- FILTRO ESTADO -->
+  <div>
+
+    <label class="block text-sm font-medium text-gray-600 mb-1">
+      Estado
+    </label>
+
+    <div class="flex flex-wrap gap-2">
+
+      <button
     (click)="filtrarEstado(null)"
     [class.bg-indigo-600]="filtroEstado === null"
     [class.text-white]="filtroEstado === null"
@@ -39,32 +75,36 @@
     Todas
   </button>
 
-  <button
-    (click)="filtrarEstado(1)"
-    [class.bg-yellow-500]="filtroEstado === 1"
-    [class.text-white]="filtroEstado === 1"
-    class="px-4 py-2 rounded-lg border border-slate-200  hover:bg-yellow-500 transition"
-  >
-    Pendientes
-  </button>
+      <button
+        (click)="filtrarEstado(1)"
+        [class.bg-yellow-500]="filtroEstado === 1"
+        [class.text-white]="filtroEstado === 1"
+        class="px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-yellow-500 hover:text-white transition"
+      >
+        Pendientes
+      </button>
 
-  <button
-    (click)="filtrarEstado(2)"
-    [class.bg-green-600]="filtroEstado === 2"
-    [class.text-white]="filtroEstado === 2"
-    class="px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-green-600 transition"
-  >
-    Aceptadas
-  </button>
+      <button
+        (click)="filtrarEstado(2)"
+        [class.bg-green-600]="filtroEstado === 2"
+        [class.text-white]="filtroEstado === 2"
+        class="px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-green-600 hover:text-white transition"
+      >
+        Aceptadas
+      </button>
 
-  <button
-    (click)="filtrarEstado(3)"
-    [class.bg-red-600]="filtroEstado === 3"
-    [class.text-white]="filtroEstado === 3"
-    class="px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-red-600 transition"
-  >
-    Rechazadas
-  </button>
+      <button
+        (click)="filtrarEstado(3)"
+        [class.bg-red-600]="filtroEstado === 3"
+        [class.text-white]="filtroEstado === 3"
+        class="px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-red-600 hover:text-white transition"
+      >
+        Rechazadas
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 

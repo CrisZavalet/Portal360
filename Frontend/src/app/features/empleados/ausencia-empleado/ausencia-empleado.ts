@@ -1,19 +1,23 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ausencia-empleado',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './ausencia-empleado.html',
   styleUrl: './ausencia-empleado.css',
 })
 export class AusenciaEmpleado {
 id: any;
 empleadoSelectado: any;
-solicitud:any;
+solicitud: any[] = [];
 filtroEstado: number | null = null;
 solicitudesFiltradas: any[] = [];
+aniosDisponibles: number[] = [];
+anioSeleccionado: number | null = null;
+
   constructor(private route: ActivatedRoute, private authService: AuthService) {}
     ngOnInit() {
 
@@ -36,20 +40,33 @@ solicitudesFiltradas: any[] = [];
       });
     }
 
-    solicitudesAusencias(id: any) {
-      this.authService.getSolicitudById(id).subscribe({
-        next: (data) => {
-          this.solicitud = data;
-          console.log('Solicitudes de ausencias:', this.solicitud);
-                this.solicitudesFiltradas = [...this.solicitud];
+solicitudesAusencias(id: any) {
+  this.authService.getSolicitudById(id).subscribe({
+    next: (data) => {
 
-        },
-        error: (err) => {
-          console.error('STATUS:', err.status);
-          console.error('ERROR BACKEND:', err.error);
-        },
-      });
-    }
+      this.solicitud = Array.isArray(data) ? data : [data];
+
+      console.log('Solicitudes de ausencias:', this.solicitud);
+
+      // Sacamos los años disponibles
+      this.aniosDisponibles = [
+        ...new Set(
+          this.solicitud
+            .filter((s: any) => s.startDate)
+            .map((s: any) => new Date(s.startDate).getFullYear())
+        )
+      ].sort((a, b) => b - a);
+
+      // Inicialmente mostramos todas
+      this.solicitudesFiltradas = [...this.solicitud];
+
+    },
+    error: (err) => {
+      console.error('STATUS:', err.status);
+      console.error('ERROR BACKEND:', err.error);
+    },
+  });
+}
 
     volver() {
       window.history.back();
@@ -124,17 +141,25 @@ solicitudesFiltradas: any[] = [];
 
   this.filtroEstado = idState;
 
-  // Mostrar todas
-  if (idState === null) {
-    this.solicitudesFiltradas = [...this.solicitud];
-    return;
-  }
+    this.aplicarFiltros();
 
-  // Filtrar por estado
-  this.solicitudesFiltradas = this.solicitud.filter(
-    (solicitud: any) => solicitud.idState === idState
-  );
 }
+aplicarFiltros() {
 
+  this.solicitudesFiltradas = this.solicitud.filter((solicitud: any) => {
+
+    // FILTRO POR AÑO
+    const coincideAnio =
+      this.anioSeleccionado === null ||
+      new Date(solicitud.startDate).getFullYear() === this.anioSeleccionado;
+
+    // FILTRO POR ESTADO
+    const coincideEstado =
+      this.filtroEstado === null ||
+      solicitud.idState === this.filtroEstado;
+
+    return coincideAnio && coincideEstado;
+  });
+}
 
 }
