@@ -27,7 +27,52 @@
     {{ empleadoSelectado?.lastName }}
   </h1>
 
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
 
+  <div class="bg-white rounded-xl border border-slate-200 p-5">
+    <p class="text-sm text-gray-500">
+      Total solicitudes
+    </p>
+
+    <p class="text-3xl font-bold text-gray-800 mt-1">
+      {{ getTotalAnio() }}
+    </p>
+  </div>
+
+
+  <div class="bg-white rounded-xl border border-green-200 p-5">
+    <p class="text-sm text-gray-500">
+      Aceptadas
+    </p>
+
+    <p class="text-3xl font-bold text-green-600 mt-1">
+      {{ getAceptadasAnio() }}
+    </p>
+  </div>
+
+
+  <div class="bg-white rounded-xl border border-yellow-200 p-5">
+    <p class="text-sm text-gray-500">
+      Pendientes
+    </p>
+
+    <p class="text-3xl font-bold text-yellow-600 mt-1">
+      {{ getPendientesAnio() }}
+    </p>
+  </div>
+
+
+  <div class="bg-white rounded-xl border border-red-200 p-5">
+    <p class="text-sm text-gray-500">
+      Rechazadas
+    </p>
+
+    <p class="text-3xl font-bold text-red-600 mt-1">
+      {{ getRechazadasAnio() }}
+    </p>
+  </div>
+
+</div>
 <div class="flex flex-wrap gap-4 mb-6">
 
   <!-- FILTRO AÑO -->

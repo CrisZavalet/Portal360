@@ -79,17 +79,135 @@
 </div>
 
 
-  <div class=" mt-6 rounded-2xl px-6 py-5  mx-auto
-         bg-white dark:bg-white/10
-         backdrop-blur-xl
-         border border-white/30 dark:border-white/10
-         shadow-xl shadow-black/5
-         transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-    <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2 ">Peticiones pendientes</h2> 
-    <div class="inline flex gap-4 justify-left"> 
-      <p class="dark:text-slate-400">No hay peticiones pendientes</p>
-    </div> 
+  <div class="mt-6 rounded-2xl px-6 py-5 mx-auto
+     bg-white dark:bg-white/10
+     backdrop-blur-xl
+     border border-white/30 dark:border-white/10
+     shadow-xl shadow-black/5
+     transition-all duration-300
+     hover:shadow-2xl hover:-translate-y-1">
+
+  <div class="flex items-center justify-between mb-4">
+
+    <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight">
+      Peticiones pendientes
+    </h2>
+
+    @if (solicitudesPendientes.length > 0) {
+      <a
+        routerLink="/absences"
+        class="text-xs font-medium text-indigo-500
+               hover:text-indigo-700
+               dark:text-indigo-300
+               dark:hover:text-indigo-200
+               transition-colors">
+
+        Ver todas →
+
+      </a>
+    }
+
+  </div>
+
+
+  @if (solicitudesPendientes.length === 0) {
+
+    <div class="flex items-center gap-3 py-4">
+
+      <div class="w-10 h-10 rounded-full
+                  bg-green-100 dark:bg-green-500/20
+                  flex items-center justify-center">
+
+        <span class="text-lg">✓</span>
+
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-slate-700 dark:text-slate-200">
+          No tienes peticiones pendientes
+        </p>
+
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Todas tus solicitudes están gestionadas.
+        </p>
+      </div>
+
     </div>
+
+  } @else {
+
+    <div class="flex flex-col gap-3">
+
+      @for (solicitud of solicitudesPendientes; track solicitud.idRequest) {
+
+        <div
+          class="flex items-center justify-between gap-4
+                 p-4 rounded-xl
+                 bg-white/50 dark:bg-white/10
+                 border border-white/40 dark:border-white/10
+                 shadow-sm
+                 transition-all duration-300
+                 hover:-translate-y-1 hover:shadow-md">
+
+          <div class="flex items-center gap-3">
+
+            <div class="w-10 h-10 rounded-xl
+                        bg-indigo-100 dark:bg-indigo-500/20
+                        flex items-center justify-center">
+
+              @if (solicitud.idType === 8) {
+                <span>🌴</span>
+              } @else {
+                <span>📋</span>
+              }
+
+            </div>
+
+            <div class="flex flex-col">
+
+              <span class="font-semibold text-sm
+                           text-slate-800 dark:text-white">
+
+                {{ solicitud.title }}
+
+              </span>
+
+              <span class="text-xs text-slate-500
+                           dark:text-slate-400 mt-1">
+
+                {{ formatearFecha(solicitud.startDate) }}
+
+                @if (solicitud.endDate) {
+                  - {{ formatearFecha(solicitud.endDate) }}
+                }
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <span
+            class="shrink-0 px-3 py-1 rounded-full
+                   text-xs font-semibold
+                   bg-yellow-100 text-yellow-700
+                   dark:bg-yellow-500/20
+                   dark:text-yellow-300">
+
+            Pendiente
+
+          </span>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>
 
 
     <div class="mt-6  rounded-2xl px-6 py-5
@@ -188,7 +306,7 @@
          transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
         <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight p-2">Calendario</h2>
    
-      <app-calendar></app-calendar>
+      <app-calendar [solicitudes]="solicitudesEmpleado"></app-calendar>
 
 
         </div>

@@ -8,4 +8,6 @@ export interface SolicitudAusencias {
   startTime: string | null;
   endTime: string | null;
   endDateResolution?: string | null;
+  
+   
 }

@@ -162,4 +162,56 @@ aplicarFiltros() {
   });
 }
 
+
+getTotalAnio(): number {
+
+  return this.solicitud.filter((s: any) => {
+
+    return this.anioSeleccionado === null ||
+      new Date(s.startDate).getFullYear() === this.anioSeleccionado;
+
+  }).length;
+
+}
+getAceptadasAnio(): number {
+
+  return this.solicitud.filter((s: any) => {
+
+    const mismoAnio =
+      this.anioSeleccionado === null ||
+      new Date(s.startDate).getFullYear() === this.anioSeleccionado;
+
+    return mismoAnio && s.idState === 2;
+
+  }).length;
+
+}
+
+getPendientesAnio(): number {
+
+  return this.solicitud.filter((s: any) => {
+
+    const mismoAnio =
+      this.anioSeleccionado === null ||
+      new Date(s.startDate).getFullYear() === this.anioSeleccionado;
+
+    return mismoAnio && s.idState === 1;
+
+  }).length;
+
+}
+
+getRechazadasAnio(): number {
+
+  return this.solicitud.filter((s: any) => {
+
+    const mismoAnio =
+      this.anioSeleccionado === null ||
+      new Date(s.startDate).getFullYear() === this.anioSeleccionado;
+
+    return mismoAnio && s.idState === 3;
+
+  }).length;
+
+}
 }

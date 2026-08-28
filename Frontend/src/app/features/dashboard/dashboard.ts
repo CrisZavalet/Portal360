@@ -7,10 +7,12 @@ import { Calendar } from "../../shared/calendar/calendar";
 import confetti from 'canvas-confetti';
 import { AuthService } from '../../core/services/auth-service';
 import { EmpleadoData } from '../../core/interfaces/empleadoData.interface';
-
+import { SolicitudAusencias } from '../../core/interfaces/solicitudAusencias.interface';
+import { ObtenerAusencias } from '../../core/interfaces/obtenerAusencias.interface';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, Fichaje, Time, Calendar],
+  imports: [CommonModule, Fichaje, Time, Calendar,RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -33,17 +35,18 @@ export class Dashboard {
   idEmployee: any;
   @ViewChildren('birthdayCard') birthdayCards!: QueryList<ElementRef>;
   empleados:any;
-
+solicitudes: ObtenerAusencias[] = [];
+solicitudesPendientes: ObtenerAusencias[] = [];
+solicitudesEmpleado: ObtenerAusencias[] = [];
 
 birthdays: any[] = [];
 
   constructor(private holidayService: Holiday,private authService: AuthService) { }
   ngOnInit() {
-
-    this.idEmployee = localStorage.getItem('idEmployee');
+    this.idEmployee = Number(localStorage.getItem('idEmployee'));
     this.user = localStorage.getItem('user');
     
-    console.log('Usuario obtenido desde el servicio AuthService:', this.user);
+    this.cargarSolicitudes();
 
     if (this.user) {
       this.authService.getEmployeeById(parseInt(this.idEmployee)).subscribe((employee: any) => {
@@ -231,6 +234,63 @@ launchConfetti(element: HTMLElement) {
     origin: origin,
     zIndex: 9999
   });
+}
+
+
+cargarSolicitudes() {
+
+ this.authService.getSolicitudById(this.idEmployee).subscribe({
+  next: (data: ObtenerAusencias[]) => {
+
+    console.log('Solicitudes del empleado:', data);
+
+    this.solicitudesEmpleado = data;
+
+    this.solicitudesPendientes = data
+      .filter(solicitud => solicitud.idState === 1)
+      .sort((a, b) =>
+        new Date(a.startDate).getTime() -
+        new Date(b.startDate).getTime()
+      )
+      .slice(0, 3);
+
+  },
+
+  error: (error) => {
+    console.error('Error al obtener las solicitudes:', error);
+  }
+});
+}
+
+formatearFecha(fecha: string | null): string {
+  if (!fecha) {
+    return '';
+  }
+
+  const date = new Date(fecha);
+
+  return date.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
+
+getTipoSolicitud(idType: number): string {
+
+  const tipos: { [key: number]: string } = {
+    1: 'Hora Libre Disposición',
+    2: 'Cita Médica',
+    3: 'Baja Boda',
+    4: 'Baja Larga',
+    5: 'Baja Paternidad',
+    6: 'Incapacidad Temporal',
+    7: 'Permiso de operación',
+    8: 'Vacaciones',
+    9: 'Otros'
+  };
+
+  return tipos[idType] ?? 'Otros';
 }
 
 }
