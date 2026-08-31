@@ -67,62 +67,105 @@ public List<EmployeeAllDTO> getAllEmployees() {
 
 
     @GetMapping("/{id}")
-public ResponseEntity<EmployeeRoleDTO> getEmployeeById(@PathVariable Integer id) {
+    public ResponseEntity<EmployeeRoleDTO> getEmployeeById(@PathVariable Integer id) {
+
+            return empleadoRepository.findById(id)
+                            .map(e -> {
+
+                                    String role = "SIN_ROL";
+
+                                    if (e.getUsuario() != null &&
+                                                    e.getUsuario().getRoles() != null &&
+                                                    !e.getUsuario().getRoles().isEmpty()) {
+
+                                            role = e.getUsuario()
+                                                            .getRoles()
+                                                            .get(0)
+                                                            .getNombreRol();
+                                    }
+
+                                    String position = "SIN_PUESTO";
+
+                                    if (e.getEmployeePositions() != null) {
+
+                                            position = e.getEmployeePositions()
+                                                            .stream()
+                                                            .filter(ep -> ep.getFechaFin() == null)
+                                                            .map(ep -> ep.getPuesto().getNombre())
+                                                            .findFirst()
+                                                            .orElse("SIN_PUESTO");
+                                    }
+
+                                    return new EmployeeRoleDTO(
+                                                    e.getIdEmployee(),
+                                                    e.getDni(),
+                                                    e.getName(),
+                                                    e.getLastName(),
+                                                    e.getUsuario() != null
+                                                                    ? e.getUsuario().getUsername()
+                                                                    : null,
+                                                    e.getUsuario() != null
+                                                                    ? e.getUsuario().getEmail()
+                                                                    : null,
+                                                    e.getDateOfBirth(),
+                                                    e.getPhone(),
+                                                    e.getAddress(),
+                                                    e.getLocation(),
+                                                    e.getIban(),
+                                                    e.getDepartment(),
+                                                    e.getStartDate(),
+                                                    position,
+                                                    e.getActive(),
+                                                    role);
+                            })
+                            .map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build());
+    }
+
+  // =====================================================
+// PATCH - Desactivar empleado
+// =====================================================
+
+@PatchMapping("/{id}/deactivate")
+public ResponseEntity<?> deactivateEmployee(
+        @PathVariable Integer id) {
 
     return empleadoRepository.findById(id)
-            .map(e -> {
+            .map(employee -> {
 
-                String role = "SIN_ROL";
+                employee.setActive(false);
 
-                if (e.getUsuario() != null &&
-                        e.getUsuario().getRoles() != null &&
-                        !e.getUsuario().getRoles().isEmpty()) {
+                Empleado employeeUpdated =
+                        empleadoRepository.save(employee);
 
-                    role = e.getUsuario()
-                            .getRoles()
-                            .get(0)
-                            .getNombreRol();
-                }
+                return ResponseEntity.ok(employeeUpdated);
 
-                String position = "SIN_PUESTO";
-
-                if (e.getEmployeePositions() != null) {
-
-                    position = e.getEmployeePositions()
-                            .stream()
-                            .filter(ep -> ep.getFechaFin() == null)
-                            .map(ep -> ep.getPuesto().getNombre())
-                            .findFirst()
-                            .orElse("SIN_PUESTO");
-                }
-
-                return new EmployeeRoleDTO(
-                        e.getIdEmployee(),
-                        e.getDni(),
-                        e.getName(),
-                        e.getLastName(),
-                        e.getUsuario() != null
-                                ? e.getUsuario().getUsername()
-                                : null,
-                        e.getUsuario() != null
-                                ? e.getUsuario().getEmail()
-                                : null,
-                        e.getDateOfBirth(),
-                        e.getPhone(),
-                        e.getAddress(),
-                        e.getLocation(),
-                        e.getIban(),
-                        e.getDepartment(),
-                        e.getStartDate(),
-                        position,
-                        e.getActive(),
-                        role
-                );
             })
-            .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
 }
 
+
+// =====================================================
+// PATCH - Activar empleado
+// =====================================================
+
+@PatchMapping("/{id}/activate")
+public ResponseEntity<?> activateEmployee(
+        @PathVariable Integer id) {
+
+    return empleadoRepository.findById(id)
+            .map(employee -> {
+
+                employee.setActive(true);
+
+                Empleado employeeUpdated =
+                        empleadoRepository.save(employee);
+
+                return ResponseEntity.ok(employeeUpdated);
+
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
 
     @GetMapping("/roles")
     public List<EmployeeRoleDTO> getEmployeesWithRoles() {
