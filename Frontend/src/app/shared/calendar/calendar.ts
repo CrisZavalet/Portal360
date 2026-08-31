@@ -80,61 +80,79 @@ export class Calendar implements OnInit, OnChanges {
 
   }
 
-  cargarSolicitudesCalendario() {
+ cargarSolicitudesCalendario() {
+
+  // Limpiar eventos anteriores
+  this.weekDays.forEach(day => {
+    day.events = [];
+  });
+
+  // Solo solicitudes aprobadas
+  const solicitudesAprobadas = this.solicitudes.filter(
+    solicitud => solicitud.idState === 2
+  );
+
+  if (solicitudesAprobadas.length === 0) {
+    return;
+  }
+
+  solicitudesAprobadas.forEach(solicitud => {
+
+    const inicio = solicitud.startDate.substring(0, 10);
+
+    const fin = solicitud.endDate
+      ? solicitud.endDate.substring(0, 10)
+      : inicio;
 
     this.weekDays.forEach(day => {
-      day.events = [];
-    });
 
-    if (!this.solicitudes || this.solicitudes.length === 0) {
-      return;
-    }
+      const fechaDia = this.fechaSinHoraDate(day.date);
 
-    this.solicitudes.forEach(solicitud => {
+      if (fechaDia >= inicio && fechaDia <= fin) {
 
-      const inicio = this.fechaSinHora(solicitud.startDate);
+        day.events?.push({
+          label: solicitud.title,
+          type: this.getTipoEvento(solicitud.idType)
+        });
 
-      const fin = solicitud.endDate
-        ? this.fechaSinHora(solicitud.endDate)
-        : inicio;
-
-      this.weekDays.forEach(day => {
-
-        const fechaDia = this.fechaSinHoraDate(day.date);
-
-        if (fechaDia >= inicio && fechaDia <= fin) {
-
-          day.events?.push({
-            label: solicitud.title,
-            type: this.getTipoEvento(solicitud.idType)
-          });
-
-        }
-
-      });
+      }
 
     });
 
+  });
+
+}
+
+ getTipoEvento(
+  idType: number
+): 'vacaciones' | 'baja' | 'ausencia' {
+
+  if (idType === 8) {
+    return 'vacaciones';
   }
 
-  getTipoEvento(idType: number): 'vacaciones' | 'baja' | 'ausencia' {
-
-    switch (idType) {
-
-      case 8:
-        return 'vacaciones';
-
-      case 4:
-      case 5:
-      case 6:
-        return 'baja';
-
-      default:
-        return 'ausencia';
-
-    }
-
+  if (
+    idType === 4 ||
+    idType === 5 ||
+    idType === 6
+  ) {
+    return 'baja';
   }
+
+  if (
+    idType === 1 ||
+    idType === 2 ||
+    idType === 3 ||
+    idType === 7 ||
+    idType === 9
+  ) {
+    return 'ausencia';
+  }
+
+  // Si llega un tipo desconocido,
+  // no debería mostrarse como ausencia.
+  return 'ausencia';
+}
 
   fechaSinHora(fecha: string): string {
 

@@ -24,13 +24,16 @@ step = 1;
 form: any;
 auth = inject(AuthService);
 role = this.auth.getRole();
-  open:any = false;
+open:any = false;
 openId: number | null = null;
 estadoFichaje: 'pendiente' | 'aprobado' | 'rechazado'| null = null;
 openDropdownId:  'editar' | 'fichajes' | 'nomina' | 'documentos' | 'mensaje'| null = null;
 empleadoSeleccionado: any = null;
 empleados:EmpleadoData[] = [];
-
+empleadoEstadoSeleccionado: EmpleadoData | null = null;
+mostrarConfirmacionEstado = false;
+accionEstado: 'activar' | 'desactivar' | null = null;
+cambiandoEstado = false;
 
 
 ngOnInit() {
@@ -203,6 +206,65 @@ subirDocumentos (id:any){
 solicitudesEmpleado (id:any){
    this.router.navigate(['../management-requests', id], {
     relativeTo: this.route
+  });
+}
+
+confirmarCambioEstado(emp: EmpleadoData) {
+
+  this.empleadoEstadoSeleccionado = emp;
+
+  this.accionEstado = emp.active ? 'desactivar' : 'activar';
+
+  this.mostrarConfirmacionEstado = true;
+}
+
+cancelarCambioEstado() {
+
+  if (this.cambiandoEstado) return;
+
+  this.mostrarConfirmacionEstado = false;
+  this.empleadoEstadoSeleccionado = null;
+  this.accionEstado = null;
+}
+
+cambiarEstadoEmpleado() {
+
+  if (!this.empleadoEstadoSeleccionado || !this.accionEstado) {
+    return;
+  }
+
+  const empleado = this.empleadoEstadoSeleccionado;
+
+  this.cambiandoEstado = true;
+
+  const peticion = this.accionEstado === 'desactivar'
+    ? this.auth.desactivarEmpleado(empleado.idEmployee)
+    : this.auth.activarEmpleado(empleado.idEmployee);
+
+  peticion.subscribe({
+
+    next: () => {
+
+      // Actualizamos el empleado directamente en la lista
+      empleado.active = this.accionEstado === 'activar';
+
+      this.cambiandoEstado = false;
+
+      this.mostrarConfirmacionEstado = false;
+      this.empleadoEstadoSeleccionado = null;
+      this.accionEstado = null;
+
+    },
+
+    error: (err) => {
+
+      console.error('Error cambiando estado del empleado:', err);
+
+      this.cambiandoEstado = false;
+
+      alert('No se ha podido cambiar el estado del empleado.');
+    }
+
   });
 }
 

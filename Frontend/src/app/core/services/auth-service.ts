@@ -146,6 +146,19 @@ getSolicitudById(id: any): Observable<ObtenerAusencias[]> {
   }
 
 
+  desactivarEmpleado(id: number): Observable<any> {
+  return this.http.patch(
+    `${this.apiUrlEmpleados}/${id}/deactivate`,
+    {}
+  );
 }
 
+activarEmpleado(id: number): Observable<any> {
+  return this.http.patch(
+    `${this.apiUrlEmpleados}/${id}/activate`,
+    {}
+  );
+}
+
+}
 

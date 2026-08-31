@@ -71,10 +71,34 @@
             <td class="p-4">{{ emp.email }}</td>
             <td class="p-4">{{ emp.phone }}</td>
             <td class="p-4">
-              <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.active)">
-                {{ emp.active ? 'Activo' : 'Inactivo' }}
-              </span>
-            </td>
+  <div class="flex items-center gap-3">
+
+    <span
+      class="px-2 py-1 text-xs rounded-full"
+      [ngClass]="getEstadoClase(emp.active)"
+    >
+      {{ emp.active ? 'Activo' : 'Inactivo' }}
+    </span>
+
+    @if (role === 'Administracion' || role === 'RRHH') {
+
+      <button
+  type="button"
+  (click)="confirmarCambioEstado(emp)"
+  class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300"
+  [ngClass]="emp.active ? 'bg-green-500' : 'bg-gray-400'"
+  [attr.aria-label]="emp.active ? 'Desactivar empleado' : 'Activar empleado'"
+>
+  <span
+    class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300"
+    [ngClass]="emp.active ? 'translate-x-6' : 'translate-x-1'"
+  ></span>
+</button>
+
+    }
+
+  </div>
+</td>
             @if (role === 'Administracion' || role === 'RRHH') {
               <td class="relative p-2 text-slate-600 dark:text-slate-300">
                 <button
@@ -696,4 +720,146 @@
   </div>
 }
 
+
+@if (mostrarConfirmacionEstado && empleadoEstadoSeleccionado) {
+
+  <div
+    class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+    (click)="cancelarCambioEstado()"
+  >
+
+    <div
+      class="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-white/20 p-6"
+      (click)="$event.stopPropagation()"
+    >
+
+      <div class="flex items-center gap-4 mb-5">
+
+        <div
+          class="w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+          [ngClass]="
+            accionEstado === 'desactivar'
+              ? 'bg-red-100'
+              : 'bg-green-100'
+          "
+        >
+          {{ accionEstado === 'desactivar' ? '⚠️' : '✓' }}
+        </div>
+
+        <div>
+          <h3 class="text-lg font-bold text-slate-800 dark:text-white">
+
+            @if (accionEstado === 'desactivar') {
+              Desactivar empleado
+            } @else {
+              Activar empleado
+            }
+
+          </h3>
+
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Confirmación de estado
+          </p>
+        </div>
+
+      </div>
+
+
+      <p class="text-slate-700 dark:text-slate-200 mb-3">
+
+        @if (accionEstado === 'desactivar') {
+
+          Estás a punto de desactivar al empleado
+
+          <strong>
+            {{ empleadoEstadoSeleccionado.name }}
+            {{ empleadoEstadoSeleccionado.lastName }}
+          </strong>.
+
+        } @else {
+
+          Estás a punto de activar al empleado
+
+          <strong>
+            {{ empleadoEstadoSeleccionado.name }}
+            {{ empleadoEstadoSeleccionado.lastName }}
+          </strong>.
+
+        }
+
+      </p>
+
+
+      <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+
+        @if (accionEstado === 'desactivar') {
+
+          El empleado dejará de estar activo, pero sus datos,
+          documentos, fichajes y demás histórico se conservarán.
+
+        } @else {
+
+          El empleado volverá a estar activo y podrá utilizar
+          nuevamente los servicios del portal.
+
+        }
+
+      </p>
+
+
+      <div class="flex justify-end gap-3">
+
+        <button
+          type="button"
+          (click)="cancelarCambioEstado()"
+          [disabled]="cambiandoEstado"
+          class="px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 transition disabled:opacity-50"
+        >
+          Cancelar
+        </button>
+
+
+        @if (accionEstado === 'desactivar') {
+
+          <button
+            type="button"
+            (click)="cambiarEstadoEmpleado()"
+            [disabled]="cambiandoEstado"
+            class="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700 transition disabled:opacity-50"
+          >
+
+            @if (cambiandoEstado) {
+              Desactivando...
+            } @else {
+              Desactivar empleado
+            }
+
+          </button>
+
+        } @else {
+
+          <button
+            type="button"
+            (click)="cambiarEstadoEmpleado()"
+            [disabled]="cambiandoEstado"
+            class="px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition disabled:opacity-50"
+          >
+
+            @if (cambiandoEstado) {
+              Activando...
+            } @else {
+              Activar empleado
+            }
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
 
