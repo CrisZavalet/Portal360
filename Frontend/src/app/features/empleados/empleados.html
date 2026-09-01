@@ -239,6 +239,18 @@
             <span class="px-2 py-1 text-xs rounded-full" [ngClass]="getEstadoClase(emp.active)">
               {{ emp.active ? 'Activo' : 'Inactivo' }}
             </span>
+              <button
+  type="button"
+  (click)="confirmarCambioEstado(emp)"
+  class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300"
+  [ngClass]="emp.active ? 'bg-green-500' : 'bg-gray-400'"
+  [attr.aria-label]="emp.active ? 'Desactivar empleado' : 'Activar empleado'"
+>
+  <span
+    class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300"
+    [ngClass]="emp.active ? 'translate-x-6' : 'translate-x-1'"
+  ></span>
+</button>
           </div>
         </div>
       </div>
@@ -488,19 +500,7 @@
             </button>
           </div>
 
-          <div class="flex">
-            <div>
-              <h3 class="font-bold text-xl text-slate-800 dark:text-white">Editar empleado</h3>
-            </div>
-            <div class="ml-auto">
-              <button
-                (click)="eliminarEmpleado()"
-                class="bg-red-500 text-white hover:bg-red-600 py-2 px-4 rounded"
-              >
-                Eliminar Empleado
-              </button>
-            </div>
-          </div>
+         
           <div class="flex justify-between mt-4 text-sm text-slate-600 dark:text-slate-300">
             <span [class.font-bold]="step === 1">Datos personales</span>
             <span [class.font-bold]="step === 2">Información laboral</span>
