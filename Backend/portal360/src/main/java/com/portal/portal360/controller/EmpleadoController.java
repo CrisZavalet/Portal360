@@ -1,15 +1,44 @@
 package com.portal.portal360.controller;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.portal.portal360.dto.CreateEmployeeDTO;
+import com.portal.portal360.model.Empleado;
+import com.portal.portal360.model.EmpleadoPuesto;
+import com.portal.portal360.model.Puesto;
+import com.portal.portal360.model.Rol;
+import com.portal.portal360.model.Usuario;
+
+import com.portal.portal360.repository.EmpleadoPuestoRepository;
+import com.portal.portal360.repository.PuestoRepository;
+import com.portal.portal360.repository.RolRepository;
+import com.portal.portal360.repository.UsuarioRepository;
+
+import com.portal.portal360.dto.CreateEmployeeDTO;
 import com.portal.portal360.dto.EmployeeAllDTO;
 import com.portal.portal360.dto.EmployeeDTO;
 import com.portal.portal360.model.Empleado;
+import com.portal.portal360.model.EmpleadoPuesto;
+import com.portal.portal360.model.Puesto;
+import com.portal.portal360.model.Rol;
+import com.portal.portal360.model.Usuario;
 import com.portal.portal360.repository.EmpleadoRepository;
+import com.portal.portal360.repository.PuestoRepository;
+import com.portal.portal360.repository.RolRepository;
+import com.portal.portal360.repository.UsuarioRepository;
 import com.portal.portal360.dto.EmployeeRoleDTO;
 import com.portal.portal360.dto.EmployeeAllDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.portal.portal360.repository.EmpleadoPuestoRepository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -221,5 +250,301 @@ public ResponseEntity<?> activateEmployee(
                 })
                 .toList();
     }
+
+    private String generarUsername(
+        String nombre,
+        String apellidos) {
+
+    String primeraParte =
+            nombre.trim().toLowerCase();
+
+    String apellidoLimpio =
+            apellidos.trim().toLowerCase();
+
+    String segundaParte =
+            apellidoLimpio.length() >= 2
+                    ? apellidoLimpio.substring(0, 2)
+                    : apellidoLimpio;
+
+    String username =
+            primeraParte + segundaParte;
+
+    username = java.text.Normalizer
+            .normalize(
+                    username,
+                    java.text.Normalizer.Form.NFD
+            )
+            .replaceAll("\\p{M}", "");
+
+    username = username
+            .replaceAll("[^a-zA-Z0-9]", "");
+
+    return username;
+}
     
+
+@Autowired
+private UsuarioRepository usuarioRepository;
+
+@Autowired
+private RolRepository rolRepository;
+
+@Autowired
+private PuestoRepository puestoRepository;
+
+
+@Autowired
+private EmpleadoPuestoRepository empleadoPuestoRepository;
+
+@Autowired
+private PasswordEncoder passwordEncoder;
+
+@PostMapping("/create-full")
+@Transactional
+public ResponseEntity<?> createFullEmployee(
+        @RequestBody CreateEmployeeDTO dto) {
+
+    try {
+
+        // ============================
+        // 1. VALIDACIONES
+        // ============================
+
+        if (dto.getName() == null || dto.getName().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body("El nombre es obligatorio");
+        }
+
+        if (dto.getLastName() == null || dto.getLastName().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body("Los apellidos son obligatorios");
+        }
+
+        if (dto.getDni() == null || dto.getDni().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body("El DNI es obligatorio");
+        }
+
+        if (dto.getEmail() == null || dto.getEmail().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body("El email es obligatorio");
+        }
+
+        if (dto.getPassword() == null || dto.getPassword().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body("La contraseña es obligatoria");
+        }
+
+        if (dto.getIdRole() == null) {
+            return ResponseEntity.badRequest()
+                    .body("El rol es obligatorio");
+        }
+
+        if (dto.getIdPosition() == null) {
+            return ResponseEntity.badRequest()
+                    .body("El puesto es obligatorio");
+        }
+
+        if (empleadoRepository.existsByDni(dto.getDni())) {
+            return ResponseEntity.badRequest()
+                    .body("Ya existe un empleado con ese DNI");
+        }
+
+        if (usuarioRepository.existsByEmail(dto.getEmail())) {
+            return ResponseEntity.badRequest()
+                    .body("Ya existe un usuario con ese email");
+        }
+
+
+        // ============================
+        // 2. BUSCAR ROL
+        // ============================
+
+        Rol rol = rolRepository.findById(dto.getIdRole())
+                .orElse(null);
+
+        if (rol == null) {
+            return ResponseEntity.badRequest()
+                    .body("El rol indicado no existe");
+        }
+
+
+        // ============================
+        // 3. BUSCAR PUESTO
+        // ============================
+
+        Puesto puesto = puestoRepository.findById(dto.getIdPosition())
+                .orElse(null);
+
+        if (puesto == null) {
+            return ResponseEntity.badRequest()
+                    .body("El puesto indicado no existe");
+        }
+
+
+        // ============================
+        // 4. GENERAR USERNAME
+        // ============================
+
+        String username = generarUsername(
+                dto.getName(),
+                dto.getLastName()
+        );
+
+
+        // Evitar username duplicado
+        String usernameBase = username;
+        int contador = 1;
+
+        while (usuarioRepository.existsByUsername(username)) {
+            username = usernameBase + contador;
+            contador++;
+        }
+
+
+        // ============================
+        // 5. CREAR USUARIO
+        // ============================
+
+        Usuario usuario = new Usuario();
+
+        usuario.setEmail(dto.getEmail());
+        usuario.setUsername(username);
+
+        usuario.setPassword(
+                passwordEncoder.encode(dto.getPassword())
+        );
+
+        usuario.setActivo(
+                dto.getActive() != null
+                        ? dto.getActive()
+                        : true
+        );
+
+        usuario.setRoles(List.of(rol));
+
+        Usuario usuarioGuardado =
+                usuarioRepository.save(usuario);
+
+
+        // ============================
+        // 6. CREAR EMPLEADO
+        // ============================
+
+        Empleado empleado = new Empleado();
+
+        empleado.setName(dto.getName());
+        empleado.setLastName(dto.getLastName());
+
+        empleado.setDni(dto.getDni());
+
+        empleado.setAddress(dto.getAddress());
+        empleado.setPhone(dto.getPhone());
+
+        empleado.setDateOfBirth(dto.getDateOfBirth());
+
+        empleado.setLocation(dto.getLocation());
+        empleado.setIban(dto.getIban());
+
+        empleado.setStartDate(dto.getStartDate());
+
+        empleado.setActive(
+                dto.getActive() != null
+                        ? dto.getActive()
+                        : true
+        );
+
+        empleado.setIdUser(
+                usuarioGuardado.getIdUsuario()
+        );
+
+        Empleado empleadoGuardado =
+                empleadoRepository.save(empleado);
+
+
+        // ============================
+        // 7. ASIGNAR PUESTO
+        // ============================
+
+        EmpleadoPuesto empleadoPuesto =
+                new EmpleadoPuesto();
+
+        empleadoPuesto.setEmployee(empleadoGuardado);
+        empleadoPuesto.setPuesto(puesto);
+        empleadoPuesto.setFechaInicio(dto.getStartDate());
+        empleadoPuesto.setFechaFin(null);
+
+        empleadoPuestoRepository.save(empleadoPuesto);
+
+
+        // ============================
+        // 8. RESPUESTA
+        // ============================
+
+        Map<String, Object> response =
+                new HashMap<>();
+
+        response.put(
+                "message",
+                "Empleado creado correctamente"
+        );
+
+        response.put(
+                "idEmployee",
+                empleadoGuardado.getIdEmployee()
+        );
+
+        response.put(
+                "idUser",
+                usuarioGuardado.getIdUsuario()
+        );
+
+        response.put(
+                "name",
+                empleadoGuardado.getName()
+        );
+
+        response.put(
+                "lastName",
+                empleadoGuardado.getLastName()
+        );
+
+        response.put(
+                "email",
+                usuarioGuardado.getEmail()
+        );
+
+        response.put(
+                "username",
+                usuarioGuardado.getUsername()
+        );
+
+        response.put(
+                "role",
+                rol.getNombreRol()
+        );
+
+        response.put(
+                "position",
+                puesto.getNombre()
+        );
+
+        response.put(
+                "active",
+                empleadoGuardado.getActive()
+        );
+
+        return ResponseEntity.ok(response);
+
+    } catch (Exception e) {
+
+        return ResponseEntity
+                .internalServerError()
+                .body(
+                    "Error al crear el empleado: "
+                    + e.getMessage()
+                );
+    }
+}
+
 }

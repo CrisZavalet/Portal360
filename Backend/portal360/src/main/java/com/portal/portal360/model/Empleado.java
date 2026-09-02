@@ -52,7 +52,7 @@ private LocalDate startDate;
     private Boolean active = true;
 
     @Column(name = "id_usuario")
-    private Integer idUser;
+    private Long idUser;
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
