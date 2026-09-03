@@ -1,13 +1,14 @@
 import {inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoginTablet } from '../interfaces/loginTablet.interface';
-import { identity, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs';
 import { Empleado } from '../interfaces/empleado.interface';
 import { EmpleadoData } from '../interfaces/empleadoData.interface';
 import { HistorialFichajeEmpleado } from '../interfaces/historialFichajeEmpleado.interface';
 import { SolicitudAusencias } from '../interfaces/solicitudAusencias.interface';
 import { ObtenerAusencias } from '../interfaces/obtenerAusencias.interface';
+import { EmpleadoCrear } from '../interfaces/empleadoCrear.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class AuthService {
   private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
   private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
   private apiUrlSolicitudAusencias = 'http://localhost:8080/api/requests';
+
 
 private http=inject(HttpClient);
  
@@ -160,5 +162,12 @@ activarEmpleado(id: number): Observable<any> {
   );
 }
 
+crearEmpleado(empleado: EmpleadoCrear): Observable<any> {
+  return this.http.post(
+    `${this.apiUrlEmpleados}/create-full`,
+    empleado
+  );
+
+}
 }
 

@@ -335,8 +335,11 @@
               }
             </fieldset>
                <fieldset class="fieldset">
-              <legend class="fieldset-legend mb-1">Número de identificación</legend>
+              <legend class="fieldset-legend mb-1">Número de identificación<span class="text-red-500">*</span></legend>
               <input class="input input-bordered" formControlName="dni" />
+               @if (form.get('dni')?.touched && form.get('dni')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">El número de identificación es obligatorio</p>
+              }
             </fieldset>
 
             <fieldset class="fieldset">
@@ -369,28 +372,61 @@
           <div
             class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300 ease-in-out animate-fade-in relative overflow-hidden"
           >
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend mb-1">Departamento</legend>
-              <input class="input input-bordered" formControlName="departamento" />
-            </fieldset>
+  
+           <fieldset class="fieldset">
+  <legend class="fieldset-legend mb-1">
+    Puesto<span class="text-red-500">*</span>
+  </legend>
 
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend mb-1">Puesto</legend>
-              <input class="input input-bordered" formControlName="puesto" />
-            </fieldset>
+  <select
+    class="select select-bordered"
+    formControlName="puesto"
+  >
+    <option value="">Selecciona un puesto</option>
+
+    <option [value]="1">Desarrollador/a</option>
+    <option [value]="2">Manager</option>
+    <option [value]="3">HR Specialist</option>
+    <option [value]="4">Compras</option>
+    <option [value]="5">Jefe de Taller</option>
+    <option [value]="6">Mecánico</option>
+    <option [value]="7">Pintor</option>
+    <option [value]="8">Marketing</option>
+    <option [value]="9">Diseñador/a Grafico</option>
+    
+  </select>
+   @if (form.get('puesto')?.touched && form.get('puesto')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">El puesto es obligatorio</p>
+              }
+</fieldset>
 
             <fieldset class="fieldset">
               <legend class="fieldset-legend mb-1">Fecha inicio</legend>
               <input type="date" class="input input-bordered" formControlName="fechaInicio" />
+             @if (form.get('fechaInicio')?.touched && form.get('fechaInicio')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">La fecha de inicio es obligatoria</p>
+              }
             </fieldset>
 
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend mb-1">Estado</legend>
-              <select class="select select-bordered" formControlName="estado">
-                <option>Activo</option>
-                <option>Inactivo</option>
-              </select>
-            </fieldset>
+
+<fieldset class="fieldset">
+  <legend class="fieldset-legend mb-1">
+    Rol<span class="text-red-500">*</span>
+  </legend>
+
+  <select
+    class="select select-bordered"
+    formControlName="rol"
+  >
+    <option value="">Selecciona un rol</option>
+    <option [value]="1">Administración</option>
+    <option [value]="2">RRHH</option>
+    <option [value]="3">Empleado</option>
+  </select>
+   @if (form.get('rol')?.touched && form.get('rol')?.invalid) {
+                <p class="text-red-500 text-xs mt-1">El rol es obligatorio</p>
+              }
+</fieldset>
           </div>
         }
 
@@ -398,9 +434,10 @@
           <div class="mt-5 space-y-4">
             <fieldset class="fieldset">
               <legend class="fieldset-legend mb-1">Usuario</legend>
-              <input class="input input-bordered w-full" formControlName="usuario" />
-              <!-- <span>Nomenclatura: {{ form.value.nombre | lowercase }}.{{ form.value.apellido | lowercase }}</span> -->
-            </fieldset>
+ <input class="input input-bordered w-full" 
+         formControlName="usuario" 
+         readonly />
+          </fieldset>
 
             <fieldset class="fieldset">
               <legend class="fieldset-legend mb-1">Contraseña</legend>
@@ -421,7 +458,6 @@
           <div class="mt-5 text-sm space-y-2 text-slate-700 dark:text-white">
             <p><b>Nombre:</b> {{ form.value.nombre }} {{ form.value.apellido }}</p>
             <p><b>Email:</b> {{ form.value.email }}</p>
-            <p><b>Departamento:</b> {{ form.value.departamento }}</p>
             <p><b>Puesto:</b> {{ form.value.puesto }}</p>
             <p><b>Usuario:</b> {{ form.value.usuario }}</p>
             <p><b>Contraseña:</b> {{ form.value.password }}</p>

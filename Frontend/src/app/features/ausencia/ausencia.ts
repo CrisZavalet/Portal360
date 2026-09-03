@@ -490,14 +490,20 @@ calcularVacaciones(): void {
 
     while (fecha <= fin) {
 
-      if (fecha < hoy) {
-        utilizadas++;
-      } else {
-        planificadas++;
-      }
+  const dia = fecha.getDay();
 
-      fecha.setDate(fecha.getDate() + 1);
+  // Solo lunes a viernes
+  if (dia !== 0 && dia !== 6) {
+
+    if (fecha < hoy) {
+      utilizadas++;
+    } else {
+      planificadas++;
     }
+  }
+
+  fecha.setDate(fecha.getDate() + 1);
+}
 
   });
 
@@ -572,20 +578,26 @@ agregarSolicitudAlCalendario(solicitud: SolicitudAusencias): void {
   // Varios días
   if (solicitud.startDate && solicitud.endDate) {
 
-    const inicio = new Date(solicitud.startDate + 'T00:00:00');
-    const fin = new Date(solicitud.endDate + 'T00:00:00');
+    const inicio = this.crearFechaLocal(solicitud.startDate);
+    const fin = this.crearFechaLocal(solicitud.endDate);
 
     const fechaActual = new Date(inicio);
 
     while (fechaActual <= fin) {
 
-      const fecha = this.formatearFechaCalendario(fechaActual);
+      const dia = fechaActual.getDay();
 
-      this.events.push({
-        date: fecha,
-        name: this.getTipoAusencia(solicitud.idType),
-        type: this.getTipoEvento(solicitud.idType)
-      });
+      // Solo lunes a viernes
+      if (dia !== 0 && dia !== 6) {
+
+        const fecha = this.formatearFechaCalendario(fechaActual);
+
+        this.events.push({
+          date: fecha,
+          name: this.getTipoAusencia(solicitud.idType),
+          type: this.getTipoEvento(solicitud.idType)
+        });
+      }
 
       fechaActual.setDate(fechaActual.getDate() + 1);
     }
@@ -626,5 +638,61 @@ getTipoEvento(idType: number): 'vacation' | 'absence' | 'sick' {
   return 'absence';
 }
 
+// validarDiaLaborable(): void {
+//   if (!this.startDate) return;
 
+//   const fecha = new Date(this.startDate + 'T00:00:00');
+//   const dia = fecha.getDay();
+
+//   // 0 = domingo
+//   // 6 = sábado
+//   if (dia === 0 || dia === 6) {
+//     this.startDate = '';
+
+//     alert('No puedes seleccionar sábados ni domingos.');
+//   }
+// }
+
+validarFecha(tipo: 'start' | 'end'): void {
+
+  const fecha = tipo === 'start'
+    ? this.startDate
+    : this.endDate;
+
+  if (!fecha) return;
+
+  const date = this.crearFechaLocal(fecha);
+  const dia = date.getDay();
+
+  // 0 = domingo
+  // 6 = sábado
+  if (dia === 0 || dia === 6) {
+
+    if (tipo === 'start') {
+      this.startDate = '';
+    } else {
+      this.endDate = '';
+    }
+
+    this.errorFormulario = 'No puedes seleccionar sábados ni domingos.';
+    return;
+  }
+
+  // Comprobar que la fecha final no sea anterior
+  if (
+    this.startDate &&
+    this.endDate &&
+    this.endDate < this.startDate
+  ) {
+
+    this.endDate = '';
+
+    this.errorFormulario =
+      'La fecha de fin no puede ser anterior a la fecha de inicio.';
+
+    return;
+  }
+
+  this.errorFormulario = '';
+}
 }

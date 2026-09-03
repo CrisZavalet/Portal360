@@ -6,6 +6,7 @@ import { Fichaje } from "../fichaje/fichaje";
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmpleadoData } from '../../core/interfaces/empleadoData.interface';
 import { RouterLink } from '@angular/router';
+import { EmpleadoCrear } from '../../core/interfaces/empleadoCrear.interface';
 
 @Component({
   selector: 'app-empleados',
@@ -38,7 +39,6 @@ cambiandoEstado = false;
 
 ngOnInit() {
 this.form = this.fb.group({
-  // Personal
   nombre: ['', Validators.required],
   apellido: ['', Validators.required],
   direccion: [''],
@@ -47,14 +47,13 @@ this.form = this.fb.group({
   nacimiento: [''],
   ubicacion: [''],
   iban: [''],
-  dni: [''],
-  departamento: [''],
-  puesto: [''],
-  fechaInicio: [''],
-  estado: ['', Validators.required],
+  dni: ['', Validators.required],
   usuario: [''],
+  estado: ['Activo', Validators.required],
+  puesto: ['', Validators.required],
+  fechaInicio: ['', Validators.required],
+  rol: ['', Validators.required],
   password: ['', Validators.required],
-  confirmPassword: ['', Validators.required],
 });
 
 this.CargarEmpleados();
@@ -93,6 +92,8 @@ openModal() {
 }
 
 closeModal() {
+  this.form.reset();
+   this.step = 1;
   this.openModalEmpleado = false;
 }
 
@@ -100,10 +101,13 @@ closeModal() {
 nextStep() {
  
   this.form.markAllAsTouched();
-if (this.step === 1 && this.form.get('nombre')?.invalid) return;
+  if (this.step === 1 && this.form.get('nombre')?.invalid) return;
   if (this.step === 1 && this.form.get('apellido')?.invalid) return;
   if (this.step === 1 && this.form.get('email')?.invalid) return;
-    // if (this.form.invalid) return;
+  if (this.step === 1 && this.form.get('dni')?.invalid) return;
+  if (this.step === 2 && this.form.get('puesto')?.invalid) return;
+  if (this.step === 2 && this.form.get('fechaInicio')?.invalid) return;
+  if (this.step === 2 && this.form.get('rol')?.invalid) return;
   if (this.step === 2) {
     this.generarUsuario();
   }
@@ -116,12 +120,14 @@ prevStep() {
 }
 
 generarUsuario() {
-  const nombre = this.form.value.name || '';
-  const apellido = this.form.value.lastName || '';
-const apellidos = apellido.split(' ');
-const user = (nombre.charAt(0) + apellidos[0] + (apellidos[1]?.charAt(0) || '')).toLowerCase();
+  const nombre = (this.form.value.nombre || '').trim().toLowerCase();
+  const apellido = (this.form.value.apellido || '').trim().toLowerCase();
 
-  this.form.patchValue({ usuario: user });
+  const user = nombre + apellido.substring(0, 2);
+
+  this.form.patchValue({
+    usuario: user
+  });
 
   this.generarPassword();
 }
@@ -132,10 +138,55 @@ generarPassword() {
 }
 
 crearEmpleado() {
-  if (this.form.invalid) return;
+   this.form.markAllAsTouched();
 
-  console.log(this.form.value);
-  this.modalOpen = false;
+  if (this.form.invalid) {
+    return;
+  }
+
+  const empleado: EmpleadoCrear = {
+     name: this.form.value.nombre,
+    lastName: this.form.value.apellido,
+    dni: this.form.value.dni,
+    address: this.form.value.direccion,
+    email: this.form.value.email,
+    password: this.form.value.password,
+    phone: this.form.value.telefono,
+    dateOfBirth: this.form.value.nacimiento,
+    location: this.form.value.ubicacion,
+    iban: this.form.value.iban,
+    idRole: Number(this.form.value.rol),
+    idPosition: Number(this.form.value.puesto),
+    startDate: this.form.value.fechaInicio,
+    active: this.form.value.estado === 'Activo'
+  };
+
+  console.log('Empleado que se enviará:', empleado);
+
+  this.auth.crearEmpleado(empleado).subscribe({
+
+    next: (response) => {
+
+      console.log('Empleado creado correctamente:', response);
+
+
+      this.closeModal();
+
+      this.form.reset();
+
+      this.step = 1;
+
+      this.CargarEmpleados();
+    },
+
+    error: (err) => {
+
+      console.error('Error creando empleado:', err);
+
+      alert('No se ha podido crear el empleado.');
+    }
+
+  });
 } 
 
 @HostListener('document:click', ['$event'])
@@ -245,7 +296,6 @@ cambiarEstadoEmpleado() {
 
     next: () => {
 
-      // Actualizamos el empleado directamente en la lista
       empleado.active = this.accionEstado === 'activar';
 
       this.cambiandoEstado = false;
@@ -267,5 +317,7 @@ cambiarEstadoEmpleado() {
 
   });
 }
+
+
 
 }

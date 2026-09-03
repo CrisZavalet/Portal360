@@ -509,12 +509,13 @@
               <label class="label">Fecha</label>
 
               <input
-                type="date"
-                [(ngModel)]="startDate"
-                name="startDateHours"
-                [min]="today"
-                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-              />
+  type="date"
+  [(ngModel)]="startDate"
+  name="startDateHours"
+  [min]="today"
+  (change)="validarFecha('start')"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+/>
             </div>
 
             <div>
@@ -546,13 +547,14 @@
           <div class="mt-4">
             <label class="label">Fecha</label>
 
-            <input
-              type="date"
-              [(ngModel)]="startDate"
-              name="startDateDay"
-              [min]="today"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-            />
+           <input
+  type="date"
+  [(ngModel)]="startDate"
+  name="startDateDay"
+  [min]="today"
+  (change)="validarFecha('start')"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+/>
           </div>
         }
 
@@ -561,25 +563,27 @@
             <div>
               <label class="label">Desde</label>
 
-              <input
-                type="date"
-                [(ngModel)]="startDate"
-                name="startDateDays"
-                [min]="today"
-                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-              />
+             <input
+  type="date"
+  [(ngModel)]="startDate"
+  name="startDateDays"
+  [min]="today"
+  (change)="validarFecha('start')"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+/>
             </div>
 
             <div>
               <label class="label">Hasta</label>
 
-              <input
-                type="date"
-                [(ngModel)]="endDate"
-                name="endDate"
-                [min]="startDate"
-                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-              />
+             <input
+  type="date"
+  [(ngModel)]="endDate"
+  name="endDate"
+  [min]="startDate || today"
+  (change)="validarFecha('end')"
+  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+/>
             </div>
           </div>
         }
