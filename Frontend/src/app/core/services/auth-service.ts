@@ -43,22 +43,16 @@ login(email: string, password: string): Observable<LoginTablet> {
     );
   }
 
-  fichaje(idEmployee: number): Observable<LoginTablet> {
+fichaje(idEmployee: number): Observable<LoginTablet> {
+  const body = {
+    idEmployee,
+  };
 
-    const body = {
-      idEmployee,
-    };
-
-    return this.http.post<LoginTablet>(this.apiUrlFichaje, body).pipe(
-      tap((response) => {
-      
-        console.log('Fichaje exitoso:', response);
-        localStorage.setItem('role', response.role);
-        localStorage.setItem('idEmployee', response.idEmployee.toString());
-      })
-    );
-  }
-
+  return this.http.post<LoginTablet>(
+    this.apiUrlFichaje,
+    body
+  );
+}
 
   logout() {
     localStorage.removeItem('user');
@@ -84,7 +78,6 @@ login(email: string, password: string): Observable<LoginTablet> {
     );
   }
   
-
   getUser() {
     console.log('Obteniendo usuario desde localStorage:', localStorage.getItem('user'));
     return JSON.parse(localStorage.getItem('user') || 'null');
@@ -144,9 +137,7 @@ getSolicitudById(id: any): Observable<ObtenerAusencias[]> {
         idState: idState
       }
     );
-
   }
-
 
   desactivarEmpleado(id: number): Observable<any> {
   return this.http.patch(

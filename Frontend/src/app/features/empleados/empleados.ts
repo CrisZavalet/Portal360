@@ -235,7 +235,6 @@ rechazarFichaje(f: any) {
 }
 
 
-
 fichajeEmpleado (id:any){
    this.router.navigate(['../management-clock-in', id], {
     relativeTo: this.route

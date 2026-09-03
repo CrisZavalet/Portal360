@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { WorkTime } from '../../core/services/work-time';
 
 @Component({
@@ -8,78 +8,119 @@ import { WorkTime } from '../../core/services/work-time';
   styleUrl: './time.css',
 })
 export class Time {
-currentDate: any;
-horasRestantes=0;
-private startTime = 0;
-private accumulatedTime = 0;
-seconds: number = 0; 
- mediaDiaria = 8;
+
+  mediaDiaria = 8;
   horasSemanales = 40;
-workData:any
-todayKey:any
-segundosHoy:any
-segundosSemana:any
-horasHoy:any
-horasSemana:any
-restantesHoy:any
-restantesSemana:any
-constructor(public workTimeService: WorkTime) {}
-ngOnInit() {
- 
-  this.todayKey = new Date().toISOString().split('T')[0];
 
-  this.segundosHoy = computed(() => {
+  constructor(public workTimeService: WorkTime) {}
 
-    const todayKey = new Date().toISOString().split('T')[0];
+  segundosHoy = computed(() => {
 
-    return (
-        (this.workTimeService.workData()[todayKey] || 0)
-        +
-        this.workTimeService.currentSession()
-    );
+    const todayKey = this.getTodayKey();
 
-});
-  this.segundosSemana = computed(() => {
-    const today = new Date();
-    const firstDay = new Date(today);
+    const trabajadoHoy =
+      this.workTimeService.workData()[todayKey] || 0;
 
-    const day = firstDay.getDay();
-    const diff = firstDay.getDate() - day + (day === 0 ? -6 : 1);
-    firstDay.setDate(diff);
-    let total = 0;
-    Object.keys(this.workTimeService.workData()).forEach(date => {
-      const current = new Date(date);
-      if (current >= firstDay && current <= today) {
-        total += this.workTimeService.workData()[date];
-      }
-    });
+    const sesionActual =
+      this.workTimeService.currentSession();
 
-    return total;
+    return trabajadoHoy + sesionActual;
   });
 
-  this.horasHoy = computed(() => this.format(this.segundosHoy()));
-  this.horasSemana = computed(() => this.format(this.segundosSemana()));
-  this.restantesHoy = computed(() =>
-    this.format(Math.max((this.mediaDiaria * 3600) - this.segundosHoy(), 0))
+
+  segundosSemana = computed(() => {
+
+    const today = new Date();
+
+    const day = today.getDay();
+
+    const diff =
+      today.getDate() - day + (day === 0 ? -6 : 1);
+
+    const firstDay = new Date(today);
+
+    firstDay.setDate(diff);
+
+    firstDay.setHours(0, 0, 0, 0);
+
+    let total = 0;
+
+    const data = this.workTimeService.workData();
+
+    Object.entries(data).forEach(([date, seconds]) => {
+
+      const current = new Date(date + 'T00:00:00');
+
+      if (current >= firstDay && current <= today) {
+        total += seconds;
+      }
+
+    });
+
+    return total + this.workTimeService.currentSession();
+  });
+
+
+  horasHoy = computed(() =>
+    this.format(this.segundosHoy())
   );
-  console.log(this.restantesHoy());
 
-  this.restantesSemana = computed(() =>
-    this.format(Math.max((this.horasSemanales * 3600) - this.segundosSemana(), 0))
+
+  horasSemana = computed(() =>
+    this.format(this.segundosSemana())
   );
 
- 
 
-}
- private format(seconds: number): string {
+  restantesHoy = computed(() =>
+    this.format(
+      Math.max(
+        (this.mediaDiaria * 3600) -
+        this.segundosHoy(),
+        0
+      )
+    )
+  );
+
+
+  restantesSemana = computed(() =>
+    this.format(
+      Math.max(
+        (this.horasSemanales * 3600) -
+        this.segundosSemana(),
+        0
+      )
+    )
+  );
+
+
+  private getTodayKey(): string {
+
+    return new Date()
+      .toISOString()
+      .split('T')[0];
+
+  }
+
+
+  private format(seconds: number): string {
+
     const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
+
+    const mins = Math.floor(
+      (seconds % 3600) / 60
+    );
+
     const secs = seconds % 60;
 
     return `${this.pad(hrs)}:${this.pad(mins)}:${this.pad(secs)}`;
   }
 
+
   private pad(value: number): string {
-    return value.toString().padStart(2, '0');
+
+    return value
+      .toString()
+      .padStart(2, '0');
+
   }
 }

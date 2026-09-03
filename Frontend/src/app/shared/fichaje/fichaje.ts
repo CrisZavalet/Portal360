@@ -7,209 +7,243 @@ import { AuthService } from '../../core/services/auth-service';
   selector: 'app-fichaje',
   imports: [CommonModule],
   templateUrl: './fichaje.html',
-  styleUrls: ['./fichaje.css'], 
+  styleUrls: ['./fichaje.css'],
 })
 export class Fichaje implements OnInit, OnDestroy {
 
-  currentDate: string = '';
-  seconds: number = 0;
-  isFichaje: boolean = false;
+  currentDate = '';
+  seconds = 0;
+
+  isFichaje = false;
+
   tipoFichaje: 'Presencial' | 'Teletrabajo' = 'Presencial';
-  intervalId!: any;
+
+  private intervalId: ReturnType<typeof setInterval> | null = null;
+
   mediaDiaria = 8;
   horasSemanales = 40;
-  idEmployee: any;
 
-  private startTime = 0; 
-  private accumulatedTime = 0;
+  idEmployee: number | null = null;
 
-  horaFichaje: string | null = null; 
-  constructor(private workTimeService: WorkTime, private authService: AuthService) {}
+  private startTime = 0;
 
-  ngOnInit() {
-   
-  const start = localStorage.getItem('startTime');
+  horaFichaje: string | null = null;
 
-if (start) {
+  constructor(
+    private workTimeService: WorkTime,
+    private authService: AuthService
+  ) {}
 
-  this.startTime = Number(start);
+  ngOnInit(): void {
 
-  this.isFichaje = true;
+    const start = localStorage.getItem('startTime');
 
-  this.intervalId = setInterval(() => {
+    if (start) {
 
-    this.seconds = Math.floor(
-      (Date.now() - this.startTime) / 1000
-    );
+      this.startTime = Number(start);
 
-    this.workTimeService.updateCurrentSession(this.seconds);
-
-  }, 1000);
-
-}
-
-const paused = localStorage.getItem('isPaused');
-
-if (paused === 'true') {
-
-  this.accumulatedTime = Number(
-    localStorage.getItem('accumulatedTime') || '0'
-  );
-
-  this.seconds = Math.floor(this.accumulatedTime / 1000);
-
-  this.workTimeService.updateCurrentSession(this.seconds);
-
-  this.isFichaje = false;
-}
-
-
+      if (this.startTime > 0) {
+        this.isFichaje = true;
+        this.iniciarIntervalo();
+      }
+    }
   }
 
 
-  ficharEmpleado() {
-    this.idEmployee = localStorage.getItem('idEmployee');
-    if (this.idEmployee) {
-      this.authService.fichaje(parseInt(this.idEmployee)).subscribe(
-        (response: any) => {
-          console.log('Fichaje exitoso:', response);    
-        },
-        (error: any) => {
-          console.error('Error en el fichaje:', error);
-        }
+  ngOnDestroy(): void {
+    this.detenerIntervalo();
+  }
+
+
+  start(): void {
+
+    if (this.isFichaje) {
+      return;
+    }
+
+    const id = localStorage.getItem('idEmployee');
+
+    if (!id) {
+      console.error('No se encontró idEmployee');
+      return;
+    }
+
+    this.idEmployee = Number(id);
+
+    this.authService.fichaje(this.idEmployee).subscribe({
+
+      next: () => {
+
+        this.isFichaje = true;
+
+        this.startTime = Date.now();
+
+        localStorage.setItem(
+          'startTime',
+          this.startTime.toString()
+        );
+
+        this.iniciarIntervalo();
+
+      },
+
+      error: (err) => {
+        console.error('Error al iniciar fichaje:', err);
+      }
+
+    });
+  }
+
+
+  stop(): void {
+
+    if (!this.isFichaje) {
+      return;
+    }
+
+    const id = localStorage.getItem('idEmployee');
+
+    if (!id) {
+      console.error('No se encontró idEmployee');
+      return;
+    }
+
+    this.idEmployee = Number(id);
+
+    this.authService.fichaje(this.idEmployee).subscribe({
+
+      next: (response) => {
+
+        console.log('Fichaje de salida correcto:', response);
+
+        this.detenerCronometro();
+
+      },
+
+      error: (err) => {
+        console.error('Error al finalizar fichaje:', err);
+      }
+
+    });
+  }
+
+
+  private iniciarIntervalo(): void {
+
+    // MUY IMPORTANTE:
+    // evitar crear varios intervalos
+    if (this.intervalId !== null) {
+      return;
+    }
+
+    this.intervalId = setInterval(() => {
+
+      if (!this.isFichaje || this.startTime <= 0) {
+        return;
+      }
+
+      this.seconds = Math.floor(
+        (Date.now() - this.startTime) / 1000
       );
-    } else {
-      console.error('No se encontró el idEmployee en el localStorage.');
+
+      this.workTimeService.updateCurrentSession(
+        this.seconds
+      );
+
+    }, 1000);
+  }
+
+
+  private detenerIntervalo(): void {
+
+    if (this.intervalId !== null) {
+
+      clearInterval(this.intervalId);
+
+      this.intervalId = null;
     }
   }
 
-  ngOnDestroy() {
-    clearInterval(this.intervalId);
+
+  private detenerCronometro(): void {
+
+    this.detenerIntervalo();
+
+    // Guardamos la sesión
+    this.workTimeService.addWorkSession(this.seconds);
+
+    this.seconds = 0;
+    this.startTime = 0;
+    this.isFichaje = false;
+    this.horaFichaje = null;
+
+    this.workTimeService.updateCurrentSession(0);
+
+    localStorage.removeItem('startTime');
   }
-
- start() {
-  if (this.isFichaje) {
-    return;
-  }
-
-  this.idEmployee = localStorage.getItem('idEmployee');
-
-  if (!this.idEmployee) {
-    return;
-  }
-
-  this.authService.fichaje(+this.idEmployee).subscribe({
-    next: () => {
-      // Solo aquí inicias el cronómetro
-      this.iniciarCronometro();
-    },
-    error: (err) => {
-      console.error('Error al fichar', err);
-    }
-  });
-}
-
-
-
- stop() {
-
-  if (!this.isFichaje) {
-    return;
-  }
-
-  this.idEmployee = localStorage.getItem('idEmployee');
-
-  if (!this.idEmployee) {
-    return;
-  }
-
-  this.authService.fichaje(+this.idEmployee).subscribe({
-    next: (response) => {
-      console.log('Fichaje de salida correcto', response);
-
-      this.detenerCronometro();
-    },
-    error: (error) => {
-      console.error('Error al fichar', error);
-    }
-  });
-
-}
-
-
-private iniciarCronometro() {
-
-  this.isFichaje = true;
-
-  this.startTime = Date.now();
-
-  localStorage.setItem('startTime', this.startTime.toString());
-
-  this.intervalId = setInterval(() => {
-
-    this.seconds = Math.floor(
-      (Date.now() - this.startTime) / 1000
-    );
-
-    this.workTimeService.updateCurrentSession(this.seconds);
-
-  }, 1000);
-
-}
-
-private detenerCronometro() {
-
-  clearInterval(this.intervalId);
-
-  this.workTimeService.addWorkSession(this.seconds);
-
-  this.seconds = 0;
-  this.startTime = 0;
-  this.isFichaje = false;
-  this.horaFichaje = null;
-
-  this.workTimeService.updateCurrentSession(0);
-
-  localStorage.removeItem('startTime');
-}
-
 
 
   get formattedTime(): string {
+
     const hrs = Math.floor(this.seconds / 3600);
-    const mins = Math.floor((this.seconds % 3600) / 60);
+
+    const mins = Math.floor(
+      (this.seconds % 3600) / 60
+    );
+
     const secs = this.seconds % 60;
 
     return `${this.pad(hrs)}:${this.pad(mins)}:${this.pad(secs)}`;
   }
 
+
   pad(value: number): string {
     return value.toString().padStart(2, '0');
   }
+
 
   get horasTrabajadas(): number {
     return this.seconds / 3600;
   }
 
-  get horasRestantesDiarias(): string {
-    const remainingSeconds = Math.max((this.mediaDiaria * 3600) - this.seconds, 0);
-    const hrs = Math.floor(remainingSeconds / 3600);
-    const mins = Math.floor((remainingSeconds % 3600) / 60);
-    const secs = remainingSeconds % 60;
 
-    return `${this.pad(hrs)}:${this.pad(mins)}:${this.pad(secs)}`;
+  get horasRestantesDiarias(): string {
+
+    const remainingSeconds = Math.max(
+      (this.mediaDiaria * 3600) - this.seconds,
+      0
+    );
+
+    return this.formatTime(remainingSeconds);
   }
+
 
   get horasRestantesSemanales(): string {
-    const remainingSeconds = Math.max((this.horasSemanales * 3600) - this.seconds, 0);
-    const hrs = Math.floor(remainingSeconds / 3600);
-    const mins = Math.floor((remainingSeconds % 3600) / 60);
-    const secs = remainingSeconds % 60;
+
+    const remainingSeconds = Math.max(
+      (this.horasSemanales * 3600) - this.seconds,
+      0
+    );
+
+    return this.formatTime(remainingSeconds);
+  }
+
+
+  private formatTime(seconds: number): string {
+
+    const hrs = Math.floor(seconds / 3600);
+
+    const mins = Math.floor(
+      (seconds % 3600) / 60
+    );
+
+    const secs = seconds % 60;
 
     return `${this.pad(hrs)}:${this.pad(mins)}:${this.pad(secs)}`;
   }
 
-  addOneHour() {
+
+  addOneHour(): void {
     this.seconds += 3600;
   }
 }
