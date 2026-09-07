@@ -164,9 +164,11 @@ crearEmpleado(empleado: EmpleadoCrear): Observable<any> {
 cambiarPassword(idEmployee: number, confirmNewPassword: string, newPassword: string, currentPassword: string): Observable<any> {
   return this.http.patch(
     `${this.apiUrlEmpleados}/${idEmployee}/change-password`,
-    { currentPassword:currentPassword,
+    { 
+      currentPassword:currentPassword,
       newPassword:newPassword, 
-      confirmNewPassword:confirmNewPassword }
+      confirmPassword:confirmNewPassword 
+    }
   );
 
 }
