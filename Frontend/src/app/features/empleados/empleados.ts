@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmpleadoData } from '../../core/interfaces/empleadoData.interface';
 import { RouterLink } from '@angular/router';
 import { EmpleadoCrear } from '../../core/interfaces/empleadoCrear.interface';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-empleados',
@@ -17,7 +18,7 @@ import { EmpleadoCrear } from '../../core/interfaces/empleadoCrear.interface';
 export class Empleados {
 
   constructor(private fb: FormBuilder,  private route: ActivatedRoute
-, private eRef: ElementRef, private router: Router) {}
+, private eRef: ElementRef, private router: Router, private toast: ToastService) {}
 searchTerm: string = '';
 openModalEmpleado = false;
 modalOpen = false;
@@ -166,20 +167,23 @@ crearEmpleado() {
   this.auth.crearEmpleado(empleado).subscribe({
 
     next: (response) => {
-
-      console.log('Empleado creado correctamente:', response);
-
+              this.toast.success('Empleado creado correctamente');
 
       this.closeModal();
 
       this.form.reset();
 
       this.step = 1;
-
+      
       this.CargarEmpleados();
+
+     setTimeout(() => {
+  window.location.reload();
+}, 2000);
     },
 
     error: (err) => {
+        this.toast.error('No se pudo crear el empleado');
 
       console.error('Error creando empleado:', err);
 

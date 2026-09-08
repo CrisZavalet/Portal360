@@ -17,23 +17,48 @@
       <div class="mt-1">
         <h2 class="text-xl font-semibold mb-4">Seguridad</h2>
 
-        <div class="space-y-4">
-          <input type="password" placeholder="Nueva contraseña"
-            class="input input-bordered border border-gray-300 rounded-lg w-full bg-white/20 text-black placeholder-gray-300" />
+       <div class="space-y-4">
 
-          <input type="password" placeholder="Confirmar contraseña"
-            class="input input-bordered border border-gray-300 rounded-lg w-full bg-white/20 text-black placeholder-gray-300" />
+  <input
+    type="password"
+    placeholder="Contraseña actual"
+    [(ngModel)]="currentPassword"
+    name="currentPassword"
+    class="input input-bordered border border-gray-300 rounded-lg w-full bg-white/20 text-black placeholder-gray-300"
+  />
 
-          <div class="flex items-center justify-between">
-            <span>Autenticación en 2 pasos</span>
-            <input type="checkbox" class="toggle toggle-primary checked:border-green-500 checked:bg-green-400 checked:text-green-800" 
-/>
-          </div>
-        </div>
+  <input
+    type="password"
+    placeholder="Nueva contraseña"
+    [(ngModel)]="newPassword"
+    name="newPassword"
+    class="input input-bordered border border-gray-300 rounded-lg w-full bg-white/20 text-black placeholder-gray-300"
+  />
 
-        <button class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white">
-          Actualizar seguridad
-        </button>
+  <input
+    type="password"
+    placeholder="Confirmar nueva contraseña"
+    [(ngModel)]="confirmPassword"
+    name="confirmPassword"
+    class="input input-bordered border border-gray-300 rounded-lg w-full bg-white/20 text-black placeholder-gray-300"
+  />
+
+  @if (passwordError) {
+    <p class="text-red-500 text-sm">
+      {{ passwordError }}
+    </p>
+  }
+
+  <button
+    type="button"
+    (click)="actualizarPassword()"
+    class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white"
+  >
+    Actualizar contraseña
+  </button>
+
+</div>
+
       </div>
 
       <div class="mt-10">
