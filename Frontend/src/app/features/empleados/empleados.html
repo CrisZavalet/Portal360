@@ -37,7 +37,7 @@
 
   <div class="hidden md:block mt-70 md:mt-70">
     <table
-      class="w-full text-slate-800 dark:text-slate-200 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-visible"
+      class="w-full text-slate-800 dark:text-slate-200 bg-white/10 backdrop-blur-lg  rounded-2xl shadow-2xl overflow-visible"
     >
       <thead class="text-xs uppercase tracking-wider text-slate-500">
         <tr>
@@ -52,7 +52,7 @@
         </tr>
       </thead>
 
-      <tbody>
+      <tbody class="dark:text-slate-800">
         @for (emp of empleadosFiltrados(); track $index) {
           <tr class="bg-white border-t border-white/40 hover:bg-white/40 transition">
              @if (role === 'Administracion' || role === 'RRHH') {

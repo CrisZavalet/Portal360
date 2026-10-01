@@ -205,7 +205,7 @@ overflow-hidden border-separate border-spacing-y-1">
     }
       @for (f of employeedDataFiltered; track $index) {
        <tr class="bg-white border-t border-white/10 hover:bg-base-200/20 transition">
-        <td class="px-3 py-2">{{formatearFecha(f.date)}}</td>
+        <td class="px-3 py-2 dark:text-slate-500">{{formatearFecha(f.date)}}</td>
        <td class="px-3 py-2">
   <div class="flex gap-3 items-center">
 
@@ -228,7 +228,7 @@ overflow-hidden border-separate border-spacing-y-1">
     Presencial
   </span>
 </td> 
-        <td class="px-3 py-2">{{ calcularTiempo(f.startHour, f.endHour) }}</td>
+        <td class="px-3 py-2 dark:text-slate-500">{{ calcularTiempo(f.startHour, f.endHour) }}</td>
       <td> <div class="flex gap-3 items-center">
        @if (f.aprobado=='APROBADO') {
   <span class="flex justify-center px-3 py-1 text-xs rounded-full

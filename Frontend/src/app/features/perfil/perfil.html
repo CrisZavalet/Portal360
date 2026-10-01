@@ -20,7 +20,7 @@
         </div>
         @if (empleadoSelectado) {
 
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">
+        <h2 class="text-xl font-bold text-gray-800">
           {{empleadoSelectado.name}} {{empleadoSelectado.lastName}}
         </h2>
         <p class="text-gray-500">{{empleadoSelectado.position}}</p>
@@ -41,41 +41,41 @@
     <div class="lg:col-span-2 space-y-6">
 
       <div class="backdrop-blur-xl bg-white border border-white/20 rounded-3xl shadow-xl p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">
           Información personal
         </h3>
         @if (empleadoSelectado) {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 dark:text-gray-200">
 
           <div>
-            <p class="text-sm text-gray-500">Número de identificación</p>
-            <p>{{empleadoSelectado.dni}}</p>
+            <p class="text-sm text-gray-800">Número de identificación</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.dni}}</p>
           </div>
 
           <div>
-            <p class="text-sm text-gray-500">Email</p>
-            <p>{{empleadoSelectado.email}}</p>
+            <p class="text-sm text-gray-800">Email</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.email}}</p>
           </div>
 
           <div>
-            <p class="text-sm text-gray-500">Teléfono</p>
-            <p>{{empleadoSelectado.phone}}</p>
+            <p class="text-sm text-gray-800">Teléfono</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.phone}}</p>
           </div>
 
 
           <div>
-            <p class="text-sm text-gray-500">Ubicación</p>
-            <p>{{empleadoSelectado.location}}</p>
+            <p class="text-sm text-gray-800">Ubicación</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.location}}</p>
           </div>
 
           <div>
-            <p class="text-sm text-gray-500">Fecha de nacimiento</p>
-            <p>{{empleadoSelectado.dateOfBirth}}</p>
+            <p class="text-sm text-gray-800">Fecha de nacimiento</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.dateOfBirth}}</p>
           </div>
 
           <div class="md:col-span-2">
-            <p class="text-sm text-gray-500">IBAN</p>
-            <p>{{empleadoSelectado.iban}}</p>
+            <p class="text-sm text-gray-800">IBAN</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.iban}}</p>
           </div>
 
         </div>
@@ -83,7 +83,7 @@
       </div>
 
       <div class="backdrop-blur-xl bg-white border border-white/20 rounded-3xl shadow-xl p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">
           Información laboral
         </h3>
         @if (empleadoSelectado) {
@@ -91,18 +91,18 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-700 dark:text-gray-200">
 
           <div>
-            <p class="text-sm text-gray-500">Departamento</p>
-            <p>{{empleadoSelectado.department}}</p>
+            <p class="text-sm text-gray-800">Departamento</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.department}}</p>
           </div>
 
           <div>
-            <p class="text-sm text-gray-500">Puesto</p>
-            <p>{{empleadoSelectado.position}}</p>
+            <p class="text-sm text-gray-800">Puesto</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.position}}</p>
           </div>
 
           <div>
-            <p class="text-sm text-gray-500">Antigüedad</p>
-            <p>{{empleadoSelectado.seniority}} años
+            <p class="text-sm text-gray-800">Antigüedad</p>
+            <p class="text-gray-800 dark:text-gray-500">{{empleadoSelectado.seniority}} años
           </div>
 
         </div>
@@ -128,7 +128,7 @@
 
       <div class="form-control">
         <label class="label">
-          <span class="label-text">Nombre</span>
+          <span class="label-text dark:text-white">Nombre</span>
         </label>
         <input type="text" [(ngModel)]="name_user" class="input w-full 
        bg-white/60 
@@ -141,7 +141,7 @@
 
       <div class="form-control">
         <label class="label">
-          <span class="label-text">Apellidos</span>
+          <span class="label-text dark:text-white">Apellidos</span>
         </label>
         <input type="text" [(ngModel)]="suername_user" class="input w-full 
        bg-white/60 
@@ -154,7 +154,7 @@
 
       <div class="form-control md:col-span-2">
         <label class="label">
-          <span class="label-text">Email</span>
+          <span class="label-text dark:text-white">Email</span>
         </label>
         <input type="email" [(ngModel)]="email_user" class="input w-full 
        bg-white/60 
@@ -167,7 +167,7 @@
 
       <div class="form-control">
         <label class="label">
-          <span class="label-text">Teléfono</span>
+          <span class="label-text dark:text-white">Teléfono</span>
         </label>
         <input type="text" [(ngModel)]="tel_user" class="input w-full 
        bg-white/60 
@@ -180,7 +180,7 @@
 
       <div class="form-control">
         <label class="label">
-          <span class="label-text">Ubicación</span>
+          <span class="label-text dark:text-white">Ubicación</span>
         </label>
         <input type="text" [(ngModel)]="ubicacion_user" class="input w-full 
        bg-white/60 
@@ -193,7 +193,7 @@
 
       <div class="form-control md:col-span-2">
         <label class="label">
-          <span class="label-text">IBAN</span>
+          <span class="label-text dark:text-white">IBAN</span>
         </label>
         <input type="text" [(ngModel)]="iban_user" class="input w-full 
        bg-white/60 

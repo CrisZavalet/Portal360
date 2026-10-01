@@ -13,6 +13,7 @@ import { AuthService } from '../../core/services/auth-service';
 import { SolicitudAusencias } from '../../core/interfaces/solicitudAusencias.interface';
 import { A11yModule } from "@angular/cdk/a11y";
 import { ObtenerAusencias } from '../../core/interfaces/obtenerAusencias.interface';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-ausencia',
@@ -22,7 +23,7 @@ import { ObtenerAusencias } from '../../core/interfaces/obtenerAusencias.interfa
 })
 export class Ausencia {
 
-  constructor(private holidayService: Holiday, private authService: AuthService) {} 
+  constructor(private holidayService: Holiday, private authService: AuthService, private toast: ToastService) {} 
   
 exportModalOpen = false;
 modalOpen = false;
@@ -381,7 +382,7 @@ crearSolicitud(): void {
     next: (respuesta) => {
 
       console.log('Solicitud creada correctamente:', respuesta);
-
+      this.toast.success('Solicitud creada correctamente');
       this.closeModal();
 
     },
@@ -389,6 +390,7 @@ crearSolicitud(): void {
     error: (error) => {
 
       console.error('Error al crear la solicitud:', error);
+      this.toast.error('Error al crear la solicitud');
 
     }
 

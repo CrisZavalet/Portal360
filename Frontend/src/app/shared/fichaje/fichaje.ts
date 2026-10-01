@@ -96,62 +96,103 @@ export class Fichaje implements OnInit, OnDestroy {
 
 
   stop(): void {
-
-    if (!this.isFichaje) {
-      return;
-    }
-
-    const id = localStorage.getItem('idEmployee');
-
-    if (!id) {
-      console.error('No se encontró idEmployee');
-      return;
-    }
-
-    this.idEmployee = Number(id);
-
-    this.authService.fichaje(this.idEmployee).subscribe({
-
-      next: (response) => {
-
-        console.log('Fichaje de salida correcto:', response);
-
-        this.detenerCronometro();
-
-      },
-
-      error: (err) => {
-        console.error('Error al finalizar fichaje:', err);
-      }
-
-    });
+  if (!this.isFichaje) {
+    return;
   }
 
+  const id = localStorage.getItem('idEmployee');
 
-  private iniciarIntervalo(): void {
+  if (!id) {
+    console.error('No se encontró idEmployee');
+    return;
+  }
 
-    // MUY IMPORTANTE:
-    // evitar crear varios intervalos
-    if (this.intervalId !== null) {
+  this.idEmployee = Number(id);
+
+  const tiempoReal = Math.floor(
+    (Date.now() - this.startTime) / 1000
+  );
+
+  this.authService.fichaje(this.idEmployee).subscribe({
+    next: (response) => {
+      console.log('Fichaje de salida correcto:', response);
+
+      localStorage.setItem(
+        'ultimoTiempoFichaje',
+        tiempoReal.toString()
+      );
+
+      this.detenerCronometro();
+    },
+    error: (err) => {
+      console.error('Error al finalizar fichaje:', err);
+    }
+  });
+}
+
+
+private iniciarIntervalo(): void {
+
+  // Evitar crear varios intervalos
+  if (this.intervalId !== null) {
+    return;
+  }
+
+  this.intervalId = setInterval(() => {
+
+    if (!this.isFichaje || this.startTime <= 0) {
       return;
     }
 
-    this.intervalId = setInterval(() => {
+    const ahora = new Date();
 
-      if (!this.isFichaje || this.startTime <= 0) {
-        return;
-      }
+    // Comprobar si hemos cambiado de día
+    const fechaInicio = new Date(this.startTime);
 
-      this.seconds = Math.floor(
-        (Date.now() - this.startTime) / 1000
-      );
+    const mismoDia =
+      ahora.getFullYear() === fechaInicio.getFullYear() &&
+      ahora.getMonth() === fechaInicio.getMonth() &&
+      ahora.getDate() === fechaInicio.getDate();
 
-      this.workTimeService.updateCurrentSession(
-        this.seconds
-      );
+    if (!mismoDia) {
 
-    }, 1000);
+      // El fichaje llegó a las 00:00
+      this.detenerPorCambioDeDia();
+
+      return;
+    }
+
+    this.seconds = Math.floor(
+      (Date.now() - this.startTime) / 1000
+    );
+
+    this.workTimeService.updateCurrentSession(
+      this.seconds
+    );
+
+  }, 1000);
+}
+
+private detenerPorCambioDeDia(): void {
+
+  console.log('Cambio de día. Cerrando fichaje automáticamente.');
+
+  this.detenerIntervalo();
+
+  // Guardar las horas trabajadas del día anterior
+  if (this.seconds > 0) {
+    this.workTimeService.addWorkSession(this.seconds);
   }
+
+  this.seconds = 0;
+  this.startTime = 0;
+  this.isFichaje = false;
+  this.horaFichaje = null;
+
+  this.workTimeService.updateCurrentSession(0);
+
+  localStorage.removeItem('startTime');
+}
 
 
   private detenerIntervalo(): void {
