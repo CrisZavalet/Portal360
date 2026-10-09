@@ -1,4 +1,4 @@
-import {inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoginTablet } from '../interfaces/loginTablet.interface';
 import { Observable } from 'rxjs';
@@ -14,50 +14,45 @@ import { EmpleadoCrear } from '../interfaces/empleadoCrear.interface';
   providedIn: 'root',
 })
 export class AuthService {
-
   private apiUrl = 'http://localhost:8080/api/kiosk/onlylogin';
   private apiUrlFichaje = 'http://localhost:8080/api/kiosk/onlyfichaje';
-  private apiUrlEmpleados = 'http://localhost:8080/api/employees'; 
+  private apiUrlEmpleados = 'http://localhost:8080/api/employees';
   private apiUrlEmpleadoRoles = 'http://localhost:8080/api/employees/roles';
-  private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings'
+  private apiUrlEmpleadoFichajeHistorial = 'http://localhost:8080/api/clockings';
   private apiUrlSolicitudAusencias = 'http://localhost:8080/api/requests';
 
+  pendientesCount = signal(0);
 
-private http=inject(HttpClient);
- 
-login(email: string, password: string): Observable<LoginTablet> {
+  private http = inject(HttpClient);
 
+  login(email: string, password: string): Observable<LoginTablet> {
     const body = {
       email,
-      password
+      password,
     };
 
     return this.http.post<LoginTablet>(this.apiUrl, body).pipe(
       tap((response) => {
-      
         console.log('Login exitoso:', response);
         localStorage.setItem('user', email);
         localStorage.setItem('role', response.role);
         localStorage.setItem('idEmployee', response.idEmployee.toString());
-      })
+      }),
     );
   }
 
-fichaje(idEmployee: number): Observable<LoginTablet> {
-  const body = {
-    idEmployee,
-  };
+  fichaje(idEmployee: number): Observable<LoginTablet> {
+    const body = {
+      idEmployee,
+    };
 
-  return this.http.post<LoginTablet>(
-    this.apiUrlFichaje,
-    body
-  );
-}
+    return this.http.post<LoginTablet>(this.apiUrlFichaje, body);
+  }
 
   logout() {
     localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
   }
 
   getAllEmployees(): Observable<Empleado[]> {
@@ -72,12 +67,12 @@ fichaje(idEmployee: number): Observable<LoginTablet> {
     return this.http.get<EmpleadoData[]>(this.apiUrlEmpleadoRoles);
   }
 
- getHistorialEmpleado(idEmployee: any): Observable<HistorialFichajeEmpleado[]> {
+  getHistorialEmpleado(idEmployee: any): Observable<HistorialFichajeEmpleado[]> {
     return this.http.get<HistorialFichajeEmpleado[]>(
-      `${this.apiUrlEmpleadoFichajeHistorial}/employee/${idEmployee}/history`
+      `${this.apiUrlEmpleadoFichajeHistorial}/employee/${idEmployee}/history`,
     );
   }
-  
+
   getUser() {
     console.log('Obteniendo usuario desde localStorage:', localStorage.getItem('user'));
     return JSON.parse(localStorage.getItem('user') || 'null');
@@ -91,12 +86,11 @@ fichaje(idEmployee: number): Observable<LoginTablet> {
     return localStorage.getItem('user');
   }
 
-
   getRole(): string | null {
     return localStorage.getItem('role');
   }
 
-   isLoggedIn(): boolean {
+  isLoggedIn(): boolean {
     return !!this.getToken();
   }
 
@@ -111,65 +105,59 @@ fichaje(idEmployee: number): Observable<LoginTablet> {
   }
 
   createSolicitudAusencias(solicitud: SolicitudAusencias): Observable<any> {
-    return this.http.post(
-      `${this.apiUrlSolicitudAusencias}/create`,
-      solicitud
-    );
+    return this.http.post(`${this.apiUrlSolicitudAusencias}/create`, solicitud);
   }
 
-getSolicitudes(): Observable<ObtenerAusencias[]> {
-    return this.http.get<ObtenerAusencias[]>(
-      `${this.apiUrlSolicitudAusencias}/all`
-    );
+  getSolicitudes(): Observable<ObtenerAusencias[]> {
+    return this.http.get<ObtenerAusencias[]>(`${this.apiUrlSolicitudAusencias}/all`);
   }
 
-getSolicitudById(id: any): Observable<ObtenerAusencias[]> {
-    return this.http.get<ObtenerAusencias[]>(
-      `${this.apiUrlSolicitudAusencias}/employee/${id}`
-    );
+  actualizarPendientes(): void {
+    this.getSolicitudes().subscribe({
+      next: (solicitudes) => {
+        const pendientes = solicitudes.filter((solicitud) => solicitud.idState === 1).length;
+
+        this.pendientesCount.set(pendientes);
+      },
+
+      error: (error) => {
+        console.error('Error al actualizar las solicitudes pendientes:', error);
+      },
+    });
   }
 
-  updateSolicitudStatus(idRequest: number,idState: number): Observable<any> 
-  {
-    return this.http.patch(
-      `${this.apiUrlSolicitudAusencias}/${idRequest}/status`,
-      {
-        idState: idState
-      }
-    );
+  getSolicitudById(id: any): Observable<ObtenerAusencias[]> {
+    return this.http.get<ObtenerAusencias[]>(`${this.apiUrlSolicitudAusencias}/employee/${id}`);
+  }
+
+  updateSolicitudStatus(idRequest: number, idState: number): Observable<any> {
+    return this.http.patch(`${this.apiUrlSolicitudAusencias}/${idRequest}/status`, {
+      idState: idState,
+    });
   }
 
   desactivarEmpleado(id: number): Observable<any> {
-  return this.http.patch(
-    `${this.apiUrlEmpleados}/${id}/deactivate`,
-    {}
-  );
-}
+    return this.http.patch(`${this.apiUrlEmpleados}/${id}/deactivate`, {});
+  }
 
-activarEmpleado(id: number): Observable<any> {
-  return this.http.patch(
-    `${this.apiUrlEmpleados}/${id}/activate`,
-    {}
-  );
-}
+  activarEmpleado(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrlEmpleados}/${id}/activate`, {});
+  }
 
-crearEmpleado(empleado: EmpleadoCrear): Observable<any> {
-  return this.http.post(
-    `${this.apiUrlEmpleados}/create-full`,
-    empleado
-  );
+  crearEmpleado(empleado: EmpleadoCrear): Observable<any> {
+    return this.http.post(`${this.apiUrlEmpleados}/create-full`, empleado);
+  }
 
-}
-
-cambiarPassword(idEmployee: any, confirmNewPassword: string, newPassword: string, currentPassword: string): Observable<any> {
-  return this.http.patch(
-    `${this.apiUrlEmpleados}/${idEmployee}/change-password`,
-    { 
-      currentPassword:currentPassword,
-      newPassword:newPassword, 
-      confirmPassword:confirmNewPassword 
-    }
-  );
-
-}
+  cambiarPassword(
+    idEmployee: any,
+    confirmNewPassword: string,
+    newPassword: string,
+    currentPassword: string,
+  ): Observable<any> {
+    return this.http.patch(`${this.apiUrlEmpleados}/${idEmployee}/change-password`, {
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      confirmPassword: confirmNewPassword,
+    });
+  }
 }

@@ -192,16 +192,19 @@ tipoAusencias(idType: number): string {
 
   }
 
-  aceptarSolicitud(solicitud: ObtenerAusencias): void {
+aceptarSolicitud(solicitud: ObtenerAusencias): void {
 
   this.authService
     .updateSolicitudStatus(solicitud.idRequest, 2)
     .subscribe({
+
       next: (respuesta) => {
 
         console.log('Solicitud aprobada:', respuesta);
 
         solicitud.idState = 2;
+
+        this.authService.actualizarPendientes();
 
       },
 
@@ -213,6 +216,7 @@ tipoAusencias(idType: number): string {
         );
 
       }
+
     });
 }
 
@@ -221,11 +225,14 @@ rechazarSolicitud(solicitud: ObtenerAusencias): void {
   this.authService
     .updateSolicitudStatus(solicitud.idRequest, 3)
     .subscribe({
+
       next: (respuesta) => {
 
         console.log('Solicitud rechazada:', respuesta);
 
         solicitud.idState = 3;
+
+        this.authService.actualizarPendientes();
 
       },
 
@@ -237,8 +244,8 @@ rechazarSolicitud(solicitud: ObtenerAusencias): void {
         );
 
       }
+
     });
 }
-
 
 }

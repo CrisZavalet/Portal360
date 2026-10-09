@@ -410,10 +410,10 @@ obtenerListadoSolicitudes(): void {
 
       // Solo pendientes para la sección "Ausencias Pendientes"
       this.request = solicitudes
-        .filter(solicitud => solicitud.idState === 1)
+       
         .sort((a, b) => {
-          return new Date(a.startDate).getTime() -
-                 new Date(b.startDate).getTime();
+          return new Date(b.startDate).getTime()-
+           new Date(a.startDate).getTime();
         });
 
       // Calculamos las vacaciones
@@ -562,13 +562,13 @@ formatearFecha(fecha: string | null): string {
   return `${day}/${month}/${year}`;
 }
 
-getSolicitudesVisibles(): SolicitudAusencias[] {
+getSolicitudesVisibles(): ObtenerAusencias[] {
 
-  if (this.mostrarTodas) {
-    return this.request;
+   if (this.mostrarTodas) {
+    return this.todasLasSolicitudes;
   }
 
-  return this.request.slice(0, 2);
+  return this.todasLasSolicitudes.slice(0, 3);
 }
 
 mostrarMas(): void {
@@ -640,20 +640,18 @@ getTipoEvento(idType: number): 'vacation' | 'absence' | 'sick' {
   return 'absence';
 }
 
-// validarDiaLaborable(): void {
-//   if (!this.startDate) return;
-
-//   const fecha = new Date(this.startDate + 'T00:00:00');
-//   const dia = fecha.getDay();
-
-//   // 0 = domingo
-//   // 6 = sábado
-//   if (dia === 0 || dia === 6) {
-//     this.startDate = '';
-
-//     alert('No puedes seleccionar sábados ni domingos.');
-//   }
-// }
+getEstadoSolicitud(idState: number): string {
+  switch (idState) {
+    case 1:
+      return 'Pendiente';
+    case 2:
+      return 'Aprobada';
+    case 3:
+      return 'Rechazada';
+    default:
+      return 'Desconocido';
+  }
+}
 
 validarFecha(tipo: 'start' | 'end'): void {
 

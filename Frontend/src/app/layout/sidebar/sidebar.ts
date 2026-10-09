@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnDestroy
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +24,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
-export class Sidebar {
+export class Sidebar implements OnDestroy {
 
   @Input() collapsed = false;
   @Output() toggle = new EventEmitter<void>();
@@ -34,11 +41,10 @@ export class Sidebar {
   user: any;
   role: any;
 
-  // Número de solicitudes pendientes
-  pendientesCount = 0;
+  private pendientesInterval: any;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {}
 
@@ -73,36 +79,29 @@ export class Sidebar {
 
     }
 
-    // Si es RRHH, cargamos las solicitudes pendientes
+    // Solo RRHH necesita el contador
     if (this.role === 'RRHH') {
-      this.cargarPendientes();
+
+      // Primera consulta
+      this.authService.actualizarPendientes();
+
+      // Comprobar nuevas solicitudes cada 30 segundos
+      this.pendientesInterval = setInterval(() => {
+
+        this.authService.actualizarPendientes();
+
+      }, 30000);
+
     }
 
   }
 
 
-  cargarPendientes(): void {
+  ngOnDestroy(): void {
 
-    this.authService.getSolicitudes().subscribe({
-
-      next: (solicitudes) => {
-
-        this.pendientesCount = solicitudes.filter(
-          solicitud => solicitud.idState === 1
-        ).length;
-
-      },
-
-      error: (error) => {
-
-        console.error(
-          'Error al cargar las solicitudes pendientes:',
-          error
-        );
-
-      }
-
-    });
+    if (this.pendientesInterval) {
+      clearInterval(this.pendientesInterval);
+    }
 
   }
 

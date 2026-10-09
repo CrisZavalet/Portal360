@@ -247,10 +247,10 @@ cargarSolicitudes() {
     this.solicitudesEmpleado = data;
 
     this.solicitudesPendientes = data
-      .filter(solicitud => solicitud.idState === 1)
+      
       .sort((a, b) =>
-        new Date(a.startDate).getTime() -
-        new Date(b.startDate).getTime()
+        new Date(b.startDate).getTime() -
+        new Date(a.startDate).getTime() 
       )
       .slice(0, 3);
 

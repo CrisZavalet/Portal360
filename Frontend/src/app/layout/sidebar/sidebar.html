@@ -136,7 +136,7 @@
         }
       </a>
 
-  @if (role == 'RRHH') {
+ @if (role == 'RRHH') {
 
   <a
     routerLink="/requests"
@@ -157,12 +157,12 @@
 
       <span>Pendientes</span>
 
-      @if (pendientesCount > 0) {
+      @if (authService.pendientesCount() > 0) {
 
         <span
           class="ml-auto min-w-5 h-5 px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold"
         >
-          {{ pendientesCount }}
+          {{ authService.pendientesCount() }}
         </span>
 
       }

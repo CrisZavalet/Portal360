@@ -90,7 +90,7 @@
   <div class="flex items-center justify-between mb-4">
 
     <h2 class="text-lg font-semibold text-slate-800 dark:text-white tracking-tight">
-      Peticiones pendientes
+      Historial de solicitudes 
     </h2>
 
     @if (solicitudesPendientes.length > 0) {
@@ -187,16 +187,32 @@
           </div>
 
 
-          <span
-            class="shrink-0 px-3 py-1 rounded-full
-                   text-xs font-semibold
-                   bg-yellow-100 text-yellow-700
-                   dark:bg-yellow-500/20
-                   dark:text-yellow-300">
+        <span
+  class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold"
+  [class.bg-yellow-100]="solicitud.idState === 1"
+  [class.text-yellow-700]="solicitud.idState === 1"
+  [class.dark:bg-yellow-500/20]="solicitud.idState === 1"
+  [class.dark:text-yellow-300]="solicitud.idState === 1"
 
-            Pendiente
+  [class.bg-green-100]="solicitud.idState === 2"
+  [class.text-green-700]="solicitud.idState === 2"
+  [class.dark:bg-green-500/20]="solicitud.idState === 2"
+  [class.dark:text-green-300]="solicitud.idState === 2"
 
-          </span>
+  [class.bg-red-100]="solicitud.idState === 3"
+  [class.text-red-700]="solicitud.idState === 3"
+  [class.dark:bg-red-500/20]="solicitud.idState === 3"
+  [class.dark:text-red-300]="solicitud.idState === 3">
+
+  @if (solicitud.idState === 1) {
+    Pendiente
+  } @else if (solicitud.idState === 2) {
+    Aprobada
+  } @else if (solicitud.idState === 3) {
+    Rechazada
+  }
+
+</span>
 
         </div>
 
