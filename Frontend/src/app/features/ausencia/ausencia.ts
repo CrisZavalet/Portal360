@@ -43,6 +43,22 @@ vacacionesDisponibles = 22;
 vacacionesPlanificadas = 0;
 endTime: string = '';
 todasLasSolicitudes: ObtenerAusencias[] = [];
+mesSeleccionado: number = new Date().getMonth();
+anioSeleccionado: number = new Date().getFullYear();
+meses = [
+  { valor: 0, nombre: 'Enero' },
+  { valor: 1, nombre: 'Febrero' },
+  { valor: 2, nombre: 'Marzo' },
+  { valor: 3, nombre: 'Abril' },
+  { valor: 4, nombre: 'Mayo' },
+  { valor: 5, nombre: 'Junio' },
+  { valor: 6, nombre: 'Julio' },
+  { valor: 7, nombre: 'Agosto' },
+  { valor: 8, nombre: 'Septiembre' },
+  { valor: 9, nombre: 'Octubre' },
+  { valor: 10, nombre: 'Noviembre' },
+  { valor: 11, nombre: 'Diciembre' }
+];
 
 selectAbsenceType = [
   { id: 1, name: 'Hora Libre Disposición' },
@@ -564,11 +580,11 @@ formatearFecha(fecha: string | null): string {
 
 getSolicitudesVisibles(): ObtenerAusencias[] {
 
-   if (this.mostrarTodas) {
-    return this.todasLasSolicitudes;
-  }
+   const solicitudes = this.getSolicitudesFiltradas();
 
-  return this.todasLasSolicitudes.slice(0, 3);
+  return this.mostrarTodas
+    ? solicitudes
+    : solicitudes.slice(0, 3);
 }
 
 mostrarMas(): void {
@@ -694,5 +710,33 @@ validarFecha(tipo: 'start' | 'end'): void {
   }
 
   this.errorFormulario = '';
+}
+
+get aniosDisponibles(): number[] {
+  const anios = this.todasLasSolicitudes.map(solicitud =>
+    Number(solicitud.startDate.substring(0, 4))
+  );
+
+  return [...new Set([
+    new Date().getFullYear(),
+    ...anios
+  ])].sort((a, b) => b - a);
+}
+
+getSolicitudesFiltradas(): ObtenerAusencias[] {
+  return this.todasLasSolicitudes.filter(solicitud => {
+    if (!solicitud.startDate) {
+      return false;
+    }
+
+    const [anio, mes] = solicitud.startDate
+      .split('-')
+      .map(Number);
+
+    return (
+      anio === this.anioSeleccionado &&
+      mes - 1 === this.mesSeleccionado
+    );
+  });
 }
 }

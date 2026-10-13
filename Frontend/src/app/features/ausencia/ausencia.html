@@ -19,9 +19,10 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Generadas</span>
-<span class="font-semibold text-lg text-slate-800 dark:text-white">
-  {{ vacacionesGeneradas }}
-</span>        </div>
+          <span class="font-semibold text-lg text-slate-800 dark:text-white">
+            {{ vacacionesGeneradas }}
+          </span>
+        </div>
 
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Utilizadas</span>
@@ -32,9 +33,10 @@
 
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Disponibles</span>
-<span class="font-semibold text-lg text-emerald-600 dark:text-emerald-400">
-  {{ vacacionesDisponibles }}
-</span>        </div>
+          <span class="font-semibold text-lg text-emerald-600 dark:text-emerald-400">
+            {{ vacacionesDisponibles }}
+          </span>
+        </div>
 
         <div class="flex justify-between items-center p-3 rounded-xl bg-white/40 dark:bg-white/5">
           <span class="text-gray-600 dark:text-gray-300">Vacaciones Planificadas</span>
@@ -46,176 +48,177 @@
     </div>
 
     <div
-  class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
->
-  <div class="flex items-center justify-between mb-4">
-    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-      Historial de solicitudes de ausencia
-    </h2>
+      class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
+          Historial de solicitudes de ausencia
+        </h2>
+      </div>
+
+     
+<div class="flex flex-col sm:flex-row gap-3 mb-5">
+
+  <div class="flex-1">
+    <label
+      for="mes"
+      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      Mes
+    </label>
+
+    <select
+      id="mes"
+      [(ngModel)]="mesSeleccionado"
+      (ngModelChange)="mostrarTodas = false"
+      class="w-full px-4 py-3 rounded-xl
+             bg-white/70 dark:bg-slate-800
+             border border-gray-200 dark:border-white/10
+             text-gray-800 dark:text-white
+             focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      @for (mes of meses; track mes.valor) {
+        <option [ngValue]="mes.valor">
+          {{ mes.nombre }}
+        </option>
+      }
+
+    </select>
   </div>
 
-  @if (request.length == 0) {
+  <div class="flex-1">
+    <label
+      for="anio"
+      class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      Año
+    </label>
 
-    <div class="p-6 text-center rounded-xl bg-white/40 dark:bg-white/5">
-      <p class="text-gray-500 dark:text-gray-400">
-        No tienes solicitudes pendientes.
-      </p>
-    </div>
+    <select
+      id="anio"
+      [(ngModel)]="anioSeleccionado"
+      (ngModelChange)="mostrarTodas = false"
+      class="w-full px-4 py-3 rounded-xl
+             bg-white/70 dark:bg-slate-800
+             border border-gray-200 dark:border-white/10
+             text-gray-800 dark:text-white
+             focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
-  } @else {
+      @for (anio of aniosDisponibles; track anio) {
+        <option [ngValue]="anio">
+          {{ anio }}
+        </option>
+      }
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    </select>
+  </div>
 
-@for (solicitud of getSolicitudesVisibles(); track $index) {
-        <div
-          class="relative p-5 rounded-2xl
-                 bg-white/50 dark:bg-white/5
-                 border border-white/40 dark:border-white/10
-                 shadow-md
-                 hover:shadow-xl
-                 hover:-translate-y-1
-                 transition-all duration-300"
-        >
+</div>
 
-         
-          <div class="flex items-start justify-between gap-3 mb-4">
 
-            <div>
-              <h3 class="font-semibold text-lg text-slate-800 dark:text-white">
-                {{ getTipoAusencia(solicitud.idType) }}
-              </h3>
-<!-- 
+      @if (getSolicitudesFiltradas().length === 0) {
+        <div class="p-6 text-center rounded-xl bg-white/40 dark:bg-white/5">
+          <p class="text-gray-500 dark:text-gray-400">No hay solicitudes de ausencia para este mes y año.</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          @for (solicitud of getSolicitudesVisibles();  track solicitud.idRequest) {
+            <div
+              class="relative p-5 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/40 dark:border-white/10 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            >
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div>
+                  <h3 class="font-semibold text-lg text-slate-800 dark:text-white">
+                    {{ getTipoAusencia(solicitud.idType) }}
+                  </h3>
+                  <!-- 
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Solicitud pendiente
               </p> -->
-            </div>
+                </div>
 
-            
-           <span
-  class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold"
-  [ngClass]="{
-    'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300': solicitud.idState === 1,
-    'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300': solicitud.idState === 2,
-    'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300': solicitud.idState === 3
-  }">
+                <span
+                  class="shrink-0 px-3 py-1 rounded-full text-xs font-semibold"
+                  [ngClass]="{
+                    'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-300':
+                      solicitud.idState === 1,
+                    'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-300':
+                      solicitud.idState === 2,
+                    'bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-300':
+                      solicitud.idState === 3,
+                  }"
+                >
+                  {{ getEstadoSolicitud(solicitud.idState) }}
+                </span>
+              </div>
 
-  {{ getEstadoSolicitud(solicitud.idState) }}
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="w-9 h-9 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center"
+                >
+                  📅
+                </div>
 
-</span>
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
 
-          </div>
+                  @if (solicitud.durationType === 'VARIOS_DIAS') {
+                    <p class="text-sm font-medium text-slate-700 dark:text-white">
+                      {{ formatearFecha(solicitud.startDate) }}
+                      -
+                      {{ formatearFecha(solicitud.endDate) }}
+                    </p>
+                  } @else {
+                    <p class="text-sm font-medium text-slate-700 dark:text-white">
+                      {{ formatearFecha(solicitud.startDate) }}
+                    </p>
+                  }
+                </div>
+              </div>
 
-         
-          <div class="flex items-center gap-3 mb-3">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center"
+                >
+                  ⏱️
+                </div>
 
-            <div
-              class="w-9 h-9 rounded-lg
-                     bg-indigo-100 dark:bg-indigo-500/20
-                     flex items-center justify-center"
-            >
-              📅
-            </div>
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Duración</p>
 
-            <div>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                Fecha
-              </p>
+                  <p class="text-sm font-medium text-slate-700 dark:text-white">
+                    {{ getDuracion(solicitud) }}
+                  </p>
+                </div>
+              </div>
 
-              @if (solicitud.durationType === 'VARIOS_DIAS') {
+              @if (solicitud.comments) {
+                <div class="mt-4 p-3 rounded-xl bg-gray-100/70 dark:bg-white/5">
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Comentario</p>
 
-                <p class="text-sm font-medium text-slate-700 dark:text-white">
-                  {{ formatearFecha(solicitud.startDate) }}
-                  -
-                  {{ formatearFecha(solicitud.endDate) }}
-                </p>
-
-              } @else {
-
-                <p class="text-sm font-medium text-slate-700 dark:text-white">
-                  {{ formatearFecha(solicitud.startDate) }}
-                </p>
-
+                  <p class="text-sm text-slate-700 dark:text-gray-200">
+                    {{ solicitud.comments }}
+                  </p>
+                </div>
               }
             </div>
-
-          </div>
-
-          
-          <div class="flex items-center gap-3 mb-3">
-
-            <div
-              class="w-9 h-9 rounded-lg
-                     bg-blue-100 dark:bg-blue-500/20
-                     flex items-center justify-center"
-            >
-              ⏱️
-            </div>
-
-            <div>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                Duración
-              </p>
-
-              <p class="text-sm font-medium text-slate-700 dark:text-white">
-                {{ getDuracion(solicitud) }}
-              </p>
-            </div>
-
-          </div>
-
-         
-          @if (solicitud.comments) {
-
-            <div
-              class="mt-4 p-3 rounded-xl
-                     bg-gray-100/70 dark:bg-white/5"
-            >
-
-              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                Comentario
-              </p>
-
-              <p class="text-sm text-slate-700 dark:text-gray-200">
-                {{ solicitud.comments }}
-              </p>
-
-            </div>
-
           }
-
         </div>
-
+        @if (getSolicitudesFiltradas().length > 3) {
+          <div class="flex justify-center mt-5">
+            <button
+              type="button"
+              (click)="mostrarMas()"
+              class="px-5 py-2 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-all duration-300 shadow-lg shadow-indigo-500/20"
+            >
+              @if (mostrarTodas) {
+                Mostrar menos
+              } @else {
+                Mostrar más
+              }
+            </button>
+          </div>
+        }
       }
-
     </div>
-     @if (request.length > 3) {
-
-  <div class="flex justify-center mt-5">
-
-    <button
-      type="button"
-      (click)="mostrarMas()"
-      class="px-5 py-2 rounded-xl
-             bg-indigo-600 text-white
-             text-sm font-medium
-             hover:bg-indigo-700
-             transition-all duration-300
-             shadow-lg shadow-indigo-500/20"
-    >
-
-      @if (mostrarTodas) {
-        Mostrar menos
-      } @else {
-        Mostrar más
-      }
-
-    </button>
-
-  </div>
-
-}
-  }
-</div>
 
     <div
       class="xl:col-span-2 mt-2 w-full rounded-2xl px-6 py-5 bg-white dark:bg-white/10 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-xl shadow-black/5"
@@ -320,7 +323,7 @@
     >
       <h2
         class="text-lg text-center font-semibold text-slate-800 dark:text-white tracking-tight p-2"
-      > 
+      >
         Información
       </h2>
 
@@ -374,7 +377,7 @@
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" (click)="closeExportModal()"></div>
 
     <div
-      class="relative w-[420px] p-6 rounded-3xl backdrop-blur-2xl bg-white/30 border border-white/40 shadow-2xl shadow-black/30"
+      class="relative w-[420px] p-6 rounded-xl backdrop-blur-2xl bg-white border border-white/40 shadow-2xl shadow-black/30"
     >
       <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-4">Contactar con RRHH</h2>
 
@@ -424,10 +427,8 @@
 
 @if (modalOpen) {
   <div class="fixed inset-0 flex items-center justify-center z-50">
-    <!-- Fondo -->
     <div class="absolute inset-0 bg-white/40 backdrop-blur-sm" (click)="closeModal()"></div>
 
-    <!-- Modal -->
     <div
       class="relative w-[600px] max-w-[95vw] p-6 rounded-3xl backdrop-blur-2xl bg-white/70 dark:bg-slate-900/70 border border-white/40 dark:border-white/10 shadow-2xl"
     >
@@ -508,13 +509,13 @@
               <label class="label">Fecha</label>
 
               <input
-  type="date"
-  [(ngModel)]="startDate"
-  name="startDateHours"
-  [min]="today"
-  (change)="validarFecha('start')"
-  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-/>
+                type="date"
+                [(ngModel)]="startDate"
+                name="startDateHours"
+                [min]="today"
+                (change)="validarFecha('start')"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
             </div>
 
             <div>
@@ -546,14 +547,14 @@
           <div class="mt-4">
             <label class="label">Fecha</label>
 
-           <input
-  type="date"
-  [(ngModel)]="startDate"
-  name="startDateDay"
-  [min]="today"
-  (change)="validarFecha('start')"
-  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-/>
+            <input
+              type="date"
+              [(ngModel)]="startDate"
+              name="startDateDay"
+              [min]="today"
+              (change)="validarFecha('start')"
+              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
         }
 
@@ -562,27 +563,27 @@
             <div>
               <label class="label">Desde</label>
 
-             <input
-  type="date"
-  [(ngModel)]="startDate"
-  name="startDateDays"
-  [min]="today"
-  (change)="validarFecha('start')"
-  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-/>
+              <input
+                type="date"
+                [(ngModel)]="startDate"
+                name="startDateDays"
+                [min]="today"
+                (change)="validarFecha('start')"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
             </div>
 
             <div>
               <label class="label">Hasta</label>
 
-             <input
-  type="date"
-  [(ngModel)]="endDate"
-  name="endDate"
-  [min]="startDate || today"
-  (change)="validarFecha('end')"
-  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-/>
+              <input
+                type="date"
+                [(ngModel)]="endDate"
+                name="endDate"
+                [min]="startDate || today"
+                (change)="validarFecha('end')"
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+              />
             </div>
           </div>
         }
