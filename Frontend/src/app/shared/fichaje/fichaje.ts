@@ -156,7 +156,6 @@ private iniciarIntervalo(): void {
 
     if (!mismoDia) {
 
-      // El fichaje llegó a las 00:00
       this.detenerPorCambioDeDia();
 
       return;
@@ -179,7 +178,6 @@ private detenerPorCambioDeDia(): void {
 
   this.detenerIntervalo();
 
-  // Guardar las horas trabajadas del día anterior
   if (this.seconds > 0) {
     this.workTimeService.addWorkSession(this.seconds);
   }
